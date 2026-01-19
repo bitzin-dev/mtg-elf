@@ -1,0 +1,5 @@
+{
+  "name": "ColeçãoMTG React",
+  "description": "A modern React migration of the ColeçãoMTG platform, featuring card collection management, price tracking, and AI-powered deck assistance.",
+  "requestFramePermissions": []
+}
