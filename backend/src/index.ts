@@ -126,7 +126,7 @@ const routes = app
 export type AppType = typeof routes;
 
 export default {
-    port: 4000,
+    port: Bun.env.PORT || 4000,
     fetch: async (req: Request, env: unknown, ctx: unknown) => {
         return routes.fetch(req, env, ctx as any);
     }

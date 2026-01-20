@@ -43,7 +43,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
 
      const fetchPrice = async () => {
          setIsLoadingPrice(true);
-         const realPrice = await getLigaMagicPrice(card.name);
+         const realPrice = await getLigaMagicPrice(card.name, card.set || "");
          if (isMounted) {
             setIsLoadingPrice(false);
             if (realPrice > 0 && onPriceUpdate) {
