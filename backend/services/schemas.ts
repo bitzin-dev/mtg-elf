@@ -99,3 +99,8 @@ export const schemaSavedSearch = z.object({
 export const schemaDeleteSearch = z.object({
     searchId: z.string(),
 });
+
+export const schemaRenameCollection = z.object({
+    collectionId: z.string(),
+    newName: z.string().min(1)
+});

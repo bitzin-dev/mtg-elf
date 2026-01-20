@@ -14,6 +14,7 @@ import { AuthModal } from './components/AuthModal';
 import { ScannerModal } from './components/ScannerModal';
 import { BinderView } from './components/BinderView';
 import { MobileBottomBar } from './components/MobileBottomBar';
+import { WelcomeScreen } from './components/WelcomeScreen';
 import { searchScryfall, getRandomCardArt, getLandingPageCards, clearSessionCache, getLigaMagicPrice, fetchCardsFromIdentifiers } from './services/scryfallService';
 import { Card, CollectionFilterType, SavedSearch, AdvancedFilters, CardColor, FrontendCollection } from './types';
 import { Search, Settings, RefreshCw, Save, Home, LogOut, Filter, Trash2, Scan, Database, Download, Upload, List as ListIcon, ExternalLink, X, Check, ArrowDown, Loader2, Layers, ShieldCheck, ShoppingCart, Printer, ArrowUp, Menu, AlertTriangle, ArrowLeft, Camera, DollarSign, ArrowRight, Sparkles, Shuffle, Share2, Wrench } from 'lucide-react';
@@ -176,7 +177,7 @@ const ToolbarButton: React.FC<{ icon: React.ReactNode; label: string; onClick?: 
   </button>
 );
 
-const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }) => {
+const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> = ({ user, onExit, sharedId }) => {
 
   console.log(user);
 
@@ -203,42 +204,73 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
   }, [user]);
 
   // Estado das coleções - inicializa vazio e carrega do backend
-  const [collections, setCollections] = useState<UserCollection[]>([]);
+  const [collections, setCollections] = useState<FrontendCollection[]>([]);
 
   // Carregar coleções do backend ao montar o componente
   useEffect(() => {
     const loadCollections = async () => {
       setIsLoadingCollections(true);
       try {
-        const result = await backendService.getCollections();
-        if (result && result.success && (result as any).collections) {
-          // Mapear os dados do backend para o formato do frontend
-          const mappedCollections: UserCollection[] = (result as any).collections.map((col: any) => ({
-            id: col._id?.toString() || col.id,
-            name: col.name,
-            filterType: col.filterType,
-            filterValue: col.filterValue,
-            query: col.query,
-            createdAt: col.createdAt,
-            ownedCardIds: col.ownedCardIds || [],
-            quantities: col.quantities || {},
-            coverImage: col.coverImage,
-            buyListIds: col.buyListIds || [],
-            printListIds: col.printListIds || []
-          }));
-          setCollections(mappedCollections);
-          // Selecionar a primeira coleção se existir
-          if (mappedCollections.length > 0) {
-            setActiveCollectionId(mappedCollections[0]._id);
+        if (sharedId) {
+          const result = await backendService.getPublicCollection(sharedId);
+          if (result && result.success && (result as any).collection) {
+            const colRaw = (result as any).collection;
+            const col: FrontendCollection = {
+              id: colRaw._id.toString(),
+              name: colRaw.name,
+              filterType: colRaw.filterType,
+              filterValue: colRaw.filterValue,
+              query: colRaw.query,
+              createdAt: colRaw.createdAt,
+              ownedCardIds: colRaw.ownedCardIds || [],
+              quantities: colRaw.quantities || {},
+              coverImage: colRaw.coverImage,
+              buyListIds: [],
+              printListIds: [],
+              email_user: ''
+            };
+            setCollections([col]);
+            setActiveCollectionId(col.id);
+            setIsBinderOpen(true);
           }
         } else {
-          // Fallback para localStorage se o backend falhar
-          const saved = localStorage.getItem('portal_mtg_collections');
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            setCollections(parsed);
-            if (parsed.length > 0) {
-              setActiveCollectionId(parsed[0].id);
+          const result = await backendService.getCollections();
+          if (result && result.success && (result as any).collections) {
+            // Mapear os dados do backend para o formato do frontend
+            const mappedCollections: FrontendCollection[] = (result as any).collections.map((col: any) => ({
+              id: col._id?.toString() || col.id,
+              name: col.name,
+              filterType: col.filterType,
+              filterValue: col.filterValue,
+              query: col.query,
+              createdAt: col.createdAt,
+              ownedCardIds: col.ownedCardIds || [],
+              quantities: col.quantities || {},
+              coverImage: col.coverImage,
+              buyListIds: col.buyListIds || [],
+              printListIds: col.printListIds || []
+            }));
+            setCollections(mappedCollections);
+            // REMOVED (OLD): Selecionar a primeira coleção se existir
+            // if (mappedCollections.length > 0) {
+            //   setActiveCollectionId(mappedCollections[0]._id);
+            // }
+
+            // NEW LOGIC: Se não houver coleções, abrir create modal. Se houver, não faz nada (Welcome Screen é mostrada).
+            if (mappedCollections.length === 0) {
+              setIsModalOpen(true);
+              setCreateModalMode('create');
+            }
+          } else {
+            // Fallback para localStorage se o backend falhar
+            const saved = localStorage.getItem('portal_mtg_collections');
+            if (saved) {
+              const parsed = JSON.parse(saved);
+              setCollections(parsed);
+              if (parsed.length === 0) {
+                setIsModalOpen(true);
+                setCreateModalMode('create');
+              }
             }
           }
         }
@@ -348,6 +380,9 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
   }, [savedSearches]);
 
   const [activeCollectionId, setActiveCollectionId] = useState<string | null>(null);
+
+  // Start with Welcome View if no active collection
+  // const [currentView, setCurrentView] = useState<'dashboard' | 'profile'>('dashboard'); // Replaced below to handle conditional rendering properly within the return statement, using activeCollectionId as the driver.
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [createModalMode, setCreateModalMode] = useState<'create' | 'import'>('create');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -439,6 +474,34 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
         const cards = await fetchCardsFromIdentifiers(identifiers);
         setCollectionCards(cards);
         setFilteredCollectionCards(cards);
+
+        // Auto-update prices for 'checklist' type collections
+        if (cards.length > 0) {
+          setIsUpdatingPrices(true);
+          setUpdateProgress(0);
+          let processed = 0;
+          // Process in background without awaiting the whole batch to block UI
+          (async () => {
+            const promises = cards.map(c => getLigaMagicPrice(c.name, c.setName, true).then(price => {
+              processed++;
+              setUpdateProgress(Math.round((processed / cards.length) * 100));
+              if (price > 0) {
+                setCollectionCards(prev => {
+                  const idx = prev.findIndex(p => p.id === c.id);
+                  if (idx === -1) return prev;
+                  if (Math.abs(prev[idx].priceBRL - price) < 0.01) return prev;
+                  const next = [...prev];
+                  next[idx] = { ...next[idx], priceBRL: price };
+                  return next;
+                });
+              }
+            }));
+            await Promise.all(promises);
+            setIsUpdatingPrices(false);
+            setUpdateProgress(0);
+          })();
+        }
+
       } else {
         // Standard Scryfall Search with Incremental Loading
         const cards = await searchScryfall(activeCollection.query, (partialCards) => {
@@ -569,6 +632,17 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
     };
 
     setCollections(prev => [...prev, newCol]);
+    // setActiveCollectionId(newCol._id); // REMOVE AUTO-SELECT NEW COLLECTION (User request: "ele seleciona qual coleção ele quer iniciar")
+    // Actually, user said "Caso ele não tenha nenhuma coleção, abre a tela de criação de coleção."
+    // He didn't explicitly say NOT to select it after creation, but generally after creation you want to go to it.
+    // However, the prompt says "mostra as coleções que ele tem e ele seleciona qual coleção ele quer iniciar."
+    // If I auto-select, I skip the welcome screen.
+    // Let's AUTO-SELECT if it's the FIRST one (created from empty state).
+    if (collections.length === 0) {
+      setActiveCollectionId(newCol._id);
+    }
+    // Else, we can stay on Welcome Screen or go to the new one. Usually creating = intent to use.
+    // Let's decide to go to the new collection for better UX, as "Create" implies intent to use.
     setActiveCollectionId(newCol._id);
     setIsModalOpen(false);
     setCurrentView('dashboard');
@@ -832,7 +906,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
     let processedCount = 0;
 
     const promises = cardsToUpdate.map(card =>
-      getLigaMagicPrice(card.name, true).then(newPrice => {
+      getLigaMagicPrice(card.name, card.setName, true).then(newPrice => {
         processedCount++;
         setUpdateProgress(Math.round((processedCount / cardsToUpdate.length) * 100));
         if (newPrice > 0) handlePriceUpdate(card.id, newPrice);
@@ -1060,6 +1134,57 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
     }, 0);
   }, [rightPanelCards, activeCollection, activeRightTab]);
 
+
+
+  // Render Welcome Screen if no active collection and not loading and not in profile view
+  if (!activeCollectionId && currentView !== 'profile') {
+    if (isLoadingCollections) {
+      return (
+        <div className="flex h-screen w-full bg-portal-bg text-gray-200 font-sans overflow-hidden items-center justify-center flex-col gap-4">
+          <Loader2 size={48} className="animate-spin text-emerald-500" />
+          {sharedId && <div className="text-emerald-500 font-bold">Carregando coleção compartilhada...</div>}
+        </div>
+      );
+    }
+
+    // Error state for shared link
+    if (sharedId) {
+      return (
+        <div className="flex h-screen w-full bg-portal-bg text-gray-200 font-sans items-center justify-center p-4">
+          <div className="bg-red-900/20 border border-red-500/50 p-8 rounded-xl max-w-md text-center">
+            <AlertTriangle size={48} className="text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">Coleção não encontrada</h2>
+            <p className="text-gray-400 mb-6">O link de compartilhamento pode estar expirado ou incorreto.</p>
+            <button onClick={() => { window.location.href = '/'; }} className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors">
+              Ir para Início
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex h-screen w-full bg-portal-bg text-gray-200 font-sans overflow-hidden">
+        <CreateCollectionModal isOpen={isModalOpen} initialMode={createModalMode} onClose={() => setIsModalOpen(false)} onCreate={handleCreateCollection} />
+
+        {/* Only show Welcome Screen if modal is not the primary interaction (e.g. if we have collections) OR if existing collections are 0 but we want to show the background behind modal */}
+        {/* Force Update Trigger */}
+        <WelcomeScreen
+          user={userProfile}
+          collections={collections}
+          onSelectCollection={(id) => setActiveCollectionId(id)}
+          onCreateCollection={() => openCreateModal('create')}
+        />
+
+        <div className="absolute top-4 right-4 z-50">
+          <button onClick={onExit} className="flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-red-900/40 text-gray-400 hover:text-red-400 rounded-lg border border-gray-800 transition-colors">
+            <LogOut size={16} /> <span className="text-sm font-bold">Sair</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen w-full bg-portal-bg text-gray-200 font-sans overflow-hidden">
       <DashboardSidebar
@@ -1096,6 +1221,8 @@ const Dashboard: React.FC<{ user: any, onExit: () => void }> = ({ user, onExit }
           onCardContextMenu={(card) => setSelectedCardDetails(card)}
           coverImage={activeCollection.coverImage}
           onUpdateCover={(url) => handleUpdateCollectionCover(activeCollection.id, url)}
+          collectionId={activeCollection.id}
+          isSharedMode={!!sharedId}
         />
       )}
 
@@ -1448,6 +1575,10 @@ const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [sharedCollectionId, setSharedCollectionId] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('share');
+  });
 
   useEffect(() => {
     const savedUser = localStorage.getItem('portal_mtg_user_session');
@@ -1480,6 +1611,12 @@ const App: React.FC = () => {
     <>
       {user ? (
         <Dashboard user={user} onExit={handleLogout} />
+      ) : sharedCollectionId ? (
+        <Dashboard
+          user={{ name: 'Visitante', email: '', isGuest: true }}
+          onExit={() => { setSharedCollectionId(null); window.history.pushState({}, '', window.location.pathname); }}
+          sharedId={sharedCollectionId}
+        />
       ) : (
         <LandingPage onAuth={handleAuth} />
       )}

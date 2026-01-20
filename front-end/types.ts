@@ -68,7 +68,7 @@ export interface SavedSearch {
 // Tipo para uso no front-end que converte _id do MongoDB para id string
 import type { UserCollection as BackendUserCollection } from '../backend/services/types';
 
-export type FrontendCollection = Omit<BackendUserCollection, '_id'> & {
+export type FrontendCollection = Omit<BackendUserCollection, '_id' | 'createdAt' | 'updatedAt'> & {
   id: string;
   createdAt: string; // Convertido de Date para string no frontend
   updatedAt?: string;

@@ -1,7 +1,7 @@
 
 import { hc } from 'hono/client';
 import type { AppType } from "../../backend/src/index";
-import { schemaLogin, schemaRegister, schemaSavedSearch, schemaDeleteSearch, schemaCreateCollection, schemaDeleteCollection, schemaCardOperation } from '../../backend/services/schemas';
+import { schemaLogin, schemaRegister, schemaSavedSearch, schemaDeleteSearch, schemaCreateCollection, schemaDeleteCollection, schemaCardOperation, schemaRenameCollection } from '../../backend/services/schemas';
 import { z } from 'zod';
 
 // ==========================================
@@ -24,7 +24,7 @@ export const client = hc<AppType>(API_URL, {
 
 export const backendService = {
 
-    async login(data : z.infer<typeof schemaLogin>) {
+    async login(data: z.infer<typeof schemaLogin>) {
         try {
             const res = await client.login.$post({
                 json: data
@@ -38,11 +38,11 @@ export const backendService = {
 
     async register(data: z.infer<typeof schemaRegister>) {
         try {
-            const res = await client.register.$post({ 
+            const res = await client.register.$post({
                 json: data
             });
             return await res.json();
-        } 
+        }
         catch (error) {
             console.error(error);
             return null;
@@ -53,14 +53,14 @@ export const backendService = {
         try {
             const res = await client.me.$get();
             return await res.json();
-        } 
+        }
         catch (error) {
             console.error(error);
             return null;
         }
     },
 
-    async getCollections(){
+    async getCollections() {
         try {
             const res = await client.me.collections.$get();
             return await res.json();
@@ -70,7 +70,7 @@ export const backendService = {
         }
     },
 
-    async deleteCollection(data : z.infer<typeof schemaDeleteCollection>) {
+    async deleteCollection(data: z.infer<typeof schemaDeleteCollection>) {
         try {
             const res = await client.me.collection.$delete({
                 json: data
@@ -82,7 +82,7 @@ export const backendService = {
         }
     },
 
-    async crateCollection(data : z.infer<typeof schemaCreateCollection>) {
+    async crateCollection(data: z.infer<typeof schemaCreateCollection>) {
         try {
             const res = await client.create.collection.$post({
                 json: data
@@ -94,7 +94,7 @@ export const backendService = {
         }
     },
 
-    async UpdateCollection(data : z.infer<typeof schemaCardOperation>) {
+    async UpdateCollection(data: z.infer<typeof schemaCardOperation>) {
         try {
             const res = await client.me.collection.card.$post({
                 json: data
@@ -106,7 +106,19 @@ export const backendService = {
         }
     },
 
-    async createSearch(data : z.infer<typeof schemaSavedSearch>) {
+    async renameCollection(data: z.infer<typeof schemaRenameCollection>) {
+        try {
+            const res = await client.me.collection.rename.$post({
+                json: data
+            });
+            return await res.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    },
+
+    async createSearch(data: z.infer<typeof schemaSavedSearch>) {
         try {
             const res = await client.create.search.$post({
                 json: data
@@ -128,10 +140,22 @@ export const backendService = {
         }
     },
 
-    async deleteSearch(data : z.infer<typeof schemaDeleteSearch>) {
+    async deleteSearch(data: z.infer<typeof schemaDeleteSearch>) {
         try {
             const res = await client.me.searches.$delete({
                 json: data
+            });
+            return await res.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    },
+
+    async getPublicCollection(id: string) {
+        try {
+            const res = await client.public.collection[':id'].$get({
+                param: { id }
             });
             return await res.json();
         } catch (error) {

@@ -1,7 +1,7 @@
 import MongoDB from "../database";
 import { ObjectId, type Db } from "mongodb";
 import { MongoCollections, Profile } from "./enums";
-import { schemaRegister, schemaLogin, schemaCreateCollection, schemaSavedSearch, schemaDeleteCollection, schemaCardOperation, schemaDeleteSearch } from "./schemas";
+import { schemaRegister, schemaLogin, schemaCreateCollection, schemaSavedSearch, schemaDeleteCollection, schemaCardOperation, schemaDeleteSearch, schemaRenameCollection } from "./schemas";
 import { MockUser, RequestResult, UserCollection } from "./types";
 import { z } from "zod";
 
@@ -267,6 +267,27 @@ class Controller {
 
     }
 
+
+
+    async renameCollection(data: z.infer<typeof schemaRenameCollection>, auth: string) {
+        const getMe = await this.GetMe(auth);
+        if (!getMe.success) return { success: false, error: "User not found" };
+
+        const collection = this.GetDB().collection(MongoCollections.collections);
+        const target = await collection.findOne({ _id: new ObjectId(data.collectionId) });
+
+        if (!target) return { success: false, error: "Collection not found" };
+        if (target.email_user !== getMe.email) return { success: false, error: "Unauthorized" };
+
+        const update = await collection.updateOne(
+            { _id: new ObjectId(data.collectionId) },
+            { $set: { name: data.newName, updatedAt: new Date() } }
+        );
+
+        if (!update.modifiedCount) return { success: false, error: "Failed to rename (or name unchanged)" };
+        return { success: true };
+    }
+
     async create_session(email: string) {
         const uuid = crypto.randomUUID();
         const expires = new Date();
@@ -335,6 +356,19 @@ class Controller {
             joinDate: user.joinDate
         };
 
+    }
+
+    async getPublicCollection(collectionId: string) {
+        try {
+            const collection = this.GetDB().collection(MongoCollections.collections);
+            const data = await collection.findOne({ _id: new ObjectId(collectionId) });
+
+            if (!data) return { success: false, error: "Collection not found" };
+
+            return { success: true, collection: data };
+        } catch (e) {
+            return { success: false, error: "Invalid ID" };
+        }
     }
 
 }

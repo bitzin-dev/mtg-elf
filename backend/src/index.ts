@@ -1,7 +1,7 @@
 import { Context, Hono } from 'hono'
 import Controller from '../services/controller';
 import { zValidator } from '@hono/zod-validator';
-import { schemaRegister, schemaLogin, schemaCreateCollection, schemaSavedSearch, schemaDeleteSearch, schemaDeleteCollection, schemaCardOperation } from '../services/schemas';
+import { schemaRegister, schemaLogin, schemaCreateCollection, schemaSavedSearch, schemaDeleteSearch, schemaDeleteCollection, schemaCardOperation, schemaRenameCollection } from '../services/schemas';
 import { cors } from 'hono/cors';
 import { makeAuthMiddleware } from '../middlewares/auth.middleware';
 
@@ -28,6 +28,13 @@ const routes = app
     .get("/", async (c) => {
         return c.json(
             { message: 'Hello World', status: 200 }
+        );
+    })
+
+    .get('/public/collection/:id', async (c) => {
+        const id = c.req.param('id');
+        return c.json(
+            await controller.getPublicCollection(id)
         );
     })
 
@@ -73,6 +80,14 @@ const routes = app
         const data = await c.req.json();
         return c.json(
             await controller.updateCollection(data, session.uuid)
+        );
+    })
+
+    .post('/me/collection/rename', zValidator('json', schemaRenameCollection), async (c) => {
+        const session = c.get("session");
+        const data = await c.req.json();
+        return c.json(
+            await controller.renameCollection(data, session.uuid)
         );
     })
 

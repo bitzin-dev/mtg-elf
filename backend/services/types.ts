@@ -11,9 +11,9 @@ export interface Session {
 
 
 declare module "hono" {
-  interface ContextVariableMap {
-    session: Session
-  }
+    interface ContextVariableMap {
+        session: Session
+    }
 }
 
 export interface MockUser {
@@ -34,7 +34,7 @@ export interface RequestResult {
 export interface UserCollection {
     _id: ObjectId;
     name: string;
-    email_user: string;    
+    email_user: string;
     filterType: CollectionFilterType;
     filterValue: string;
     query: string;
@@ -44,6 +44,7 @@ export interface UserCollection {
     quantities: Record<string, number>;
     buyListIds: string[];
     printListIds: string[];
+    coverImage?: string;
 }
 
 

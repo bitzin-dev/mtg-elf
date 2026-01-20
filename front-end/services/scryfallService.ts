@@ -56,24 +56,50 @@ const fetchDollarRate = async () => {
     }
 };
 
-// Queue system for LigaMagic scraping to avoid "Too Many Requests" via proxy
-const priceQueue: { cardName: string, resolve: (price: number) => void }[] = [];
+// Queue system for LigaMagic scraping
+const priceQueue: { cardName: string, setName: string, resolve: (price: number) => void }[] = [];
 let isProcessingQueue = false;
+
+const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
 
 const processPriceQueue = async () => {
     if (isProcessingQueue || priceQueue.length === 0) return;
     isProcessingQueue = true;
 
-    const { cardName, resolve } = priceQueue.shift()!;
+    const { cardName, setName, resolve } = priceQueue.shift()!;
 
     try {
-        // 1. Check Cache First (Inside queue processing for consistency, though bypass handles outside)
-        // Note: The bypass logic is handled in the pushing function, but here we perform the fetch
         const targetUrl = `https://www.ligamagic.com.br/?view=cards/card&card=${encodeURIComponent(cardName)}`;
         const response = await fetch(`${PROXY_URL}${encodeURIComponent(targetUrl)}`);
         const data = await response.json();
 
         if (data.contents) {
+            // Attempt to match the specific set name first
+            // Look for SetName ... followed by price (Normal price usually appears first or explicitly labeled)
+            // We use a loose match because Scryfall Set Names might differ slightly from LigaMagic
+            // But strict enough to avoid matching wrong sets.
+
+            // Strategy: Find the set name in the HTML, then grab the first R$ value that appears after it.
+            // This works because LigaMagic lists editions in blocks.
+            const cleanSetName = setName.replace(/ edition| set| core set/gi, "").trim(); // Simple normalization
+            const setRegex = new RegExp(escapeRegExp(cleanSetName) + "[\\s\\S]*?R\\$\\s?(\\d{1,3}(?:\\.\\d{3})*,\\d{2})", "i");
+            const setMatch = data.contents.match(setRegex);
+
+            if (setMatch && setMatch[1]) {
+                const priceStr = setMatch[1].replace('R$', '').trim().replace('.', '').replace(',', '.');
+                const price = parseFloat(priceStr);
+                if (!isNaN(price) && price > 0) {
+                    saveToCache(`price_${cardName}_${setName}`, price);
+                    resolve(price);
+                    isProcessingQueue = false;
+                    processPriceQueue();
+                    return;
+                }
+            }
+
+            // Fallback: Global minimum (original logic) if set specific price not found
             // Regex to find prices like "R$ 15,00" or "R$ 0,50"
             const priceMatches = data.contents.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/g);
 
@@ -85,7 +111,7 @@ const processPriceQueue = async () => {
 
                 if (values.length > 0) {
                     const minPrice = Math.min(...values);
-                    saveToCache(`price_${cardName}`, minPrice); // Save to cache
+                    saveToCache(`price_${cardName}_${setName}`, minPrice); // Save to cache with set specificity
                     resolve(minPrice);
                 } else {
                     resolve(0);
@@ -108,18 +134,18 @@ const processPriceQueue = async () => {
     processPriceQueue(); // Process next
 };
 
-export const getLigaMagicPrice = (cardName: string, bypassCache: boolean = false): Promise<number> => {
+export const getLigaMagicPrice = (cardName: string, setName: string, bypassCache: boolean = false): Promise<number> => {
     return new Promise((resolve) => {
-        // Check cache synchronously first to avoid queue overhead if possible
+        // Check cache synchronously first
         if (!bypassCache) {
-            const cachedPrice = getFromCache<number>(`price_${cardName}`);
+            const cachedPrice = getFromCache<number>(`price_${cardName}_${setName}`);
             if (cachedPrice !== null) {
                 resolve(cachedPrice);
                 return;
             }
         }
 
-        priceQueue.push({ cardName, resolve });
+        priceQueue.push({ cardName, setName, resolve });
         processPriceQueue();
     });
 };

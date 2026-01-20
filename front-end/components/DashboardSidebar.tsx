@@ -1,6 +1,7 @@
 
-import React from 'react';
-import { Layers, List, Package, Save, Plus, User, Settings, X, Search, Trash2, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { Layers, List, Package, Save, Plus, User, Settings, X, Search, Trash2, LogOut, Edit2, Check } from 'lucide-react';
+import { backendService } from '../services/honoClient';
 import { SavedSearch } from '../types';
 import { UserCollection } from '../../backend/services/types';
 
@@ -52,6 +53,37 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   console.log(activeCollection);
   console.log(collections);
   console.log(activeCollectionId);
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+
+  const handleStartEdit = (e: React.MouseEvent, id: string, currentName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditingId(id);
+    setEditName(currentName);
+  };
+
+  const handleCancelEdit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditingId(null);
+  };
+
+  const handleSaveRename = async (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!editName.trim()) return;
+
+    const res = await backendService.renameCollection({ collectionId: id, newName: editName });
+    if (res && res.success) {
+      setEditingId(null);
+      window.location.reload();
+    } else {
+      console.error("Rename failed:", res);
+      alert(`Erro ao renomear: ${(res as any)?.error || 'Erro desconhecido'}`);
+    }
+  };
 
   return (
     <>
@@ -151,7 +183,35 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                   >
                     <Layers size={14} className={activeCollectionId === col.id ? "text-emerald-500" : ""} />
                     <div className="flex-1 min-w-0">
-                      <div className="truncate text-xs font-bold">{col.name}</div>
+                      {editingId === col.id ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-gray-800 border border-emerald-500/50 rounded px-1 py-0.5 text-white text-xs w-full focus:outline-none"
+                            autoFocus
+                          />
+                          <button onClick={(e) => handleSaveRename(e, col.id)} className="text-emerald-500 hover:text-emerald-400">
+                            <Check size={12} />
+                          </button>
+                          <button onClick={handleCancelEdit} className="text-red-500 hover:text-red-400">
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between group/title">
+                          <div className="truncate text-xs font-bold">{col.name}</div>
+                          <button
+                            onClick={(e) => handleStartEdit(e, col.id, col.name)}
+                            className="opacity-0 group-hover/title:opacity-100 text-gray-500 hover:text-white transition-opacity"
+                            title="Renomear"
+                          >
+                            <Edit2 size={10} />
+                          </button>
+                        </div>
+                      )}
                       <div className="text-[9px] opacity-60">{new Date(col.createdAt).toLocaleDateString()}</div>
                     </div>
                   </div>
