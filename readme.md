@@ -3,7 +3,7 @@
 
 ---
 
-**View the hosted application** [Preview Click Here]("https://colecaomtg.com")
+**View the hosted application: ** [Preview Click Here](https://colecaomtg.com)
 
 ## 🌟 Introduction
 
