@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { UserCollection } from '../../backend/services/types';
-import { Layers, Plus, ArrowRight, Search, Clock, Database, Loader2, Edit2, Check, X } from 'lucide-react';
+import { Layers, Plus, ArrowRight, Search, Clock, Database, Loader2, Edit2, Check, X, Trash2 } from 'lucide-react';
 import { backendService } from '../services/honoClient';
 
 interface WelcomeScreenProps {
@@ -12,13 +11,15 @@ interface WelcomeScreenProps {
     collections: UserCollection[];
     onSelectCollection: (id: string) => void;
     onCreateCollection: () => void;
+    onDeleteCollection: (id: string) => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
     user,
     collections,
     onSelectCollection,
-    onCreateCollection
+    onCreateCollection,
+    onDeleteCollection
 }) => {
     const [searchTerm, setSearchTerm] = useState('');
     // Use a default static image for instant load, similar to LandingPage
@@ -152,13 +153,25 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                                             <h3 className="text-xl font-bold text-gray-200 group-hover:text-white line-clamp-1 tracking-tight">
                                                 {collection.name}
                                             </h3>
-                                            <button
-                                                onClick={(e) => handleStartEdit(e, collection.id, collection.name)}
-                                                className="opacity-0 group-hover/title:opacity-100 p-1.5 text-gray-500 hover:text-emerald-400 transition-all hover:bg-gray-800 rounded"
-                                                title="Renomear coleção"
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
+                                            <div className="flex items-center gap-1 opacity-0 group-hover/title:opacity-100 transition-all">
+                                                <button
+                                                    onClick={(e) => handleStartEdit(e, collection.id, collection.name)}
+                                                    className="p-1.5 text-gray-500 hover:text-emerald-400 transition-all hover:bg-gray-800 rounded"
+                                                    title="Renomear coleção"
+                                                >
+                                                    <Edit2 size={14} />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onDeleteCollection(collection.id);
+                                                    }}
+                                                    className="p-1.5 text-gray-500 hover:text-red-400 transition-all hover:bg-gray-800 rounded"
+                                                    title="Excluir coleção"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
 

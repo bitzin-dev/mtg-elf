@@ -52,10 +52,13 @@ export const backendService = {
     async me() {
         try {
             const res = await client.me.$get();
+            if (res.status === 401) {
+                return null;
+            }
             return await res.json();
         }
         catch (error) {
-            console.error(error);
+            // console.error(error); // Silently fail for auth check
             return null;
         }
     },
