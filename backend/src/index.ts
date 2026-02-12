@@ -4,23 +4,29 @@ import { zValidator } from '@hono/zod-validator';
 import { schemaRegister, schemaLogin, schemaCreateCollection, schemaSavedSearch, schemaDeleteSearch, schemaDeleteCollection, schemaCardOperation, schemaRenameCollection } from '../services/schemas';
 import { cors } from 'hono/cors';
 import { makeAuthMiddleware } from '../middlewares/auth.middleware';
+import { IDBService } from '../services/modules/database/db.service';
+import MTG from '../services/modules/mtg/mtg.service';
+import { AuthService } from '../services/modules/auth/auth.service';
 
-const controller = new Controller();
 const app = new Hono();
-const setup = controller.setup();
 
 // Habilita o CORS para essa URL 
 app.use(cors());
+const db = IDBService.GetInstance();
+
+// Services - Repositorys
+const MTGService = new MTG(db);
+const auth = new AuthService(db);
 
 // Middleware para setup do banco de dados
 app.use('*', async (c, next) => {
-    await setup;
+    await db.setup();
     await next();
 });
 
 // Middleware com autenticação integrada!
-app.use('/me/*', makeAuthMiddleware(controller));
-app.use('/create/*', makeAuthMiddleware(controller));
+app.use('/me/*', makeAuthMiddleware());
+app.use('/create/*', makeAuthMiddleware());
 
 // Routes
 const routes = app
@@ -34,28 +40,28 @@ const routes = app
     .get('/public/collection/:id', async (c) => {
         const id = c.req.param('id');
         return c.json(
-            await controller.getPublicCollection(id)
+            await MTGService.getPublicCollection(id)
         );
     })
 
     .get('/me', async (c) => {
         const session = c.get("session");
         return c.json(
-            await controller.GetMe(session.uuid)
+            await MTGService.GetMe(session.uuid)
         );
     })
 
     .get('/me/collections', async (c) => {
         const session = c.get("session");
         return c.json(
-            await controller.MeCollections(session.uuid)
+            await MTGService.MeCollections(session.uuid)
         );
     })
 
     .get('/me/searches', async (c) => {
         const session = c.get("session");
         return c.json(
-            await controller.getSearches(session.uuid)
+            await MTGService.getSearches(session.uuid)
         );
     })
 
@@ -63,7 +69,7 @@ const routes = app
         const session = c.get("session");
         const data = await c.req.json();
         return c.json(
-            await controller.deleteSearch(data, session.uuid)
+            await MTGService.deleteSearch(data, session.uuid)
         );
     })
 
@@ -71,7 +77,7 @@ const routes = app
         const session = c.get("session");
         const data = await c.req.json();
         return c.json(
-            await controller.deleteCollection(data, session.uuid)
+            await MTGService.deleteCollection(data, session.uuid)
         );
     })
 
@@ -79,7 +85,7 @@ const routes = app
         const session = c.get("session");
         const data = await c.req.json();
         return c.json(
-            await controller.updateCollection(data, session.uuid)
+            await MTGService.updateCollection(data, session.uuid)
         );
     })
 
@@ -87,7 +93,7 @@ const routes = app
         const session = c.get("session");
         const data = await c.req.json();
         return c.json(
-            await controller.renameCollection(data, session.uuid)
+            await MTGService.renameCollection(data, session.uuid)
         );
     })
 
@@ -95,7 +101,7 @@ const routes = app
         const session = c.get("session");
         const data = await c.req.json();
         return c.json(
-            await controller.createSearch(data, session.uuid)
+            await MTGService.createSearch(data, session.uuid)
         );
     })
 
@@ -103,7 +109,7 @@ const routes = app
         const session = c.get("session");
         const data = await c.req.json();
         return c.json(
-            await controller.createCollection(data, session.uuid)
+            await MTGService.createCollection(data, session.uuid)
         );
     })
 
@@ -111,7 +117,7 @@ const routes = app
     .post("/register", zValidator('json', schemaRegister), async (c) => {
         const data = await c.req.json();
         return c.json(
-            await controller.register(data)
+            await auth.register(data)
         );
     })
 
@@ -119,7 +125,7 @@ const routes = app
     .post("/login", zValidator('json', schemaLogin), async (c) => {
         const data = await c.req.json();
         return c.json(
-            await controller.login(data)
+            await auth.login(data)
         );
     })
 

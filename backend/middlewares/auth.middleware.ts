@@ -1,8 +1,12 @@
-import type Controller from "../services/controller";
+import { IDBService } from "../services/modules/database/db.service";
 import type { MiddlewareHandler } from "hono";
 import { Session } from "../services/types";
+import { AuthService } from "../services/modules/auth/auth.service";
 
-export function makeAuthMiddleware(controller: Controller): MiddlewareHandler {
+const database : IDBService = IDBService.GetInstance();
+const auth = new AuthService(database);
+
+export function makeAuthMiddleware(): MiddlewareHandler {
   
     return async (c, next) => {
     
@@ -13,7 +17,7 @@ export function makeAuthMiddleware(controller: Controller): MiddlewareHandler {
       ? authHeader.slice(7)
       : authHeader
 
-    const session = await controller.isAuthenticated(token);
+    const session = await auth.isAuthenticated(token);
     if (!session) return c.json({ success: false, error: "Invalid session" }, 401);
 
     c.set("session", session as Session);

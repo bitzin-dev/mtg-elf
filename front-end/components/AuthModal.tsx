@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, Mail, Lock, User, ArrowRight, ShieldCheck, Github, Loader2, AlertTriangle } from 'lucide-react';
-import { backendService } from '@/services/honoClient';
+import { X, Mail, Lock, User, ArrowRight, ShieldCheck, Loader2, AlertTriangle } from 'lucide-react';
+import { backendService, clearAuthSession } from '@/services/honoClient';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,7 +15,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [auth, setAuth] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -26,70 +25,62 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
 
   useEffect(() => {
     setMode(initialMode);
-
-    if (!auth){
-      setAuth(localStorage.getItem('portal_auth_token'));
-    }
-
-  }, [initialMode, auth, isOpen]);
+    setError(null);
+  }, [initialMode, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    localStorage.removeItem('portal_auth_token');
+    clearAuthSession();
 
-    let completed = false;
+    try {
+      let authorization: string | undefined;
 
-    if (mode === 'login') {
-      const login = await backendService.login({ email: formData.email, password: formData.password });
-      if (login.success) {
-        localStorage.setItem('portal_auth_token', login.authorization);
-        setAuth(login.authorization);
-        completed = true;
-      } else {
-        setError(login.error);
+      if (mode === 'login') {
+        const login = await backendService.login({ email: formData.email, password: formData.password });
+        if (!login?.success || !login.authorization) {
+          setError(login?.error || 'Falha ao fazer login. Tente novamente.');
+          return;
+        }
+        authorization = login.authorization;
       }
-    }
 
-    if (mode === 'register') {
-      const register = await backendService.register({ name: formData.name, email: formData.email, password: formData.password });
-      if (register.success) {
-        completed = true;
-        setAuth(register.authorization);
-        localStorage.setItem('portal_auth_token', register.authorization);
-      } 
-      else {
-        setError(register.error);
+      if (mode === 'register') {
+        const register = await backendService.register({ name: formData.name, email: formData.email, password: formData.password });
+        if (!register?.success || !register.authorization) {
+          setError(register?.error || 'Falha ao criar conta. Tente novamente.');
+          return;
+        }
+        authorization = register.authorization;
       }
-    }
 
-    setIsLoading(false);
+      if (!authorization) {
+        setError('Nao foi possivel concluir a autenticacao.');
+        return;
+      }
 
-    if (completed) {
+      localStorage.setItem('portal_auth_token', authorization);
 
       const me = await backendService.me();
-
-      if (!me.success){
-        setError(me.error);
+      if (!me?.success) {
+        clearAuthSession();
+        setError(me?.error || 'Sessao invalida. Faca login novamente.');
         setMode('login');
         return;
       }
 
       onClose();
-
-      const mockUser = {
+      onAuthSuccess({
         name: me.name,
         email: me.email,
         avatarUrl: me.avatarUrl,
         joinDate: me.joinDate
-      };
-
-      onAuthSuccess(mockUser);
-
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 

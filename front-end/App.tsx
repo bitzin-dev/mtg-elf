@@ -19,7 +19,7 @@ import { searchScryfall, getRandomCardArt, getLandingPageCards, clearSessionCach
 import { Card, CollectionFilterType, SavedSearch, AdvancedFilters, CardColor, FrontendCollection } from './types';
 import { parseImportFile } from './utils/importUtils';
 import { Search, Settings, RefreshCw, Save, Home, LogOut, Filter, Trash2, Scan, Database, Download, Upload, List as ListIcon, ExternalLink, X, Check, ArrowDown, Loader2, Layers, ShieldCheck, ShoppingCart, Printer, ArrowUp, Menu, AlertTriangle, ArrowLeft, Camera, DollarSign, ArrowRight, Sparkles, Shuffle, Share2, Wrench } from 'lucide-react';
-import { backendService } from './services/honoClient';
+import { backendService, clearAuthSession } from './services/honoClient';
 import { UserCollection } from '../backend/services/types';
 
 const Footer: React.FC = () => (
@@ -292,6 +292,8 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
 
   // Verificação periódica de autenticação (a cada 30 segundos)
   useEffect(() => {
+    if (user?.isGuest) return;
+
     const checkAuth = async () => {
       try {
         const result = await backendService.me();
@@ -311,7 +313,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
     const interval = setInterval(checkAuth, 30000); // 30 segundos
 
     return () => clearInterval(interval);
-  }, [onExit]);
+  }, [onExit, user?.isGuest]);
 
   // Calculate total cards owned across all collections for the profile view
   const totalCardsOwned = useMemo(() => {
@@ -1655,6 +1657,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
 
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
+  const [isAuthReady, setIsAuthReady] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [sharedCollectionId, setSharedCollectionId] = useState<string | null>(() => {
@@ -1663,14 +1666,41 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('portal_mtg_user_session');
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
+    let isMounted = true;
+
+    const restoreSession = async () => {
+      const token = localStorage.getItem('portal_auth_token');
+      if (!token) {
         localStorage.removeItem('portal_mtg_user_session');
+        if (isMounted) setIsAuthReady(true);
+        return;
       }
-    }
+
+      const me = await backendService.me();
+      if (!isMounted) return;
+
+      if (me?.success) {
+        const restoredUser = {
+          name: me.name,
+          email: me.email,
+          avatarUrl: me.avatarUrl,
+          joinDate: me.joinDate
+        };
+        setUser(restoredUser);
+        localStorage.setItem('portal_mtg_user_session', JSON.stringify(restoredUser));
+      } else {
+        clearAuthSession();
+        setUser(null);
+      }
+
+      setIsAuthReady(true);
+    };
+
+    restoreSession();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleAuth = (mode: 'login' | 'register') => {
@@ -1686,8 +1716,11 @@ const App: React.FC = () => {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('portal_mtg_user_session');
+    clearAuthSession();
+    clearSessionCache();
   };
+
+  if (!isAuthReady) return null;
 
   return (
     <>

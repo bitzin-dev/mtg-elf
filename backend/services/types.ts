@@ -2,13 +2,19 @@ import type { ObjectId } from "mongodb";
 import { CollectionFilterType } from "../../front-end/types";
 import { AdvancedFilters } from "../../front-end/types";
 
+export interface SessionResult {
+    success: boolean;
+    authorization?: string;
+    expires?: Date;
+    error?: string;
+}
+
 export interface Session {
     _id: ObjectId;
     email: string;
     uuid: string;
     expires: Date;
 }
-
 
 declare module "hono" {
     interface ContextVariableMap {

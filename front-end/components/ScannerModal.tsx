@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { X, Camera, RefreshCw, Check, AlertTriangle, Loader2, ChevronDown, Sliders, Zap, ZapOff } from 'lucide-react';
-import { identifyCardFromImage } from '../services/geminiService';
 import { searchScryfall, getCardPrintings } from '../services/scryfallService';
 import { Card } from '../types';
 
@@ -21,6 +20,7 @@ interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
 }
 
 export const ScannerModal: React.FC<ScannerModalProps> = ({ isOpen, onClose, onCardFound }) => {
+  const SCANNER_AI_ENABLED = false;
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -48,6 +48,11 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({ isOpen, onClose, onC
       setAvailablePrints([]);
       setCameraCapabilities(null);
       setShowControls(false);
+
+      if (!SCANNER_AI_ENABLED) {
+        setError('Scanner IA desativado temporariamente nesta versao.');
+        return;
+      }
       
       const constraints: MediaStreamConstraints = { 
         video: { 
@@ -152,6 +157,8 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({ isOpen, onClose, onC
   const captureAndScan = async () => {
     if (!videoRef.current || !canvasRef.current || isScanning || foundCard) return;
 
+    if (!SCANNER_AI_ENABLED) return;
+
     setIsScanning(true);
     
     try {
@@ -169,7 +176,7 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({ isOpen, onClose, onC
       const imageBase64 = canvas.toDataURL('image/jpeg', 0.8);
 
       // 2. Identify with AI
-      const recognitionResult = await identifyCardFromImage(imageBase64);
+      const recognitionResult = null;
       
       if (!recognitionResult || !recognitionResult.name) {
          setIsScanning(false);
