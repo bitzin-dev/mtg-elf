@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Layers, List, Package, Save, Plus, User, Settings, X, Search, Trash2, LogOut, Edit2, Check } from 'lucide-react';
+import { Layers, List, Package, Save, Plus, User, Settings, X, Search, Trash2, LogOut, Edit2, Check, Calendar } from 'lucide-react';
 import { backendService } from '../services/honoClient';
 import { SavedSearch } from '../types';
 import { UserCollection } from '../../backend/services/types';
@@ -21,7 +21,9 @@ interface DashboardSidebarProps {
   onLoadSearch?: (search: SavedSearch) => void;
   onDeleteSearch?: (id: string) => void;
   onProfileClick?: () => void;
+  onSpoilersClick?: () => void;
   onLogout?: () => void;
+  activeView?: 'dashboard' | 'profile' | 'spoilers';
   user?: {
     name: string;
     email: string;
@@ -45,7 +47,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   onLoadSearch,
   onDeleteSearch,
   onProfileClick,
+  onSpoilersClick,
   onLogout,
+  activeView = 'dashboard',
   user
 }) => {
   const activeCollection = collections.find(c => c.id === activeCollectionId);
@@ -159,6 +163,25 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 </button>
               </li>
             </ul>
+          </div>
+
+          {/* Explorar */}
+          <div>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Explorar</h3>
+            <button
+              onClick={() => {
+                if (onSpoilersClick) onSpoilersClick();
+                if (onClose) onClose();
+              }}
+              className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors border ${
+                activeView === 'spoilers'
+                  ? 'bg-pink-900/30 text-pink-300 border-pink-500/40'
+                  : 'text-gray-300 bg-portal-accent/10 border-transparent hover:bg-portal-surface hover:text-white hover:border-portal-border'
+              }`}
+            >
+              <Calendar size={16} className={activeView === 'spoilers' ? 'text-pink-400' : 'text-pink-500'} />
+              <span className="flex-1 text-left">Spoilers</span>
+            </button>
           </div>
 
           {/* Minhas Coleções */}

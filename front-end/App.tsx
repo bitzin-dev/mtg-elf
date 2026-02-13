@@ -15,10 +15,11 @@ import { ScannerModal } from './components/ScannerModal';
 import { BinderView } from './components/BinderView';
 import { MobileBottomBar } from './components/MobileBottomBar';
 import { WelcomeScreen } from './components/WelcomeScreen';
+import { SpoilersPage } from './components/SpoilersPage';
 import { searchScryfall, getRandomCardArt, getLandingPageCards, clearSessionCache, getLigaMagicPrice, fetchCardsFromIdentifiers } from './services/scryfallService';
 import { Card, CollectionFilterType, SavedSearch, AdvancedFilters, CardColor, FrontendCollection } from './types';
 import { parseImportFile } from './utils/importUtils';
-import { Search, Settings, RefreshCw, Save, Home, LogOut, Filter, Trash2, Scan, Database, Download, Upload, List as ListIcon, ExternalLink, X, Check, ArrowDown, Loader2, Layers, ShieldCheck, ShoppingCart, Printer, ArrowUp, Menu, AlertTriangle, ArrowLeft, Camera, DollarSign, ArrowRight, Sparkles, Shuffle, Share2, Wrench } from 'lucide-react';
+import { Search, Settings, RefreshCw, Save, LogOut, Filter, Trash2, Scan, Database, Download, Upload, List as ListIcon, ExternalLink, X, Check, ArrowDown, Loader2, Layers, ShieldCheck, ShoppingCart, Printer, ArrowUp, Menu, AlertTriangle, ArrowLeft, Camera, DollarSign, ArrowRight, Sparkles, Shuffle, Share2, Wrench } from 'lucide-react';
 import { backendService, clearAuthSession } from './services/honoClient';
 import { UserCollection } from '../backend/services/types';
 
@@ -182,7 +183,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
 
   console.log(user);
 
-  const [currentView, setCurrentView] = useState<'dashboard' | 'profile'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'profile' | 'spoilers'>('dashboard');
   const importInputRef = useRef<HTMLInputElement>(null);
   const [isLoadingCollections, setIsLoadingCollections] = useState(true);
 
@@ -385,7 +386,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
   const [activeCollectionId, setActiveCollectionId] = useState<string | null>(null);
 
   // Start with Welcome View if no active collection
-  // const [currentView, setCurrentView] = useState<'dashboard' | 'profile'>('dashboard'); // Replaced below to handle conditional rendering properly within the return statement, using activeCollectionId as the driver.
+  // const [currentView, setCurrentView] = useState<'dashboard' | 'profile' | 'spoilers'>('dashboard'); // Replaced below to handle conditional rendering properly within the return statement, using activeCollectionId as the driver.
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [createModalMode, setCreateModalMode] = useState<'create' | 'import'>('create');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -1170,10 +1171,29 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
     setIsBinderOpen(true);
   };
 
+  const handleOpenSpoilers = useCallback(() => {
+    if (!activeCollectionId) {
+      setCreateModalMode('create');
+      setIsModalOpen(true);
+      setCurrentView('dashboard');
+      return;
+    }
+    setCurrentView('spoilers');
+    setShowMobileOwned(false);
+    setIsMobileSidebarOpen(false);
+    setIsMobileToolsOpen(false);
+  }, [activeCollectionId]);
+
+  useEffect(() => {
+    if (!activeCollectionId && currentView === 'spoilers') {
+      setCurrentView('dashboard');
+    }
+  }, [activeCollectionId, currentView]);
+
   // Logic to handle mobile bottom bar "Collections" button click
   const handleMobileCollectionsClick = () => {
-    // If we are in profile, go back to dashboard
-    if (currentView === 'profile') {
+    // If we are in profile/spoilers, go back to dashboard
+    if (currentView === 'profile' || currentView === 'spoilers') {
       setCurrentView('dashboard');
       return;
     }
@@ -1284,7 +1304,9 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
         onLoadSearch={handleLoadSearch}
         onDeleteSearch={handleDeleteSearch}
         onProfileClick={() => { setCurrentView('profile'); setIsMobileSidebarOpen(false); }}
+        onSpoilersClick={handleOpenSpoilers}
         onLogout={onExit}
+        activeView={currentView}
         user={userProfile}
       />
 
@@ -1458,6 +1480,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
                   <>
                     <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setIsMobileToolsOpen(false)}></div>
                     <div className="absolute right-0 top-12 z-50 w-48 bg-[#0a1410] border border-gray-700 rounded-lg shadow-xl p-2 flex flex-col gap-1 animate-in fade-in zoom-in-95">
+                      <button onClick={() => { setIsMobileToolsOpen(false); handleOpenSpoilers(); }} className="flex items-center gap-2 p-2 text-sm text-pink-400 hover:bg-gray-800 rounded text-left"><Sparkles size={14} /> Spoilers</button>
                       <button onClick={() => { setIsMobileToolsOpen(false); handleManualReload(); }} className="flex items-center gap-2 p-2 text-sm text-blue-400 hover:bg-gray-800 rounded text-left"><RefreshCw size={14} /> Recarregar</button>
                       <button onClick={() => { setIsMobileToolsOpen(false); handleShareClick(); }} className="flex items-center gap-2 p-2 text-sm text-amber-500 hover:bg-gray-800 rounded text-left"><Share2 size={14} /> Compartilhar</button>
                       <button onClick={() => { setIsMobileToolsOpen(false); handleSaveSearch(); }} className="flex items-center gap-2 p-2 text-sm text-emerald-500 hover:bg-gray-800 rounded text-left"><Save size={14} /> Salvar Pesquisa</button>
@@ -1477,6 +1500,11 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
                 <>
                   <h2 className="text-xl lg:text-2xl font-bold text-white leading-tight truncate">Meu Perfil</h2>
                   <div className="text-xs lg:text-sm text-gray-500 mt-1">Gerencie sua conta e assinatura</div>
+                </>
+              ) : currentView === 'spoilers' ? (
+                <>
+                  <h2 className="text-xl lg:text-2xl font-bold text-white leading-tight truncate">Spoilers & Novas Edicoes</h2>
+                  <div className="text-xs lg:text-sm text-gray-500 mt-1">Explore cartas recem reveladas e adicione direto na colecao</div>
                 </>
               ) : (
                 <>
@@ -1505,14 +1533,19 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
                 <button onClick={() => setCurrentView('dashboard')} className="flex items-center gap-1 bg-gray-800 text-gray-300 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white hover:bg-gray-700 transition-colors whitespace-nowrap"><ArrowLeft size={14} /> <span className="hidden sm:inline">VOLTAR</span></button>
                 <button className="flex items-center gap-1 bg-red-900/30 text-red-400 border border-red-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-red-900/50 transition-colors whitespace-nowrap" onClick={onExit}><LogOut size={14} /> <span className="hidden sm:inline">SAIR</span></button>
               </>
+            ) : currentView === 'spoilers' ? (
+              <>
+                <button onClick={() => setCurrentView('dashboard')} className="flex items-center gap-1 bg-gray-800 text-gray-300 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white hover:bg-gray-700 transition-colors whitespace-nowrap"><ArrowLeft size={14} /> <span className="hidden sm:inline">VOLTAR</span></button>
+                <button onClick={handleShareClick} className="flex items-center gap-1 bg-amber-900/40 text-amber-500 border border-amber-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-amber-900/60 hover:text-amber-400 transition-colors whitespace-nowrap"><Share2 size={14} /> <span className="hidden sm:inline">COMPARTILHAR</span></button>
+              </>
             ) : (
               <>
+                <button onClick={handleOpenSpoilers} className="flex items-center gap-1 bg-pink-900/30 text-pink-400 border border-pink-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-pink-900/50 transition-colors whitespace-nowrap"><Sparkles size={14} /> <span className="hidden sm:inline">SPOILERS</span></button>
                 <button onClick={handleManualReload} className="flex items-center gap-1 bg-blue-900/30 text-blue-400 border border-blue-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-blue-900/50 transition-colors whitespace-nowrap"><RefreshCw size={14} /> <span className="hidden sm:inline">RECARREGAR</span></button>
                 <button onClick={handleShareClick} className="flex items-center gap-1 bg-amber-900/40 text-amber-500 border border-amber-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-amber-900/60 hover:text-amber-400 transition-colors whitespace-nowrap"><Share2 size={14} /> <span className="hidden sm:inline">COMPARTILHAR</span></button>
                 <button onClick={handleSaveSearch} className="flex items-center gap-1 bg-portal-accent text-black px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-portal-accentHover shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all whitespace-nowrap"><Save size={14} /> <span className="hidden sm:inline">SALVAR</span></button>
                 <button onClick={() => setIsExportModalOpen(true)} className="flex items-center gap-1 bg-gray-800 text-gray-400 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white transition-colors whitespace-nowrap"><Upload size={14} className="text-blue-400" /> <span className="hidden sm:inline">EXPORTAR</span></button>
                 <button onClick={handleDashboardImportClick} className="flex items-center gap-1 bg-gray-800 text-gray-400 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white transition-colors whitespace-nowrap"><Download size={14} className="text-red-400" /> <span className="hidden sm:inline">IMPORTAR</span></button>
-                <button className="flex items-center gap-1 bg-gray-800 text-gray-400 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white transition-colors whitespace-nowrap" onClick={onExit}><Home size={14} /> <span className="hidden sm:inline">INÍCIO</span></button>
               </>
             )}
           </div>
@@ -1524,6 +1557,15 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
             onUpdateProfile={handleUpdateProfile}
             collections={collections}
             totalCardsOwned={totalCardsOwned}
+          />
+        ) : currentView === 'spoilers' ? (
+          <SpoilersPage
+            onAddCard={handleAddCard}
+            ownedIds={activeCollection?.ownedCardIds || []}
+            onToggleBuyList={toggleBuyList}
+            onTogglePrintList={togglePrintList}
+            buyList={buyList}
+            printList={printList}
           />
         ) : (
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -1746,3 +1788,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+
