@@ -9,9 +9,10 @@ import MTG from '../services/modules/mtg/mtg.service';
 import { AuthService } from '../services/modules/auth/auth.service';
 
 const app = new Hono();
+const api = new Hono();
 
-// Habilita o CORS para essa URL 
-app.use(cors());
+// Habilita o CORS para as rotas da API.
+app.use('*', cors());
 const db = IDBService.GetInstance();
 
 // Services - Repositorys
@@ -25,11 +26,11 @@ app.use('*', async (c, next) => {
 });
 
 // Middleware com autenticação integrada!
-app.use('/me/*', makeAuthMiddleware());
-app.use('/create/*', makeAuthMiddleware());
+app.use('/api/me/*', makeAuthMiddleware());
+app.use('/api/create/*', makeAuthMiddleware());
 
 // Routes
-const routes = app
+const routes = api
 
     .get("/", async (c) => {
         return c.json(
@@ -129,11 +130,13 @@ const routes = app
         );
     })
 
+app.route('/api', routes);
+
 export type AppType = typeof routes;
 
 export default {
-    port: Bun.env.PORT || 4000,
+    port: Bun.env.HONO_PORT || 4000,
     fetch: async (req: Request, env: unknown, ctx: unknown) => {
-        return routes.fetch(req, env, ctx as any);
+        return app.fetch(req, env, ctx as any);
     }
 }

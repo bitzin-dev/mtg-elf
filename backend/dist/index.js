@@ -45,8 +45,8 @@ var require_bson = __commonJS((exports) => {
   function isMap(value) {
     return typeof value === "object" && value != null && Symbol.toStringTag in value && value[Symbol.toStringTag] === "Map";
   }
-  function isDate(date) {
-    return date instanceof Date || Object.prototype.toString.call(date) === "[object Date]";
+  function isDate(date5) {
+    return date5 instanceof Date || Object.prototype.toString.call(date5) === "[object Date]";
   }
   function defaultInspect(x, _options) {
     return JSON.stringify(x, (k, v) => {
@@ -265,11 +265,11 @@ var require_bson = __commonJS((exports) => {
     equals(a, b) {
       return nodeJsByteUtils.toLocalBufferType(a).equals(b);
     },
-    fromNumberArray(array) {
-      return Buffer.from(array);
+    fromNumberArray(array2) {
+      return Buffer.from(array2);
     },
-    fromBase64(base64) {
-      return Buffer.from(base64, "base64");
+    fromBase64(base643) {
+      return Buffer.from(base643, "base64");
     },
     fromUTF8(utf8) {
       return Buffer.from(utf8, "utf8");
@@ -283,8 +283,8 @@ var require_bson = __commonJS((exports) => {
     toISO88591(buffer2) {
       return nodeJsByteUtils.toLocalBufferType(buffer2).toString("binary");
     },
-    fromHex(hex) {
-      return Buffer.from(hex, "hex");
+    fromHex(hex3) {
+      return Buffer.from(hex3, "hex");
     },
     toHex(buffer2) {
       return nodeJsByteUtils.toLocalBufferType(buffer2).toString("hex");
@@ -294,16 +294,16 @@ var require_bson = __commonJS((exports) => {
       if (basicLatin != null) {
         return basicLatin;
       }
-      const string = nodeJsByteUtils.toLocalBufferType(buffer2).toString("utf8", start, end);
+      const string4 = nodeJsByteUtils.toLocalBufferType(buffer2).toString("utf8", start, end);
       if (fatal) {
-        for (let i = 0;i < string.length; i++) {
-          if (string.charCodeAt(i) === 65533) {
+        for (let i = 0;i < string4.length; i++) {
+          if (string4.charCodeAt(i) === 65533) {
             parseUtf8(buffer2, start, end, true);
             break;
           }
         }
       }
-      return string;
+      return string4;
     },
     utf8ByteLength(input) {
       return Buffer.byteLength(input, "utf8");
@@ -411,11 +411,11 @@ var require_bson = __commonJS((exports) => {
       }
       return true;
     },
-    fromNumberArray(array) {
-      return Uint8Array.from(array);
+    fromNumberArray(array2) {
+      return Uint8Array.from(array2);
     },
-    fromBase64(base64) {
-      return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    fromBase64(base643) {
+      return Uint8Array.from(atob(base643), (c) => c.charCodeAt(0));
     },
     fromUTF8(utf8) {
       return new TextEncoder().encode(utf8);
@@ -429,8 +429,8 @@ var require_bson = __commonJS((exports) => {
     toISO88591(uint8array) {
       return Array.from(Uint16Array.from(uint8array), (b) => String.fromCharCode(b)).join("");
     },
-    fromHex(hex) {
-      const evenLengthHex = hex.length % 2 === 0 ? hex : hex.slice(0, hex.length - 1);
+    fromHex(hex3) {
+      const evenLengthHex = hex3.length % 2 === 0 ? hex3 : hex3.slice(0, hex3.length - 1);
       const buffer2 = [];
       for (let i = 0;i < evenLengthHex.length; i += 2) {
         const firstDigit = evenLengthHex[i];
@@ -736,39 +736,39 @@ var require_bson = __commonJS((exports) => {
       }
       throw new BSONError(`Binary sub_type "${this.sub_type}" is not supported for converting to UUID. Only "${Binary.SUBTYPE_UUID}" is currently supported.`);
     }
-    static createFromHexString(hex, subType) {
-      return new Binary(ByteUtils.fromHex(hex), subType);
+    static createFromHexString(hex3, subType) {
+      return new Binary(ByteUtils.fromHex(hex3), subType);
     }
-    static createFromBase64(base64, subType) {
-      return new Binary(ByteUtils.fromBase64(base64), subType);
+    static createFromBase64(base643, subType) {
+      return new Binary(ByteUtils.fromBase64(base643), subType);
     }
-    static fromExtendedJSON(doc, options) {
+    static fromExtendedJSON(doc2, options) {
       options = options || {};
       let data;
       let type;
-      if ("$binary" in doc) {
-        if (options.legacy && typeof doc.$binary === "string" && "$type" in doc) {
-          type = doc.$type ? parseInt(doc.$type, 16) : 0;
-          data = ByteUtils.fromBase64(doc.$binary);
+      if ("$binary" in doc2) {
+        if (options.legacy && typeof doc2.$binary === "string" && "$type" in doc2) {
+          type = doc2.$type ? parseInt(doc2.$type, 16) : 0;
+          data = ByteUtils.fromBase64(doc2.$binary);
         } else {
-          if (typeof doc.$binary !== "string") {
-            type = doc.$binary.subType ? parseInt(doc.$binary.subType, 16) : 0;
-            data = ByteUtils.fromBase64(doc.$binary.base64);
+          if (typeof doc2.$binary !== "string") {
+            type = doc2.$binary.subType ? parseInt(doc2.$binary.subType, 16) : 0;
+            data = ByteUtils.fromBase64(doc2.$binary.base64);
           }
         }
-      } else if ("$uuid" in doc) {
+      } else if ("$uuid" in doc2) {
         type = 4;
-        data = UUID.bytesFromString(doc.$uuid);
+        data = UUID.bytesFromString(doc2.$uuid);
       }
       if (!data) {
-        throw new BSONError(`Unexpected Binary Extended JSON format ${JSON.stringify(doc)}`);
+        throw new BSONError(`Unexpected Binary Extended JSON format ${JSON.stringify(doc2)}`);
       }
       return type === BSON_BINARY_SUBTYPE_UUID_NEW ? new UUID(data) : new Binary(data, type);
     }
     inspect(depth, options, inspect) {
       inspect ??= defaultInspect;
-      const base64 = ByteUtils.toBase64(this.buffer.subarray(0, this.position));
-      const base64Arg = inspect(base64, options);
+      const base643 = ByteUtils.toBase64(this.buffer.subarray(0, this.position));
+      const base64Arg = inspect(base643, options);
       const subTypeArg = inspect(this.sub_type, options);
       return `Binary.createFromBase64(${base64Arg}, ${subTypeArg})`;
     }
@@ -825,21 +825,21 @@ var require_bson = __commonJS((exports) => {
       }
       return bits;
     }
-    static fromInt8Array(array) {
-      const buffer2 = ByteUtils.allocate(array.byteLength + 2);
+    static fromInt8Array(array2) {
+      const buffer2 = ByteUtils.allocate(array2.byteLength + 2);
       buffer2[0] = Binary.VECTOR_TYPE.Int8;
       buffer2[1] = 0;
-      const intBytes = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
+      const intBytes = new Uint8Array(array2.buffer, array2.byteOffset, array2.byteLength);
       buffer2.set(intBytes, 2);
       const bin = new this(buffer2, this.SUBTYPE_VECTOR);
       validateBinaryVector(bin);
       return bin;
     }
-    static fromFloat32Array(array) {
-      const binaryBytes = ByteUtils.allocate(array.byteLength + 2);
+    static fromFloat32Array(array2) {
+      const binaryBytes = ByteUtils.allocate(array2.byteLength + 2);
       binaryBytes[0] = Binary.VECTOR_TYPE.Float32;
       binaryBytes[1] = 0;
-      const floatBytes = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
+      const floatBytes = new Uint8Array(array2.buffer, array2.byteOffset, array2.byteLength);
       binaryBytes.set(floatBytes, 2);
       if (NumberUtils.isBigEndian)
         ByteUtils.swap32(new Uint8Array(binaryBytes.buffer, 2));
@@ -847,11 +847,11 @@ var require_bson = __commonJS((exports) => {
       validateBinaryVector(bin);
       return bin;
     }
-    static fromPackedBits(array, padding = 0) {
-      const buffer2 = ByteUtils.allocate(array.byteLength + 2);
+    static fromPackedBits(array2, padding = 0) {
+      const buffer2 = ByteUtils.allocate(array2.byteLength + 2);
       buffer2[0] = Binary.VECTOR_TYPE.PackedBit;
       buffer2[1] = padding;
-      buffer2.set(array, 2);
+      buffer2.set(array2, 2);
       const bin = new this(buffer2, this.SUBTYPE_VECTOR);
       validateBinaryVector(bin);
       return bin;
@@ -983,8 +983,8 @@ var require_bson = __commonJS((exports) => {
       const buffer2 = UUID.bytesFromString(hexString);
       return new UUID(buffer2);
     }
-    static createFromBase64(base64) {
-      return new UUID(ByteUtils.fromBase64(base64));
+    static createFromBase64(base643) {
+      return new UUID(ByteUtils.fromBase64(base643));
     }
     static bytesFromString(representation) {
       if (!UUID.isValidUUIDString(representation)) {
@@ -1024,8 +1024,8 @@ var require_bson = __commonJS((exports) => {
       }
       return { $code: this.code };
     }
-    static fromExtendedJSON(doc) {
-      return new Code(doc.$code, doc.$scope);
+    static fromExtendedJSON(doc2) {
+      return new Code(doc2.$code, doc2.$scope);
     }
     inspect(depth, options, inspect) {
       inspect ??= defaultInspect;
@@ -1095,12 +1095,12 @@ var require_bson = __commonJS((exports) => {
       o = Object.assign(o, this.fields);
       return o;
     }
-    static fromExtendedJSON(doc) {
-      const copy = Object.assign({}, doc);
+    static fromExtendedJSON(doc2) {
+      const copy = Object.assign({}, doc2);
       delete copy.$ref;
       delete copy.$id;
       delete copy.$db;
-      return new DBRef(doc.$ref, doc.$id, doc.$db, copy);
+      return new DBRef(doc2.$ref, doc2.$id, doc2.$db, copy);
     }
     inspect(depth, options, inspect) {
       inspect ??= defaultInspect;
@@ -1759,19 +1759,19 @@ var require_bson = __commonJS((exports) => {
         return this.toNumber();
       return { $numberLong: this.toString() };
     }
-    static fromExtendedJSON(doc, options) {
+    static fromExtendedJSON(doc2, options) {
       const { useBigInt64 = false, relaxed = true } = { ...options };
-      if (doc.$numberLong.length > MAX_INT64_STRING_LENGTH) {
+      if (doc2.$numberLong.length > MAX_INT64_STRING_LENGTH) {
         throw new BSONError("$numberLong string is too long");
       }
-      if (!DECIMAL_REG_EX.test(doc.$numberLong)) {
-        throw new BSONError(`$numberLong string "${doc.$numberLong}" is in an invalid format`);
+      if (!DECIMAL_REG_EX.test(doc2.$numberLong)) {
+        throw new BSONError(`$numberLong string "${doc2.$numberLong}" is in an invalid format`);
       }
       if (useBigInt64) {
-        const bigIntResult = BigInt(doc.$numberLong);
+        const bigIntResult = BigInt(doc2.$numberLong);
         return BigInt.asIntN(64, bigIntResult);
       }
-      const longResult = Long.fromString(doc.$numberLong);
+      const longResult = Long.fromString(doc2.$numberLong);
       if (relaxed) {
         return longResult.toNumber();
       }
@@ -1898,8 +1898,8 @@ var require_bson = __commonJS((exports) => {
     }
     return false;
   }
-  function invalidErr(string, message) {
-    throw new BSONError(`"${string}" is not a valid Decimal128 string - ${message}`);
+  function invalidErr(string4, message) {
+    throw new BSONError(`"${string4}" is not a valid Decimal128 string - ${message}`);
   }
 
   class Decimal128 extends BSONValue {
@@ -2225,7 +2225,7 @@ var require_bson = __commonJS((exports) => {
       let significand_msb;
       let significand128 = { parts: [0, 0, 0, 0] };
       let j, k;
-      const string = [];
+      const string4 = [];
       index = 0;
       const buffer2 = this.bytes;
       const low = buffer2[index++] | buffer2[index++] << 8 | buffer2[index++] << 16 | buffer2[index++] << 24;
@@ -2238,12 +2238,12 @@ var require_bson = __commonJS((exports) => {
         high: new Long(midh, high)
       };
       if (dec.high.lessThan(Long.ZERO)) {
-        string.push("-");
+        string4.push("-");
       }
       const combination = high >> 26 & COMBINATION_MASK;
       if (combination >> 3 === 3) {
         if (combination === COMBINATION_INFINITY) {
-          return string.join("") + "Infinity";
+          return string4.join("") + "Infinity";
         } else if (combination === COMBINATION_NAN) {
           return "NaN";
         } else {
@@ -2288,51 +2288,51 @@ var require_bson = __commonJS((exports) => {
       const scientific_exponent = significand_digits - 1 + exponent;
       if (scientific_exponent >= 34 || scientific_exponent <= -7 || exponent > 0) {
         if (significand_digits > 34) {
-          string.push(`${0}`);
+          string4.push(`${0}`);
           if (exponent > 0)
-            string.push(`E+${exponent}`);
+            string4.push(`E+${exponent}`);
           else if (exponent < 0)
-            string.push(`E${exponent}`);
-          return string.join("");
+            string4.push(`E${exponent}`);
+          return string4.join("");
         }
-        string.push(`${significand[index++]}`);
+        string4.push(`${significand[index++]}`);
         significand_digits = significand_digits - 1;
         if (significand_digits) {
-          string.push(".");
+          string4.push(".");
         }
         for (let i = 0;i < significand_digits; i++) {
-          string.push(`${significand[index++]}`);
+          string4.push(`${significand[index++]}`);
         }
-        string.push("E");
+        string4.push("E");
         if (scientific_exponent > 0) {
-          string.push(`+${scientific_exponent}`);
+          string4.push(`+${scientific_exponent}`);
         } else {
-          string.push(`${scientific_exponent}`);
+          string4.push(`${scientific_exponent}`);
         }
       } else {
         if (exponent >= 0) {
           for (let i = 0;i < significand_digits; i++) {
-            string.push(`${significand[index++]}`);
+            string4.push(`${significand[index++]}`);
           }
         } else {
           let radix_position = significand_digits + exponent;
           if (radix_position > 0) {
             for (let i = 0;i < radix_position; i++) {
-              string.push(`${significand[index++]}`);
+              string4.push(`${significand[index++]}`);
             }
           } else {
-            string.push("0");
+            string4.push("0");
           }
-          string.push(".");
+          string4.push(".");
           while (radix_position++ < 0) {
-            string.push("0");
+            string4.push("0");
           }
           for (let i = 0;i < significand_digits - Math.max(radix_position - 1, 0); i++) {
-            string.push(`${significand[index++]}`);
+            string4.push(`${significand[index++]}`);
           }
         }
       }
-      return string.join("");
+      return string4.join("");
     }
     toJSON() {
       return { $numberDecimal: this.toString() };
@@ -2340,8 +2340,8 @@ var require_bson = __commonJS((exports) => {
     toExtendedJSON() {
       return { $numberDecimal: this.toString() };
     }
-    static fromExtendedJSON(doc) {
-      return Decimal128.fromString(doc.$numberDecimal);
+    static fromExtendedJSON(doc2) {
+      return Decimal128.fromString(doc2.$numberDecimal);
     }
     inspect(depth, options, inspect) {
       inspect ??= defaultInspect;
@@ -2404,8 +2404,8 @@ var require_bson = __commonJS((exports) => {
         $numberDouble: Number.isInteger(this.value) ? this.value.toFixed(1) : this.value.toString()
       };
     }
-    static fromExtendedJSON(doc, options) {
-      const doubleValue = parseFloat(doc.$numberDouble);
+    static fromExtendedJSON(doc2, options) {
+      const doubleValue = parseFloat(doc2.$numberDouble);
       return options && options.relaxed ? doubleValue : new Double(doubleValue);
     }
     inspect(depth, options, inspect) {
@@ -2454,8 +2454,8 @@ var require_bson = __commonJS((exports) => {
         return this.value;
       return { $numberInt: this.value.toString() };
     }
-    static fromExtendedJSON(doc, options) {
-      return options && options.relaxed ? parseInt(doc.$numberInt, 10) : new Int32(doc.$numberInt);
+    static fromExtendedJSON(doc2, options) {
+      return options && options.relaxed ? parseInt(doc2.$numberInt, 10) : new Int32(doc2.$numberInt);
     }
     inspect(depth, options, inspect) {
       inspect ??= defaultInspect;
@@ -2543,11 +2543,11 @@ var require_bson = __commonJS((exports) => {
         __idCache.set(this, ByteUtils.toHex(value));
       }
     }
-    static validateHexString(string) {
-      if (string?.length !== 24)
+    static validateHexString(string4) {
+      if (string4?.length !== 24)
         return false;
       for (let i = 0;i < 24; i++) {
-        const char = string.charCodeAt(i);
+        const char = string4.charCodeAt(i);
         if (char >= 48 && char <= 57 || char >= 97 && char <= 102 || char >= 65 && char <= 70) {
           continue;
         }
@@ -2570,13 +2570,13 @@ var require_bson = __commonJS((exports) => {
     static getInc() {
       return ObjectId.index = (ObjectId.index + 1) % 16777215;
     }
-    static generate(time) {
-      if (typeof time !== "number") {
-        time = Math.floor(Date.now() / 1000);
+    static generate(time3) {
+      if (typeof time3 !== "number") {
+        time3 = Math.floor(Date.now() / 1000);
       }
       const inc = ObjectId.getInc();
       const buffer2 = ByteUtils.allocateUnsafe(12);
-      NumberUtils.setInt32BE(buffer2, 0, time);
+      NumberUtils.setInt32BE(buffer2, 0, time3);
       if (PROCESS_UNIQUE === null) {
         PROCESS_UNIQUE = ByteUtils.randomBytes(5);
       }
@@ -2622,8 +2622,8 @@ var require_bson = __commonJS((exports) => {
     }
     getTimestamp() {
       const timestamp = new Date;
-      const time = NumberUtils.getUint32BE(this.buffer, 0);
-      timestamp.setTime(Math.floor(time) * 1000);
+      const time3 = NumberUtils.getUint32BE(this.buffer, 0);
+      timestamp.setTime(Math.floor(time3) * 1000);
       return timestamp;
     }
     static createPk() {
@@ -2644,11 +2644,11 @@ var require_bson = __commonJS((exports) => {
       uint8array[index + 11] = this.buffer[11];
       return 12;
     }
-    static createFromTime(time) {
+    static createFromTime(time3) {
       const buffer2 = ByteUtils.allocate(12);
       for (let i = 11;i >= 4; i--)
         buffer2[i] = 0;
-      NumberUtils.setInt32BE(buffer2, 0, time);
+      NumberUtils.setInt32BE(buffer2, 0, time3);
       return new ObjectId(buffer2);
     }
     static createFromHexString(hexString) {
@@ -2657,11 +2657,11 @@ var require_bson = __commonJS((exports) => {
       }
       return new ObjectId(ByteUtils.fromHex(hexString));
     }
-    static createFromBase64(base64) {
-      if (base64?.length !== 16) {
+    static createFromBase64(base643) {
+      if (base643?.length !== 16) {
         throw new BSONError("base64 string must be 16 characters");
       }
-      return new ObjectId(ByteUtils.fromBase64(base64));
+      return new ObjectId(ByteUtils.fromBase64(base643));
     }
     static isValid(id) {
       if (id == null)
@@ -2680,8 +2680,8 @@ var require_bson = __commonJS((exports) => {
         return { $oid: this.toHexString() };
       return { $oid: this.toString("hex") };
     }
-    static fromExtendedJSON(doc) {
-      return new ObjectId(doc.$oid);
+    static fromExtendedJSON(doc2) {
+      return new ObjectId(doc2.$oid);
     }
     isCached() {
       return ObjectId.cacheHexString && __idCache.has(this);
@@ -2691,18 +2691,18 @@ var require_bson = __commonJS((exports) => {
       return `new ObjectId(${inspect(this.toHexString(), options)})`;
     }
   }
-  function internalCalculateObjectSize(object, serializeFunctions, ignoreUndefined) {
+  function internalCalculateObjectSize(object2, serializeFunctions, ignoreUndefined) {
     let totalLength = 4 + 1;
-    if (Array.isArray(object)) {
-      for (let i = 0;i < object.length; i++) {
-        totalLength += calculateElement(i.toString(), object[i], serializeFunctions, true, ignoreUndefined);
+    if (Array.isArray(object2)) {
+      for (let i = 0;i < object2.length; i++) {
+        totalLength += calculateElement(i.toString(), object2[i], serializeFunctions, true, ignoreUndefined);
       }
     } else {
-      if (typeof object?.toBSON === "function") {
-        object = object.toBSON();
+      if (typeof object2?.toBSON === "function") {
+        object2 = object2.toBSON();
       }
-      for (const key of Object.keys(object)) {
-        totalLength += calculateElement(key, object[key], serializeFunctions, false, ignoreUndefined);
+      for (const key of Object.keys(object2)) {
+        totalLength += calculateElement(key, object2[key], serializeFunctions, false, ignoreUndefined);
       }
     }
     return totalLength;
@@ -2825,20 +2825,20 @@ var require_bson = __commonJS((exports) => {
       }
       return { $regularExpression: { pattern: this.pattern, options: this.options } };
     }
-    static fromExtendedJSON(doc) {
-      if ("$regex" in doc) {
-        if (typeof doc.$regex !== "string") {
-          if (doc.$regex._bsontype === "BSONRegExp") {
-            return doc;
+    static fromExtendedJSON(doc2) {
+      if ("$regex" in doc2) {
+        if (typeof doc2.$regex !== "string") {
+          if (doc2.$regex._bsontype === "BSONRegExp") {
+            return doc2;
           }
         } else {
-          return new BSONRegExp(doc.$regex, BSONRegExp.parseOptions(doc.$options));
+          return new BSONRegExp(doc2.$regex, BSONRegExp.parseOptions(doc2.$options));
         }
       }
-      if ("$regularExpression" in doc) {
-        return new BSONRegExp(doc.$regularExpression.pattern, BSONRegExp.parseOptions(doc.$regularExpression.options));
+      if ("$regularExpression" in doc2) {
+        return new BSONRegExp(doc2.$regularExpression.pattern, BSONRegExp.parseOptions(doc2.$regularExpression.options));
       }
-      throw new BSONError(`Unexpected BSONRegExp EJSON object form: ${JSON.stringify(doc)}`);
+      throw new BSONError(`Unexpected BSONRegExp EJSON object form: ${JSON.stringify(doc2)}`);
     }
     inspect(depth, options, inspect) {
       const stylize = getStylizeFunction(options) ?? ((v) => v);
@@ -2870,8 +2870,8 @@ var require_bson = __commonJS((exports) => {
     toExtendedJSON() {
       return { $symbol: this.value };
     }
-    static fromExtendedJSON(doc) {
-      return new BSONSymbol(doc.$symbol);
+    static fromExtendedJSON(doc2) {
+      return new BSONSymbol(doc2.$symbol);
     }
     inspect(depth, options, inspect) {
       inspect ??= defaultInspect;
@@ -2947,9 +2947,9 @@ var require_bson = __commonJS((exports) => {
     toExtendedJSON() {
       return { $timestamp: { t: this.t, i: this.i } };
     }
-    static fromExtendedJSON(doc) {
-      const i = Long.isLong(doc.$timestamp.i) ? doc.$timestamp.i.getLowBitsUnsigned() : doc.$timestamp.i;
-      const t = Long.isLong(doc.$timestamp.t) ? doc.$timestamp.t.getLowBitsUnsigned() : doc.$timestamp.t;
+    static fromExtendedJSON(doc2) {
+      const i = Long.isLong(doc2.$timestamp.i) ? doc2.$timestamp.i.getLowBitsUnsigned() : doc2.$timestamp.i;
+      const t = Long.isLong(doc2.$timestamp.t) ? doc2.$timestamp.t.getLowBitsUnsigned() : doc2.$timestamp.t;
       return new Timestamp({ t, i });
     }
     inspect(depth, options, inspect) {
@@ -3033,7 +3033,7 @@ var require_bson = __commonJS((exports) => {
     index += 4;
     if (size < 5 || size > buffer2.length)
       throw new BSONError("corrupt bson message");
-    const object = isArray ? [] : {};
+    const object2 = isArray ? [] : {};
     let arrayIndex = 0;
     let isPossibleDBRef = isArray ? false : null;
     while (true) {
@@ -3233,8 +3233,8 @@ var require_bson = __commonJS((exports) => {
         if (stringSize <= 0 || stringSize > buffer2.length - index || buffer2[index + stringSize - 1] !== 0) {
           throw new BSONError("bad string length in bson");
         }
-        const symbol = ByteUtils.toUTF8(buffer2, index, index + stringSize - 1, shouldValidateKey);
-        value = promoteValues ? symbol : new BSONSymbol(symbol);
+        const symbol2 = ByteUtils.toUTF8(buffer2, index, index + stringSize - 1, shouldValidateKey);
+        value = promoteValues ? symbol2 : new BSONSymbol(symbol2);
         index = index + stringSize;
       } else if (elementType === BSON_DATA_TIMESTAMP) {
         value = new Timestamp({
@@ -3296,14 +3296,14 @@ var require_bson = __commonJS((exports) => {
         throw new BSONError(`Detected unknown BSON type ${elementType.toString(16)} for fieldname "${name}"`);
       }
       if (name === "__proto__") {
-        Object.defineProperty(object, name, {
+        Object.defineProperty(object2, name, {
           value,
           writable: true,
           enumerable: true,
           configurable: true
         });
       } else {
-        object[name] = value;
+        object2[name] = value;
       }
     }
     if (size !== index - startIndex) {
@@ -3312,15 +3312,15 @@ var require_bson = __commonJS((exports) => {
       throw new BSONError("corrupt object bson");
     }
     if (!isPossibleDBRef)
-      return object;
-    if (isDBRefLike(object)) {
-      const copy = Object.assign({}, object);
+      return object2;
+    if (isDBRefLike(object2)) {
+      const copy = Object.assign({}, object2);
       delete copy.$ref;
       delete copy.$id;
       delete copy.$db;
-      return new DBRef(object.$ref, object.$id, object.$db, copy);
+      return new DBRef(object2.$ref, object2.$id, object2.$db, copy);
     }
-    return object;
+    return object2;
   }
   var regexp = /\x00/;
   var ignoreKeys = new Set(["$db", "$ref", "$id", "$clusterTime"]);
@@ -3606,9 +3606,9 @@ var require_bson = __commonJS((exports) => {
     startIndex += NumberUtils.setInt32LE(buffer2, index, size);
     return endIndex;
   }
-  function serializeInto(buffer2, object, checkKeys, startingIndex, depth, serializeFunctions, ignoreUndefined, path) {
+  function serializeInto(buffer2, object2, checkKeys, startingIndex, depth, serializeFunctions, ignoreUndefined, path) {
     if (path == null) {
-      if (object == null) {
+      if (object2 == null) {
         buffer2[0] = 5;
         buffer2[1] = 0;
         buffer2[2] = 0;
@@ -3616,24 +3616,24 @@ var require_bson = __commonJS((exports) => {
         buffer2[4] = 0;
         return 5;
       }
-      if (Array.isArray(object)) {
+      if (Array.isArray(object2)) {
         throw new BSONError("serialize does not support an array as the root input");
       }
-      if (typeof object !== "object") {
+      if (typeof object2 !== "object") {
         throw new BSONError("serialize does not support non-object as the root input");
-      } else if ("_bsontype" in object && typeof object._bsontype === "string") {
+      } else if ("_bsontype" in object2 && typeof object2._bsontype === "string") {
         throw new BSONError(`BSON types cannot be serialized as a document`);
-      } else if (isDate(object) || isRegExp(object) || isUint8Array(object) || isAnyArrayBuffer(object)) {
+      } else if (isDate(object2) || isRegExp(object2) || isUint8Array(object2) || isAnyArrayBuffer(object2)) {
         throw new BSONError(`date, regexp, typedarray, and arraybuffer cannot be BSON documents`);
       }
       path = new Set;
     }
-    path.add(object);
+    path.add(object2);
     let index = startingIndex + 4;
-    if (Array.isArray(object)) {
-      for (let i = 0;i < object.length; i++) {
+    if (Array.isArray(object2)) {
+      for (let i = 0;i < object2.length; i++) {
         const key = `${i}`;
-        let value = object[i];
+        let value = object2[i];
         if (typeof value?.toBSON === "function") {
           value = value.toBSON();
         }
@@ -3692,8 +3692,8 @@ var require_bson = __commonJS((exports) => {
           index = serializeFunction(buffer2, key, value, index);
         }
       }
-    } else if (object instanceof Map || isMap(object)) {
-      const iterator = object.entries();
+    } else if (object2 instanceof Map || isMap(object2)) {
+      const iterator = object2.entries();
       let done = false;
       while (!done) {
         const entry = iterator.next();
@@ -3774,14 +3774,14 @@ var require_bson = __commonJS((exports) => {
         }
       }
     } else {
-      if (typeof object?.toBSON === "function") {
-        object = object.toBSON();
-        if (object != null && typeof object !== "object") {
+      if (typeof object2?.toBSON === "function") {
+        object2 = object2.toBSON();
+        if (object2 != null && typeof object2 !== "object") {
           throw new BSONError("toBSON function did not return an object");
         }
       }
-      for (const key of Object.keys(object)) {
-        let value = object[key];
+      for (const key of Object.keys(object2)) {
+        let value = object2[key];
         if (typeof value?.toBSON === "function") {
           value = value.toBSON();
         }
@@ -3854,7 +3854,7 @@ var require_bson = __commonJS((exports) => {
         }
       }
     }
-    path.delete(object);
+    path.delete(object2);
     buffer2[index++] = 0;
     const size = index - startingIndex;
     startingIndex += NumberUtils.setInt32LE(buffer2, startingIndex, size);
@@ -3910,29 +3910,29 @@ var require_bson = __commonJS((exports) => {
     }
     if (value.$date != null) {
       const d = value.$date;
-      const date = new Date;
+      const date5 = new Date;
       if (options.legacy) {
         if (typeof d === "number")
-          date.setTime(d);
+          date5.setTime(d);
         else if (typeof d === "string")
-          date.setTime(Date.parse(d));
+          date5.setTime(Date.parse(d));
         else if (typeof d === "bigint")
-          date.setTime(Number(d));
+          date5.setTime(Number(d));
         else
           throw new BSONRuntimeError(`Unrecognized type for EJSON date: ${typeof d}`);
       } else {
         if (typeof d === "string")
-          date.setTime(Date.parse(d));
+          date5.setTime(Date.parse(d));
         else if (Long.isLong(d))
-          date.setTime(d.toNumber());
+          date5.setTime(d.toNumber());
         else if (typeof d === "number" && options.relaxed)
-          date.setTime(d);
+          date5.setTime(d);
         else if (typeof d === "bigint")
-          date.setTime(Number(d));
+          date5.setTime(Number(d));
         else
           throw new BSONRuntimeError(`Unrecognized type for EJSON date: ${typeof d}`);
       }
-      return date;
+      return date5;
     }
     if (value.$code != null) {
       const copy = Object.assign({}, value);
@@ -3956,8 +3956,8 @@ var require_bson = __commonJS((exports) => {
     }
     return value;
   }
-  function serializeArray(array, options) {
-    return array.map((v, index) => {
+  function serializeArray(array2, options) {
+    return array2.map((v, index) => {
       options.seenObjects.push({ propertyName: `index ${index}`, obj: null });
       try {
         return serializeValue(v, options);
@@ -3966,9 +3966,9 @@ var require_bson = __commonJS((exports) => {
       }
     });
   }
-  function getISOString(date) {
-    const isoStr = date.toISOString();
-    return date.getUTCMilliseconds() !== 0 ? isoStr : isoStr.slice(0, -5) + "Z";
+  function getISOString(date5) {
+    const isoStr = date5.toISOString();
+    return date5.getUTCMilliseconds() !== 0 ? isoStr : isoStr.slice(0, -5) + "Z";
   }
   function serializeValue(value, options) {
     if (value instanceof Map || isMap(value)) {
@@ -4055,16 +4055,16 @@ var require_bson = __commonJS((exports) => {
     BSONSymbol: (o) => new BSONSymbol(o.value),
     Timestamp: (o) => Timestamp.fromBits(o.low, o.high)
   };
-  function serializeDocument(doc, options) {
-    if (doc == null || typeof doc !== "object")
+  function serializeDocument(doc2, options) {
+    if (doc2 == null || typeof doc2 !== "object")
       throw new BSONError("not an object instance");
-    const bsontype = doc._bsontype;
+    const bsontype = doc2._bsontype;
     if (typeof bsontype === "undefined") {
       const _doc = {};
-      for (const name of Object.keys(doc)) {
+      for (const name of Object.keys(doc2)) {
         options.seenObjects.push({ propertyName: name, obj: null });
         try {
-          const value = serializeValue(doc[name], options);
+          const value = serializeValue(doc2[name], options);
           if (name === "__proto__") {
             Object.defineProperty(_doc, name, {
               value,
@@ -4080,14 +4080,14 @@ var require_bson = __commonJS((exports) => {
         }
       }
       return _doc;
-    } else if (doc != null && typeof doc === "object" && typeof doc._bsontype === "string" && doc[BSON_VERSION_SYMBOL] !== BSON_MAJOR_VERSION) {
+    } else if (doc2 != null && typeof doc2 === "object" && typeof doc2._bsontype === "string" && doc2[BSON_VERSION_SYMBOL] !== BSON_MAJOR_VERSION) {
       throw new BSONVersionError;
-    } else if (isBSONType(doc)) {
-      let outDoc = doc;
+    } else if (isBSONType(doc2)) {
+      let outDoc = doc2;
       if (typeof outDoc.toExtendedJSON !== "function") {
-        const mapper = BSON_TYPE_MAPPINGS[doc._bsontype];
+        const mapper = BSON_TYPE_MAPPINGS[doc2._bsontype];
         if (!mapper) {
-          throw new BSONError("Unrecognized or invalid _bsontype: " + doc._bsontype);
+          throw new BSONError("Unrecognized or invalid _bsontype: " + doc2._bsontype);
         }
         outDoc = mapper(outDoc);
       }
@@ -4101,7 +4101,7 @@ var require_bson = __commonJS((exports) => {
       throw new BSONError("_bsontype must be a string, but was: " + typeof bsontype);
     }
   }
-  function parse(text, options) {
+  function parse6(text, options) {
     const ejsonOptions = {
       useBigInt64: options?.useBigInt64 ?? false,
       relaxed: options?.relaxed ?? true,
@@ -4127,8 +4127,8 @@ var require_bson = __commonJS((exports) => {
     const serializeOptions = Object.assign({ relaxed: true, legacy: false }, options, {
       seenObjects: [{ propertyName: "(root)", obj: null }]
     });
-    const doc = serializeValue(value, serializeOptions);
-    return JSON.stringify(doc, replacer, space);
+    const doc2 = serializeValue(value, serializeOptions);
+    return JSON.stringify(doc2, replacer, space);
   }
   function EJSONserialize(value, options) {
     options = options || {};
@@ -4136,10 +4136,10 @@ var require_bson = __commonJS((exports) => {
   }
   function EJSONdeserialize(ejson, options) {
     options = options || {};
-    return parse(JSON.stringify(ejson), options);
+    return parse6(JSON.stringify(ejson), options);
   }
   var EJSON = Object.create(null);
-  EJSON.parse = parse;
+  EJSON.parse = parse6;
   EJSON.stringify = stringify;
   EJSON.serialize = EJSONserialize;
   EJSON.deserialize = EJSONdeserialize;
@@ -4257,7 +4257,7 @@ var require_bson = __commonJS((exports) => {
       buffer = ByteUtils.allocate(size);
     }
   }
-  function serialize(object, options = {}) {
+  function serialize2(object2, options = {}) {
     const checkKeys = typeof options.checkKeys === "boolean" ? options.checkKeys : false;
     const serializeFunctions = typeof options.serializeFunctions === "boolean" ? options.serializeFunctions : false;
     const ignoreUndefined = typeof options.ignoreUndefined === "boolean" ? options.ignoreUndefined : true;
@@ -4265,28 +4265,28 @@ var require_bson = __commonJS((exports) => {
     if (buffer.length < minInternalBufferSize) {
       buffer = ByteUtils.allocate(minInternalBufferSize);
     }
-    const serializationIndex = serializeInto(buffer, object, checkKeys, 0, 0, serializeFunctions, ignoreUndefined, null);
+    const serializationIndex = serializeInto(buffer, object2, checkKeys, 0, 0, serializeFunctions, ignoreUndefined, null);
     const finishedBuffer = ByteUtils.allocateUnsafe(serializationIndex);
     finishedBuffer.set(buffer.subarray(0, serializationIndex), 0);
     return finishedBuffer;
   }
-  function serializeWithBufferAndIndex(object, finalBuffer, options = {}) {
+  function serializeWithBufferAndIndex(object2, finalBuffer, options = {}) {
     const checkKeys = typeof options.checkKeys === "boolean" ? options.checkKeys : false;
     const serializeFunctions = typeof options.serializeFunctions === "boolean" ? options.serializeFunctions : false;
     const ignoreUndefined = typeof options.ignoreUndefined === "boolean" ? options.ignoreUndefined : true;
     const startIndex = typeof options.index === "number" ? options.index : 0;
-    const serializationIndex = serializeInto(buffer, object, checkKeys, 0, 0, serializeFunctions, ignoreUndefined, null);
+    const serializationIndex = serializeInto(buffer, object2, checkKeys, 0, 0, serializeFunctions, ignoreUndefined, null);
     finalBuffer.set(buffer.subarray(0, serializationIndex), startIndex);
     return startIndex + serializationIndex - 1;
   }
   function deserialize(buffer2, options = {}) {
     return internalDeserialize(ByteUtils.toLocalBufferType(buffer2), options);
   }
-  function calculateObjectSize(object, options = {}) {
+  function calculateObjectSize(object2, options = {}) {
     options = options || {};
     const serializeFunctions = typeof options.serializeFunctions === "boolean" ? options.serializeFunctions : false;
     const ignoreUndefined = typeof options.ignoreUndefined === "boolean" ? options.ignoreUndefined : true;
-    return internalCalculateObjectSize(object, serializeFunctions, ignoreUndefined);
+    return internalCalculateObjectSize(object2, serializeFunctions, ignoreUndefined);
   }
   function deserializeStream(data, startIndex, numberOfDocuments, documents, docStartIndex, options) {
     const internalOptions = Object.assign({ allowObjectSmallerThanBufferSize: true, index: 0 }, options);
@@ -4330,7 +4330,7 @@ var require_bson = __commonJS((exports) => {
     deserialize,
     deserializeStream,
     onDemand,
-    serialize,
+    serialize: serialize2,
     serializeWithBufferAndIndex,
     setInternalBufferSize
   });
@@ -4363,7 +4363,7 @@ var require_bson = __commonJS((exports) => {
   exports.deserialize = deserialize;
   exports.deserializeStream = deserializeStream;
   exports.onDemand = onDemand;
-  exports.serialize = serialize;
+  exports.serialize = serialize2;
   exports.serializeWithBufferAndIndex = serializeWithBufferAndIndex;
   exports.setInternalBufferSize = setInternalBufferSize;
 });
@@ -5050,51 +5050,51 @@ var require_error = __commonJS((exports) => {
     exports.MONGODB_ERROR_CODES.ReadConcernMajorityNotAvailableYet
   ]);
   var RETRYABLE_WRITE_ERROR_CODES = RETRYABLE_READ_ERROR_CODES;
-  function needsRetryableWriteLabel(error, maxWireVersion, serverType) {
-    if (error instanceof MongoNetworkError) {
+  function needsRetryableWriteLabel(error48, maxWireVersion, serverType) {
+    if (error48 instanceof MongoNetworkError) {
       return true;
     }
-    if (error instanceof MongoError) {
-      if ((maxWireVersion >= 9 || isRetryableWriteError(error)) && !error.hasErrorLabel(exports.MongoErrorLabel.HandshakeError)) {
+    if (error48 instanceof MongoError) {
+      if ((maxWireVersion >= 9 || isRetryableWriteError(error48)) && !error48.hasErrorLabel(exports.MongoErrorLabel.HandshakeError)) {
         return false;
       }
     }
-    if (error instanceof MongoWriteConcernError) {
+    if (error48 instanceof MongoWriteConcernError) {
       if (serverType === "Mongos" && maxWireVersion < 9) {
-        return RETRYABLE_WRITE_ERROR_CODES.has(error.result.code ?? 0);
+        return RETRYABLE_WRITE_ERROR_CODES.has(error48.result.code ?? 0);
       }
-      const code = error.result.writeConcernError.code ?? Number(error.code);
+      const code = error48.result.writeConcernError.code ?? Number(error48.code);
       return RETRYABLE_WRITE_ERROR_CODES.has(Number.isNaN(code) ? 0 : code);
     }
-    if (error instanceof MongoError) {
-      return RETRYABLE_WRITE_ERROR_CODES.has(Number(error.code));
+    if (error48 instanceof MongoError) {
+      return RETRYABLE_WRITE_ERROR_CODES.has(Number(error48.code));
     }
-    const isNotWritablePrimaryError2 = exports.LEGACY_NOT_WRITABLE_PRIMARY_ERROR_MESSAGE.test(error.message);
+    const isNotWritablePrimaryError2 = exports.LEGACY_NOT_WRITABLE_PRIMARY_ERROR_MESSAGE.test(error48.message);
     if (isNotWritablePrimaryError2) {
       return true;
     }
-    const isNodeIsRecoveringError = exports.NODE_IS_RECOVERING_ERROR_MESSAGE.test(error.message);
+    const isNodeIsRecoveringError = exports.NODE_IS_RECOVERING_ERROR_MESSAGE.test(error48.message);
     if (isNodeIsRecoveringError) {
       return true;
     }
     return false;
   }
-  function isRetryableWriteError(error) {
-    return error.hasErrorLabel(exports.MongoErrorLabel.RetryableWriteError) || error.hasErrorLabel(exports.MongoErrorLabel.PoolRequestedRetry);
+  function isRetryableWriteError(error48) {
+    return error48.hasErrorLabel(exports.MongoErrorLabel.RetryableWriteError) || error48.hasErrorLabel(exports.MongoErrorLabel.PoolRequestedRetry);
   }
-  function isRetryableReadError(error) {
-    const hasRetryableErrorCode = typeof error.code === "number" ? RETRYABLE_READ_ERROR_CODES.has(error.code) : false;
+  function isRetryableReadError(error48) {
+    const hasRetryableErrorCode = typeof error48.code === "number" ? RETRYABLE_READ_ERROR_CODES.has(error48.code) : false;
     if (hasRetryableErrorCode) {
       return true;
     }
-    if (error instanceof MongoNetworkError) {
+    if (error48 instanceof MongoNetworkError) {
       return true;
     }
-    const isNotWritablePrimaryError2 = exports.LEGACY_NOT_WRITABLE_PRIMARY_ERROR_MESSAGE.test(error.message);
+    const isNotWritablePrimaryError2 = exports.LEGACY_NOT_WRITABLE_PRIMARY_ERROR_MESSAGE.test(error48.message);
     if (isNotWritablePrimaryError2) {
       return true;
     }
-    const isNodeIsRecoveringError = exports.NODE_IS_RECOVERING_ERROR_MESSAGE.test(error.message);
+    const isNodeIsRecoveringError = exports.NODE_IS_RECOVERING_ERROR_MESSAGE.test(error48.message);
     if (isNodeIsRecoveringError) {
       return true;
     }
@@ -5134,33 +5134,33 @@ var require_error = __commonJS((exports) => {
   function isNodeShuttingDownError(err) {
     return !!(typeof err.code === "number" && SDAM_NODE_SHUTTING_DOWN_ERROR_CODES.has(err.code));
   }
-  function isSDAMUnrecoverableError(error) {
-    if (error instanceof MongoParseError || error == null) {
+  function isSDAMUnrecoverableError(error48) {
+    if (error48 instanceof MongoParseError || error48 == null) {
       return true;
     }
-    return isRecoveringError(error) || isNotWritablePrimaryError(error);
+    return isRecoveringError(error48) || isNotWritablePrimaryError(error48);
   }
   function isNetworkTimeoutError(err) {
     return !!(err instanceof MongoNetworkError && err.message.match(/timed out/));
   }
-  function isResumableError(error, wireVersion) {
-    if (error == null || !(error instanceof MongoError)) {
+  function isResumableError(error48, wireVersion) {
+    if (error48 == null || !(error48 instanceof MongoError)) {
       return false;
     }
-    if (error instanceof MongoNetworkError) {
+    if (error48 instanceof MongoNetworkError) {
       return true;
     }
-    if (error instanceof MongoServerSelectionError) {
+    if (error48 instanceof MongoServerSelectionError) {
       return true;
     }
     if (wireVersion != null && wireVersion >= 9) {
-      if (error.code === exports.MONGODB_ERROR_CODES.CursorNotFound) {
+      if (error48.code === exports.MONGODB_ERROR_CODES.CursorNotFound) {
         return true;
       }
-      return error.hasErrorLabel(exports.MongoErrorLabel.ResumableChangeStreamError);
+      return error48.hasErrorLabel(exports.MongoErrorLabel.ResumableChangeStreamError);
     }
-    if (typeof error.code === "number") {
-      return exports.GET_MORE_RESUMABLE_CODES.has(error.code);
+    if (typeof error48.code === "number") {
+      return exports.GET_MORE_RESUMABLE_CODES.has(error48.code);
     }
     return false;
   }
@@ -5842,10 +5842,10 @@ var require_document = __commonJS((exports) => {
         return true;
       return this.getElement(name) != null;
     }
-    get(name, as, required) {
+    get(name, as, required2) {
       const element = this.getElement(name);
       if (element == null) {
-        if (required === true) {
+        if (required2 === true) {
           throw new bson_1.BSONError(`BSON element "${name}" is missing`);
         } else {
           return null;
@@ -5854,7 +5854,7 @@ var require_document = __commonJS((exports) => {
       if (element.value == null) {
         const value = this.toJSValue(element.element, as);
         if (value == null) {
-          if (required === true) {
+          if (required2 === true) {
             throw new bson_1.BSONError(`BSON element "${name}" is missing`);
           } else {
             return null;
@@ -5864,13 +5864,13 @@ var require_document = __commonJS((exports) => {
       }
       return element.value;
     }
-    getNumber(name, required) {
+    getNumber(name, required2) {
       const maybeBool = this.get(name, bson_1.BSONType.bool);
       const bool = maybeBool == null ? null : maybeBool ? 1 : 0;
       const maybeLong = this.get(name, bson_1.BSONType.long);
       const long = maybeLong == null ? null : Number(maybeLong);
       const result = bool ?? long ?? this.get(name, bson_1.BSONType.int) ?? this.get(name, bson_1.BSONType.double);
-      if (required === true && result == null) {
+      if (required2 === true && result == null) {
         throw new bson_1.BSONError(`BSON element "${name}" is missing`);
       }
       return result;
@@ -5926,9 +5926,9 @@ var require_responses = __commonJS((exports) => {
   }
 
   class MongoDBResponse extends document_1.OnDemandDocument {
-    get(name, as, required) {
+    get(name, as, required2) {
       try {
-        return super.get(name, as, required);
+        return super.get(name, as, required2);
       } catch (cause) {
         throw new error_1.MongoUnexpectedServerResponseError(cause.message, { cause });
       }
@@ -6091,11 +6091,11 @@ var require_responses = __commonJS((exports) => {
       if (options?.raw) {
         return result.toBytes();
       } else {
-        const object = result.toObject(options);
+        const object2 = result.toObject(options);
         if (encryptedResult) {
-          (0, utils_1.decorateDecryptionResult)(object, encryptedResult.toObject(options), true);
+          (0, utils_1.decorateDecryptionResult)(object2, encryptedResult.toObject(options), true);
         }
-        return object;
+        return object2;
       }
     }
     clear() {
@@ -6232,7 +6232,7 @@ var require_utils = __commonJS((exports) => {
   exports.isUint8Array = isUint8Array;
   exports.hostMatchesWildcards = hostMatchesWildcards;
   exports.normalizeHintField = normalizeHintField;
-  exports.isObject = isObject;
+  exports.isObject = isObject2;
   exports.mergeOptions = mergeOptions;
   exports.filterOptions = filterOptions;
   exports.isPromiseLike = isPromiseLike;
@@ -6282,7 +6282,7 @@ var require_utils = __commonJS((exports) => {
   var fs_1 = __require("fs");
   var http = __require("http");
   var timers_1 = __require("timers");
-  var url = __require("url");
+  var url2 = __require("url");
   var url_1 = __require("url");
   var util_1 = __require("util");
   var bson_1 = require_bson2();
@@ -6335,8 +6335,8 @@ var require_utils = __commonJS((exports) => {
     }
     return finalHint;
   }
-  var TO_STRING = (object) => Object.prototype.toString.call(object);
-  function isObject(arg) {
+  var TO_STRING = (object2) => Object.prototype.toString.call(object2);
+  function isObject2(arg) {
     return TO_STRING(arg) === "[object Object]";
   }
   function mergeOptions(target, source) {
@@ -6497,20 +6497,20 @@ var require_utils = __commonJS((exports) => {
     const elapsed = now() - started;
     return elapsed < 0 ? 0 : elapsed;
   }
-  function hasAtomicOperators(doc, options) {
-    if (Array.isArray(doc)) {
-      for (const document of doc) {
+  function hasAtomicOperators(doc2, options) {
+    if (Array.isArray(doc2)) {
+      for (const document of doc2) {
         if (hasAtomicOperators(document)) {
           return true;
         }
       }
       return false;
     }
-    const keys = Object.keys(doc);
+    const keys = Object.keys(doc2);
     if (options?.ignoreUndefined) {
       let allUndefined = true;
       for (const key of keys) {
-        if (doc[key] !== undefined) {
+        if (doc2[key] !== undefined) {
           allUndefined = false;
           break;
         }
@@ -6559,18 +6559,18 @@ var require_utils = __commonJS((exports) => {
     }
     return result;
   }
-  function isSuperset(set, subset) {
-    set = Array.isArray(set) ? new Set(set) : set;
+  function isSuperset(set2, subset) {
+    set2 = Array.isArray(set2) ? new Set(set2) : set2;
     subset = Array.isArray(subset) ? new Set(subset) : subset;
     for (const elem of subset) {
-      if (!set.has(elem)) {
+      if (!set2.has(elem)) {
         return false;
       }
     }
     return true;
   }
-  function isHello(doc) {
-    return doc[constants_2.LEGACY_HELLO_COMMAND] || doc.hello ? true : false;
+  function isHello(doc2) {
+    return doc2[constants_2.LEGACY_HELLO_COMMAND] || doc2.hello ? true : false;
   }
   function setDifference(setA, setB) {
     const difference = new Set(setA);
@@ -6579,14 +6579,14 @@ var require_utils = __commonJS((exports) => {
     }
     return difference;
   }
-  var HAS_OWN = (object, prop) => Object.prototype.hasOwnProperty.call(object, prop);
+  var HAS_OWN = (object2, prop) => Object.prototype.hasOwnProperty.call(object2, prop);
   function isRecord(value, requiredKeys = undefined) {
-    if (!isObject(value)) {
+    if (!isObject2(value)) {
       return false;
     }
     const ctor = value.constructor;
     if (ctor && ctor.prototype) {
-      if (!isObject(ctor.prototype)) {
+      if (!isObject2(ctor.prototype)) {
         return false;
       }
       if (!HAS_OWN(ctor.prototype, "isPrototypeOf")) {
@@ -6765,20 +6765,20 @@ var require_utils = __commonJS((exports) => {
         return;
       }
       const urlString = `iLoveJS://${escapedHost}`;
-      let url2;
+      let url3;
       try {
-        url2 = new url_1.URL(urlString);
+        url3 = new url_1.URL(urlString);
       } catch (urlError) {
         const runtimeError = new error_1.MongoRuntimeError(`Unable to parse ${escapedHost} with URL`);
         runtimeError.cause = urlError;
         throw runtimeError;
       }
-      const hostname = url2.hostname;
-      const port = url2.port;
-      let normalized = decodeURIComponent(hostname).toLowerCase();
+      const hostname3 = url3.hostname;
+      const port = url3.port;
+      let normalized = decodeURIComponent(hostname3).toLowerCase();
       if (normalized.startsWith("[") && normalized.endsWith("]")) {
         this.isIPv6 = true;
-        normalized = normalized.substring(1, hostname.length - 1);
+        normalized = normalized.substring(1, hostname3.length - 1);
       }
       this.host = normalized.toLowerCase();
       if (typeof port === "number") {
@@ -6924,10 +6924,10 @@ var require_utils = __commonJS((exports) => {
       throw new error_1.MongoAPIError("Server record does not share hostname with parent URI");
     }
   }
-  function get(url2, options = {}) {
+  function get(url3, options = {}) {
     return new Promise((resolve, reject) => {
       let timeoutId;
-      const request2 = http.get(url2, options, (response) => {
+      const request2 = http.get(url3, options, (response) => {
         response.setEncoding("utf8");
         let body = "";
         response.on("data", (chunk) => body += chunk);
@@ -6935,9 +6935,9 @@ var require_utils = __commonJS((exports) => {
           (0, timers_1.clearTimeout)(timeoutId);
           resolve({ status: response.statusCode, body });
         });
-      }).on("error", (error) => {
+      }).on("error", (error48) => {
         (0, timers_1.clearTimeout)(timeoutId);
-        reject(error);
+        reject(error48);
       }).end();
       timeoutId = (0, timers_1.setTimeout)(() => {
         request2.destroy(new error_1.MongoNetworkTimeoutError(`request timed out after 10 seconds`));
@@ -6950,7 +6950,7 @@ var require_utils = __commonJS((exports) => {
         method: "GET",
         timeout: 1e4,
         json: true,
-        ...url.parse(uri),
+        ...url2.parse(uri),
         ...options
       };
       const req = http.request(requestOptions, (res) => {
@@ -6973,7 +6973,7 @@ var require_utils = __commonJS((exports) => {
         });
       });
       req.once("timeout", () => req.destroy(new error_1.MongoNetworkTimeoutError(`Network request to ${uri} timed out after ${options.timeout} ms`)));
-      req.once("error", (error) => reject(error));
+      req.once("error", (error48) => reject(error48));
       req.end();
     });
   }
@@ -6987,11 +6987,11 @@ var require_utils = __commonJS((exports) => {
   function promiseWithResolvers() {
     let resolve;
     let reject;
-    const promise = new Promise(function withResolversExecutor(promiseResolve, promiseReject) {
+    const promise2 = new Promise(function withResolversExecutor(promiseResolve, promiseReject) {
       resolve = promiseResolve;
       reject = promiseReject;
     });
-    return { promise, resolve, reject };
+    return { promise: promise2, resolve, reject };
   }
   function squashError(_error) {
     return;
@@ -6999,15 +6999,15 @@ var require_utils = __commonJS((exports) => {
   exports.randomBytes = (0, util_1.promisify)(crypto2.randomBytes);
   async function once(ee, name, options) {
     options?.signal?.throwIfAborted();
-    const { promise, resolve, reject } = promiseWithResolvers();
+    const { promise: promise2, resolve, reject } = promiseWithResolvers();
     const onEvent = (data) => resolve(data);
-    const onError = (error) => reject(error);
+    const onError = (error48) => reject(error48);
     const abortListener = addAbortListener(options?.signal, function() {
       reject(this.reason);
     });
     ee.once(name, onEvent).once("error", onError);
     try {
-      return await promise;
+      return await promise2;
     } finally {
       ee.off(name, onEvent);
       ee.off("error", onError);
@@ -7032,12 +7032,12 @@ var require_utils = __commonJS((exports) => {
       return false;
     }
   }
-  function csotMin(duration1, duration2) {
+  function csotMin(duration1, duration22) {
     if (duration1 === 0)
-      return duration2;
-    if (duration2 === 0)
+      return duration22;
+    if (duration22 === 0)
       return duration1;
-    return Math.min(duration1, duration2);
+    return Math.min(duration1, duration22);
   }
   function noop() {
     return;
@@ -7077,16 +7077,16 @@ var require_utils = __commonJS((exports) => {
     signal.addEventListener("abort", listener, { once: true });
     return { [exports.kDispose]: () => signal.removeEventListener("abort", listener) };
   }
-  async function abortable(promise, { signal }) {
+  async function abortable(promise2, { signal }) {
     if (signal == null) {
-      return await promise;
+      return await promise2;
     }
-    const { promise: aborted, reject } = promiseWithResolvers();
+    const { promise: aborted2, reject } = promiseWithResolvers();
     const abortListener = signal.aborted ? reject(signal.reason) : addAbortListener(signal, function() {
       reject(this.reason);
     });
     try {
-      return await Promise.race([promise, aborted]);
+      return await Promise.race([promise2, aborted2]);
     } finally {
       abortListener?.[exports.kDispose]();
     }
@@ -7109,8 +7109,8 @@ var require_timeout = __commonJS((exports) => {
       super(message, options);
       this.duration = options.duration;
     }
-    static is(error) {
-      return error != null && typeof error === "object" && "name" in error && error.name === "TimeoutError";
+    static is(error48) {
+      return error48 != null && typeof error48 === "object" && "name" in error48 && error48.name === "TimeoutError";
     }
   }
   exports.TimeoutError = TimeoutError;
@@ -7127,10 +7127,10 @@ var require_timeout = __commonJS((exports) => {
       return Math.trunc(performance.now()) - this.start;
     }
     constructor(executor = () => null, options) {
-      const duration = options?.duration ?? 0;
+      const duration3 = options?.duration ?? 0;
       const unref = !!options?.unref;
       const rejection = options?.rejection;
-      if (duration < 0) {
+      if (duration3 < 0) {
         throw new error_1.MongoInvalidArgumentError("Cannot create a Timeout with a negative duration");
       }
       let reject;
@@ -7141,13 +7141,13 @@ var require_timeout = __commonJS((exports) => {
       this.ended = null;
       this.timedOut = false;
       this.cleared = false;
-      this.duration = duration;
+      this.duration = duration3;
       this.start = Math.trunc(performance.now());
       if (rejection == null && this.duration > 0) {
         this.id = (0, timers_1.setTimeout)(() => {
           this.ended = Math.trunc(performance.now());
           this.timedOut = true;
-          reject(new TimeoutError(`Expired after ${duration}ms`, { duration }));
+          reject(new TimeoutError(`Expired after ${duration3}ms`, { duration: duration3 }));
         }, this.duration);
         if (typeof this.id.unref === "function" && unref) {
           this.id.unref();
@@ -7170,8 +7170,8 @@ var require_timeout = __commonJS((exports) => {
         throw new TimeoutError("Timed out", { duration: this.duration });
       }
     }
-    static expires(duration, unref) {
-      return new Timeout(undefined, { duration, unref });
+    static expires(duration3, unref) {
+      return new Timeout(undefined, { duration: duration3, unref });
     }
     static reject(rejection) {
       return new Timeout(undefined, { duration: 0, unref: true, rejection });
@@ -7453,8 +7453,8 @@ var require_operation = __commonJS((exports) => {
     handleOk(response) {
       return response.toObject(this.bsonOptions);
     }
-    handleError(error) {
-      throw error;
+    handleError(error48) {
+      throw error48;
     }
   }
   exports.AbstractOperation = AbstractOperation;
@@ -7776,8 +7776,8 @@ var require_execute_operation = __commonJS((exports) => {
         try {
           const result = await server.command(operation, timeoutContext);
           return operation.handleOk(result);
-        } catch (error) {
-          return operation.handleError(error);
+        } catch (error48) {
+          return operation.handleError(error48);
         }
       } catch (operationError) {
         if (!(operationError instanceof error_1.MongoError))
@@ -8164,8 +8164,8 @@ var require_insert = __commonJS((exports) => {
   exports.InsertOperation = InsertOperation;
 
   class InsertOneOperation extends InsertOperation {
-    constructor(collection, doc, options) {
-      super(collection.s.namespace, [(0, utils_1.maybeAddIdToDocuments)(collection, doc, options)], options);
+    constructor(collection, doc2, options) {
+      super(collection.s.namespace, [(0, utils_1.maybeAddIdToDocuments)(collection, doc2, options)], options);
     }
     handleOk(response) {
       const res = super.handleOk(response);
@@ -8506,8 +8506,8 @@ var require_common2 = __commonJS((exports) => {
   class BulkWriteResult {
     static generateIdMap(ids) {
       const idMap = {};
-      for (const doc of ids) {
-        idMap[doc.index] = doc._id;
+      for (const doc2 of ids) {
+        idMap[doc2.index] = doc2._id;
       }
       return idMap;
     }
@@ -8577,8 +8577,8 @@ var require_common2 = __commonJS((exports) => {
   exports.BulkWriteResult = BulkWriteResult;
 
   class WriteConcernError {
-    constructor(error) {
-      this.serverError = error;
+    constructor(error48) {
+      this.serverError = error48;
     }
     get code() {
       return this.serverError.code;
@@ -8729,8 +8729,8 @@ var require_common2 = __commonJS((exports) => {
       let result;
       try {
         result = await (0, execute_operation_1.executeOperation)(bulkOperation.s.collection.client, operation, finalOptions.timeoutContext);
-      } catch (error) {
-        thrownError = error;
+      } catch (error48) {
+        thrownError = error48;
       }
       if (thrownError != null) {
         if (thrownError instanceof error_1.MongoWriteConcernError) {
@@ -8755,18 +8755,18 @@ var require_common2 = __commonJS((exports) => {
   }
 
   class MongoBulkWriteError extends error_1.MongoServerError {
-    constructor(error, result) {
-      super(error);
+    constructor(error48, result) {
+      super(error48);
       this.writeErrors = [];
-      if (error instanceof WriteConcernError)
-        this.err = error;
-      else if (!(error instanceof Error)) {
-        this.message = error.message;
-        this.code = error.code;
-        this.writeErrors = error.writeErrors ?? [];
+      if (error48 instanceof WriteConcernError)
+        this.err = error48;
+      else if (!(error48 instanceof Error)) {
+        this.message = error48.message;
+        this.code = error48.code;
+        this.writeErrors = error48.writeErrors ?? [];
       }
       this.result = result;
-      Object.assign(this, error);
+      Object.assign(this, error48);
     }
     get name() {
       return "MongoBulkWriteError";
@@ -9671,7 +9671,7 @@ var require_mongo_logger = __commonJS((exports) => {
         }
       }
     }
-    logWriteFailureHandler(error) {
+    logWriteFailureHandler(error48) {
       if (this.logDestinationIsStdErr) {
         this.turnOffSeverities();
         this.clearPendingLog();
@@ -9684,7 +9684,7 @@ var require_mongo_logger = __commonJS((exports) => {
         toLog: function() {
           return {
             message: "User input for mongodbLogPath is now invalid. Logging is halted.",
-            error: error.message
+            error: error48.message
           };
         }
       });
@@ -9721,8 +9721,8 @@ var require_mongo_logger = __commonJS((exports) => {
         if ((0, utils_1.isPromiseLike)(logResult)) {
           this.pendingLog = logResult.then(this.clearPendingLog.bind(this), this.logWriteFailureHandler.bind(this));
         }
-      } catch (error) {
-        this.logWriteFailureHandler(error);
+      } catch (error48) {
+        this.logWriteFailureHandler(error48);
       }
     }
     static resolveOptions(envOptions, clientOptions) {
@@ -10170,10 +10170,10 @@ var require_sessions = __commonJS((exports) => {
         if (this.inTransaction()) {
           await this.abortTransaction({ ...options, throwTimeout: true });
         }
-      } catch (error) {
-        if (error.name === "MongoOperationTimeoutError")
-          throw error;
-        (0, utils_1.squashError)(error);
+      } catch (error48) {
+        if (error48.name === "MongoOperationTimeoutError")
+          throw error48;
+        (0, utils_1.squashError)(error48);
       } finally {
         if (!this.hasEnded) {
           const serverSession = this.serverSession;
@@ -10410,11 +10410,11 @@ var require_sessions = __commonJS((exports) => {
         while (!committed) {
           this.startTransaction(options);
           try {
-            const promise = fn(this);
-            if (!(0, utils_1.isPromiseLike)(promise)) {
+            const promise2 = fn(this);
+            if (!(0, utils_1.isPromiseLike)(promise2)) {
               throw new error_1.MongoInvalidArgumentError("Function provided to `withTransaction` must return a Promise");
             }
-            result = await promise;
+            result = await promise2;
             if (this.transaction.state === transactions_1.TxnState.NO_TRANSACTION || this.transaction.state === transactions_1.TxnState.TRANSACTION_COMMITTED || this.transaction.state === transactions_1.TxnState.TRANSACTION_ABORTED) {
               return result;
             }
@@ -10483,8 +10483,8 @@ var require_sessions = __commonJS((exports) => {
   }
   function maybeClearPinnedConnection(session, options) {
     const conn = session.pinnedConnection;
-    const error = options?.error;
-    if (session.inTransaction() && error && error instanceof error_1.MongoError && error.hasErrorLabel(error_1.MongoErrorLabel.TransientTransactionError)) {
+    const error48 = options?.error;
+    if (session.inTransaction() && error48 && error48 instanceof error_1.MongoError && error48.hasErrorLabel(error_1.MongoErrorLabel.TransientTransactionError)) {
       return;
     }
     const topology = session.client.topology;
@@ -10799,9 +10799,9 @@ var require_abstract_cursor = __commonJS((exports) => {
     bufferedCount() {
       return this.documents?.length ?? 0;
     }
-    readBufferedDocuments(number) {
+    readBufferedDocuments(number4) {
       const bufferedDocs = [];
-      const documentsToRead = Math.min(number ?? this.documents?.length ?? 0, this.documents?.length ?? 0);
+      const documentsToRead = Math.min(number4 ?? this.documents?.length ?? 0, this.documents?.length ?? 0);
       for (let count = 0;count < documentsToRead; count++) {
         const document = this.documents?.shift(this.deserializationOptions);
         if (document != null) {
@@ -10837,8 +10837,8 @@ var require_abstract_cursor = __commonJS((exports) => {
         if (!this.isClosed) {
           try {
             await this.close();
-          } catch (error) {
-            (0, utils_1.squashError)(error);
+          } catch (error48) {
+            (0, utils_1.squashError)(error48);
           }
         }
       }
@@ -10885,11 +10885,11 @@ var require_abstract_cursor = __commonJS((exports) => {
       }
       try {
         do {
-          const doc = this.documents?.shift(this.deserializationOptions);
-          if (doc != null) {
+          const doc2 = this.documents?.shift(this.deserializationOptions);
+          if (doc2 != null) {
             if (this.transform != null)
-              return await this.transformDocument(doc);
-            return doc;
+              return await this.transformDocument(doc2);
+            return doc2;
           }
           await this.fetchBatch();
         } while (!this.isDead || (this.documents?.length ?? 0) !== 0);
@@ -10909,18 +10909,18 @@ var require_abstract_cursor = __commonJS((exports) => {
         this.timeoutContext?.refresh();
       }
       try {
-        let doc = this.documents?.shift(this.deserializationOptions);
-        if (doc != null) {
+        let doc2 = this.documents?.shift(this.deserializationOptions);
+        if (doc2 != null) {
           if (this.transform != null)
-            return await this.transformDocument(doc);
-          return doc;
+            return await this.transformDocument(doc2);
+          return doc2;
         }
         await this.fetchBatch();
-        doc = this.documents?.shift(this.deserializationOptions);
-        if (doc != null) {
+        doc2 = this.documents?.shift(this.deserializationOptions);
+        if (doc2 != null) {
           if (this.transform != null)
-            return await this.transformDocument(doc);
-          return doc;
+            return await this.transformDocument(doc2);
+          return doc2;
         }
       } finally {
         if (this.cursorOptions.timeoutMode === exports.CursorTimeoutMode.ITERATION) {
@@ -10946,21 +10946,21 @@ var require_abstract_cursor = __commonJS((exports) => {
     }
     async toArray() {
       this.signal?.throwIfAborted();
-      const array = [];
+      const array2 = [];
       for await (const document of this) {
-        array.push(document);
+        array2.push(document);
         const docs = this.readBufferedDocuments();
         if (this.transform != null) {
-          for (const doc of docs) {
-            array.push(await this.transformDocument(doc));
+          for (const doc2 of docs) {
+            array2.push(await this.transformDocument(doc2));
           }
         } else {
-          for (const doc of docs) {
-            array.push(doc);
+          for (const doc2 of docs) {
+            array2.push(doc2);
           }
         }
       }
-      return array;
+      return array2;
     }
     addCursorFlag(flag, value) {
       this.throwIfInitialized();
@@ -10973,15 +10973,15 @@ var require_abstract_cursor = __commonJS((exports) => {
       this.cursorOptions[flag] = value;
       return this;
     }
-    map(transform) {
+    map(transform2) {
       this.throwIfInitialized();
       const oldTransform = this.transform;
       if (oldTransform) {
-        this.transform = (doc) => {
-          return transform(oldTransform(doc));
+        this.transform = (doc2) => {
+          return transform2(oldTransform(doc2));
         };
       } else {
-        this.transform = transform;
+        this.transform = transform2;
       }
       return this;
     }
@@ -11081,10 +11081,10 @@ var require_abstract_cursor = __commonJS((exports) => {
         this.cursorNamespace = response.ns ?? this.namespace;
         this.documents = response;
         this.initialized = true;
-      } catch (error) {
+      } catch (error48) {
         this.initialized = true;
-        await this.cleanup(undefined, error);
-        throw error;
+        await this.cleanup(undefined, error48);
+        throw error48;
       }
       if (this.isDead) {
         await this.cleanup();
@@ -11108,19 +11108,19 @@ var require_abstract_cursor = __commonJS((exports) => {
         const response = await this.getMore();
         this.cursorId = response.id;
         this.documents = response;
-      } catch (error) {
+      } catch (error48) {
         try {
-          await this.cleanup(undefined, error);
+          await this.cleanup(undefined, error48);
         } catch (cleanupError) {
           (0, utils_1.squashError)(cleanupError);
         }
-        throw error;
+        throw error48;
       }
       if (this.isDead) {
         await this.cleanup();
       }
     }
-    async cleanup(timeoutMS, error) {
+    async cleanup(timeoutMS, error48) {
       this.abortListener?.[utils_1.kDispose]();
       this.isClosed = true;
       const timeoutContextForKillCursors = () => {
@@ -11154,14 +11154,14 @@ var require_abstract_cursor = __commonJS((exports) => {
               session
             }), timeoutContextForKillCursors());
           }
-        } catch (error2) {
-          (0, utils_1.squashError)(error2);
+        } catch (error49) {
+          (0, utils_1.squashError)(error49);
         } finally {
           if (session.owner === this) {
-            await session.endSession({ error });
+            await session.endSession({ error: error48 });
           }
           if (!session.inTransaction()) {
-            (0, sessions_1.maybeClearPinnedConnection)(session, { error });
+            (0, sessions_1.maybeClearPinnedConnection)(session, { error: error48 });
           }
         }
       };
@@ -11218,8 +11218,8 @@ var require_abstract_cursor = __commonJS((exports) => {
         this._readNext();
       }
     }
-    _destroy(error, callback) {
-      this._cursor.close().then(() => callback(error), (closeError) => callback(closeError));
+    _destroy(error48, callback) {
+      this._cursor.close().then(() => callback(error48), (closeError) => callback(closeError));
     }
     _readNext() {
       if (this._cursor.id === bson_1.Long.ZERO) {
@@ -11246,9 +11246,9 @@ var require_abstract_cursor = __commonJS((exports) => {
           return this.push(null);
         }
         return this.destroy(err);
-      }).catch((error) => {
+      }).catch((error48) => {
         this._readInProgress = false;
-        this.destroy(error);
+        this.destroy(error48);
       });
     }
   }
@@ -11358,8 +11358,8 @@ var require_aggregation_cursor = __commonJS((exports) => {
         ...clonedOptions
       });
     }
-    map(transform) {
-      return super.map(transform);
+    map(transform2) {
+      return super.map(transform2);
     }
     async _initialize(session) {
       const options = {
@@ -11658,8 +11658,8 @@ var require_find_cursor = __commonJS((exports) => {
         ...clonedOptions
       });
     }
-    map(transform) {
-      return super.map(transform);
+    map(transform2) {
+      return super.map(transform2);
     }
     async _initialize(session) {
       const options = {
@@ -11687,8 +11687,8 @@ var require_find_cursor = __commonJS((exports) => {
       if (numReturned === limit && !this.id?.isZero()) {
         try {
           await this.close();
-        } catch (error) {
-          (0, utils_1.squashError)(error);
+        } catch (error48) {
+          (0, utils_1.squashError)(error48);
         }
         return responses_1.CursorResponse.emptyGetMore;
       }
@@ -12443,10 +12443,10 @@ var require_drop = __commonJS((exports) => {
     buildOptions(timeoutContext) {
       return { session: this.session, timeoutContext };
     }
-    handleError(error) {
-      const isNamespaceNotFoundError = error instanceof error_1.MongoServerError && error.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound;
+    handleError(error48) {
+      const isNamespaceNotFoundError = error48 instanceof error_1.MongoServerError && error48.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound;
       if (!isNamespaceNotFoundError) {
-        throw error;
+        throw error48;
       }
     }
   }
@@ -12576,8 +12576,8 @@ var require_collection = __commonJS((exports) => {
     get timeoutMS() {
       return this.s.options.timeoutMS;
     }
-    async insertOne(doc, options) {
-      return await (0, execute_operation_1.executeOperation)(this.client, new insert_1.InsertOneOperation(this, doc, (0, utils_1.resolveOptions)(this, options)));
+    async insertOne(doc2, options) {
+      return await (0, execute_operation_1.executeOperation)(this.client, new insert_1.InsertOneOperation(this, doc2, (0, utils_1.resolveOptions)(this, options)));
     }
     async insertMany(docs, options) {
       if (!Array.isArray(docs)) {
@@ -12586,7 +12586,7 @@ var require_collection = __commonJS((exports) => {
       options = (0, utils_1.resolveOptions)(this, options ?? {});
       const acknowledged = write_concern_1.WriteConcern.fromOptions(options)?.w !== 0;
       try {
-        const res = await this.bulkWrite(docs.map((doc) => ({ insertOne: { document: doc } })), options);
+        const res = await this.bulkWrite(docs.map((doc2) => ({ insertOne: { document: doc2 } })), options);
         return {
           acknowledged,
           insertedCount: res.insertedCount,
@@ -12678,9 +12678,9 @@ var require_collection = __commonJS((exports) => {
       try {
         await (0, execute_operation_1.executeOperation)(this.client, new indexes_1.DropIndexOperation(this, "*", (0, utils_1.resolveOptions)(this, options)));
         return true;
-      } catch (error) {
-        if (error instanceof error_1.MongoOperationTimeoutError)
-          throw error;
+      } catch (error48) {
+        if (error48 instanceof error_1.MongoOperationTimeoutError)
+          throw error48;
         return false;
       }
     }
@@ -12712,9 +12712,9 @@ var require_collection = __commonJS((exports) => {
       }
       pipeline.push({ $group: { _id: 1, n: { $sum: 1 } } });
       const cursor = this.aggregate(pipeline, options);
-      const doc = await cursor.next();
+      const doc2 = await cursor.next();
       await cursor.close();
-      return doc?.n ?? 0;
+      return doc2?.n ?? 0;
     }
     async distinct(key, filter = {}, options = {}) {
       return await (0, execute_operation_1.executeOperation)(this.client, new distinct_1.DistinctOperation(this, key, filter, (0, utils_1.resolveOptions)(this, options)));
@@ -12725,8 +12725,8 @@ var require_collection = __commonJS((exports) => {
       if (full) {
         return indexes;
       }
-      const object = Object.fromEntries(indexes.map(({ name, key }) => [name, Object.entries(key)]));
-      return object;
+      const object2 = Object.fromEntries(indexes.map(({ name, key }) => [name, Object.entries(key)]));
+      return object2;
     }
     async findOneAndDelete(filter, options) {
       return await (0, execute_operation_1.executeOperation)(this.client, new find_and_modify_1.FindOneAndDeleteOperation(this, filter, (0, utils_1.resolveOptions)(this, options)));
@@ -13179,11 +13179,11 @@ var require_drop2 = __commonJS((exports) => {
     handleOk(_response) {
       return true;
     }
-    handleError(error) {
-      if (!(error instanceof __1.MongoServerError))
-        throw error;
-      if (Number(error.code) !== error_1.MONGODB_ERROR_CODES.NamespaceNotFound)
-        throw error;
+    handleError(error48) {
+      if (!(error48 instanceof __1.MongoServerError))
+        throw error48;
+      if (Number(error48.code) !== error_1.MONGODB_ERROR_CODES.NamespaceNotFound)
+        throw error48;
       return false;
     }
   }
@@ -13574,17 +13574,17 @@ var require_deps = __commonJS((exports) => {
   exports.getSocks = getSocks;
   exports.getMongoDBClientEncryption = getMongoDBClientEncryption;
   var error_1 = require_error();
-  function makeErrorModule(error) {
-    const props = error ? { kModuleError: error } : {};
+  function makeErrorModule(error48) {
+    const props = error48 ? { kModuleError: error48 } : {};
     return new Proxy(props, {
       get: (_, key) => {
         if (key === "kModuleError") {
-          return error;
+          return error48;
         }
-        throw error;
+        throw error48;
       },
       set: () => {
-        throw error;
+        throw error48;
       }
     });
   }
@@ -13592,8 +13592,8 @@ var require_deps = __commonJS((exports) => {
     let kerberos;
     try {
       kerberos = (()=>{throw new Error("Cannot require module "+"kerberos");})();
-    } catch (error) {
-      kerberos = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `kerberos` not found. Please install it to enable kerberos authentication", { cause: error, dependencyName: "kerberos" }));
+    } catch (error48) {
+      kerberos = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `kerberos` not found. Please install it to enable kerberos authentication", { cause: error48, dependencyName: "kerberos" }));
     }
     return kerberos;
   }
@@ -13601,8 +13601,8 @@ var require_deps = __commonJS((exports) => {
     let ZStandard;
     try {
       ZStandard = (()=>{throw new Error("Cannot require module "+"@mongodb-js/zstd");})();
-    } catch (error) {
-      ZStandard = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `@mongodb-js/zstd` not found. Please install it to enable zstd compression", { cause: error, dependencyName: "zstd" }));
+    } catch (error48) {
+      ZStandard = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `@mongodb-js/zstd` not found. Please install it to enable zstd compression", { cause: error48, dependencyName: "zstd" }));
     }
     return ZStandard;
   }
@@ -13610,24 +13610,24 @@ var require_deps = __commonJS((exports) => {
     try {
       const credentialProvider = (()=>{throw new Error("Cannot require module "+"@aws-sdk/credential-providers");})();
       return credentialProvider;
-    } catch (error) {
-      return makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `@aws-sdk/credential-providers` not found." + " Please install it to enable getting aws credentials via the official sdk.", { cause: error, dependencyName: "@aws-sdk/credential-providers" }));
+    } catch (error48) {
+      return makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `@aws-sdk/credential-providers` not found." + " Please install it to enable getting aws credentials via the official sdk.", { cause: error48, dependencyName: "@aws-sdk/credential-providers" }));
     }
   }
   function getGcpMetadata() {
     try {
       const credentialProvider = (()=>{throw new Error("Cannot require module "+"gcp-metadata");})();
       return credentialProvider;
-    } catch (error) {
-      return makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `gcp-metadata` not found." + " Please install it to enable getting gcp credentials via the official sdk.", { cause: error, dependencyName: "gcp-metadata" }));
+    } catch (error48) {
+      return makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `gcp-metadata` not found." + " Please install it to enable getting gcp credentials via the official sdk.", { cause: error48, dependencyName: "gcp-metadata" }));
     }
   }
   function getSnappy() {
     try {
       const value = (()=>{throw new Error("Cannot require module "+"snappy");})();
       return value;
-    } catch (error) {
-      const kModuleError = new error_1.MongoMissingDependencyError("Optional module `snappy` not found. Please install it to enable snappy compression", { cause: error, dependencyName: "snappy" });
+    } catch (error48) {
+      const kModuleError = new error_1.MongoMissingDependencyError("Optional module `snappy` not found. Please install it to enable snappy compression", { cause: error48, dependencyName: "snappy" });
       return { kModuleError };
     }
   }
@@ -13635,8 +13635,8 @@ var require_deps = __commonJS((exports) => {
     try {
       const value = (()=>{throw new Error("Cannot require module "+"socks");})();
       return value;
-    } catch (error) {
-      const kModuleError = new error_1.MongoMissingDependencyError("Optional module `socks` not found. Please install it to connections over a SOCKS5 proxy", { cause: error, dependencyName: "socks" });
+    } catch (error48) {
+      const kModuleError = new error_1.MongoMissingDependencyError("Optional module `socks` not found. Please install it to connections over a SOCKS5 proxy", { cause: error48, dependencyName: "socks" });
       return { kModuleError };
     }
   }
@@ -13645,8 +13645,8 @@ var require_deps = __commonJS((exports) => {
     let aws4;
     try {
       aws4 = (()=>{throw new Error("Cannot require module "+"aws4");})();
-    } catch (error) {
-      aws4 = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `aws4` not found. Please install it to enable AWS authentication", { cause: error, dependencyName: "aws4" }));
+    } catch (error48) {
+      aws4 = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `aws4` not found. Please install it to enable AWS authentication", { cause: error48, dependencyName: "aws4" }));
     }
     return aws4;
   }
@@ -13654,8 +13654,8 @@ var require_deps = __commonJS((exports) => {
     let mongodbClientEncryption = null;
     try {
       mongodbClientEncryption = (()=>{throw new Error("Cannot require module "+"mongodb-client-encryption");})();
-    } catch (error) {
-      const kModuleError = new error_1.MongoMissingDependencyError("Optional module `mongodb-client-encryption` not found. Please install it to use auto encryption or ClientEncryption.", { cause: error, dependencyName: "mongodb-client-encryption" });
+    } catch (error48) {
+      const kModuleError = new error_1.MongoMissingDependencyError("Optional module `mongodb-client-encryption` not found. Please install it to use auto encryption or ClientEncryption.", { cause: error48, dependencyName: "mongodb-client-encryption" });
       return { kModuleError };
     }
     return mongodbClientEncryption;
@@ -13733,7 +13733,7 @@ var require_gssapi = __commonJS((exports) => {
       const saslStartResponse = await externalCommand(connection, saslStart(payload));
       const negotiatedPayload = await negotiate(client, 10, saslStartResponse.payload);
       const saslContinueResponse = await externalCommand(connection, saslContinue(negotiatedPayload, saslStartResponse.conversationId));
-      const finalizePayload = await finalize(client, username, saslContinueResponse.payload);
+      const finalizePayload = await finalize2(client, username, saslContinueResponse.payload);
       await externalCommand(connection, {
         saslContinue: 1,
         conversationId: saslContinueResponse.conversationId,
@@ -13787,14 +13787,14 @@ var require_gssapi = __commonJS((exports) => {
     try {
       const response = await client.step(payload);
       return response || "";
-    } catch (error) {
+    } catch (error48) {
       if (retries === 0) {
-        throw error;
+        throw error48;
       }
       return await negotiate(client, retries - 1, payload);
     }
   }
-  async function finalize(client, user, payload) {
+  async function finalize2(client, user, payload) {
     const response = await client.unwrap(payload);
     return await client.wrap(response || "", { user });
   }
@@ -14171,7 +14171,7 @@ var require_client_metadata = __commonJS((exports) => {
   exports.makeClientMetadata = makeClientMetadata;
   exports.getFAASEnv = getFAASEnv;
   var os = __require("os");
-  var process2 = __require("process");
+  var process3 = __require("process");
   var bson_1 = require_bson2();
   var error_1 = require_error();
   var utils_1 = require_utils();
@@ -14240,7 +14240,7 @@ var require_client_metadata = __commonJS((exports) => {
     if (!metadataDocument.ifItFitsItSits("platform", runtimeInfo)) {
       throw new error_1.MongoInvalidArgumentError("Unable to include driverInfo platform, metadata cannot exceed 512 bytes");
     }
-    const osInfo = new Map().set("name", process2.platform).set("architecture", process2.arch).set("version", os.release()).set("type", os.type());
+    const osInfo = new Map().set("name", process3.platform).set("architecture", process3.arch).set("version", os.release()).set("type", os.type());
     if (!metadataDocument.ifItFitsItSits("os", osInfo)) {
       for (const key of osInfo.keys()) {
         osInfo.delete(key);
@@ -14268,7 +14268,7 @@ var require_client_metadata = __commonJS((exports) => {
   async function getContainerMetadata() {
     dockerPromise ??= (0, utils_1.fileIsAccessible)("/.dockerenv");
     const isDocker = await dockerPromise;
-    const { KUBERNETES_SERVICE_HOST = "" } = process2.env;
+    const { KUBERNETES_SERVICE_HOST = "" } = process3.env;
     const isKubernetes = KUBERNETES_SERVICE_HOST.length > 0 ? true : false;
     const containerMetadata = {};
     if (isDocker)
@@ -14301,7 +14301,7 @@ var require_client_metadata = __commonJS((exports) => {
     return extendedMetadata.toObject();
   }
   function getFAASEnv() {
-    const { AWS_EXECUTION_ENV = "", AWS_LAMBDA_RUNTIME_API = "", FUNCTIONS_WORKER_RUNTIME = "", K_SERVICE = "", FUNCTION_NAME = "", VERCEL = "", AWS_LAMBDA_FUNCTION_MEMORY_SIZE = "", AWS_REGION = "", FUNCTION_MEMORY_MB = "", FUNCTION_REGION = "", FUNCTION_TIMEOUT_SEC = "", VERCEL_REGION = "" } = process2.env;
+    const { AWS_EXECUTION_ENV = "", AWS_LAMBDA_RUNTIME_API = "", FUNCTIONS_WORKER_RUNTIME = "", K_SERVICE = "", FUNCTION_NAME = "", VERCEL = "", AWS_LAMBDA_FUNCTION_MEMORY_SIZE = "", AWS_REGION = "", FUNCTION_MEMORY_MB = "", FUNCTION_REGION = "", FUNCTION_TIMEOUT_SEC = "", VERCEL_REGION = "" } = process3.env;
     const isAWSFaaS = AWS_EXECUTION_ENV.startsWith("AWS_Lambda_") || AWS_LAMBDA_RUNTIME_API.length > 0;
     const isAzureFaaS = FUNCTIONS_WORKER_RUNTIME.length > 0;
     const isGCPFaaS = K_SERVICE.length > 0 || FUNCTION_NAME.length > 0;
@@ -14345,14 +14345,14 @@ var require_client_metadata = __commonJS((exports) => {
   }
   function getRuntimeInfo() {
     if ("Deno" in globalThis) {
-      const version = typeof Deno?.version?.deno === "string" ? Deno?.version?.deno : "0.0.0-unknown";
-      return `Deno v${version}, ${os.endianness()}`;
+      const version2 = typeof Deno?.version?.deno === "string" ? Deno?.version?.deno : "0.0.0-unknown";
+      return `Deno v${version2}, ${os.endianness()}`;
     }
     if ("Bun" in globalThis) {
-      const version = typeof Bun?.version === "string" ? Bun?.version : "0.0.0-unknown";
-      return `Bun v${version}, ${os.endianness()}`;
+      const version2 = typeof Bun?.version === "string" ? Bun?.version : "0.0.0-unknown";
+      return `Bun v${version2}, ${os.endianness()}`;
     }
-    return `Node.js ${process2.version}, ${os.endianness()}`;
+    return `Node.js ${process3.version}, ${os.endianness()}`;
   }
 });
 
@@ -14690,7 +14690,7 @@ var require_lib = __commonJS((exports) => {
 
 // node_modules/whatwg-url/lib/utils.js
 var require_utils2 = __commonJS((exports, module) => {
-  function isObject(value) {
+  function isObject2(value) {
     return typeof value === "object" && value !== null || typeof value === "function";
   }
   var hasOwn = Function.prototype.call.bind(Object.prototype.hasOwnProperty);
@@ -14702,9 +14702,9 @@ var require_utils2 = __commonJS((exports, module) => {
       }
     }
   }
-  function newObjectInRealm(globalObject, object) {
+  function newObjectInRealm(globalObject, object2) {
     const ctorRegistry = initCtorRegistry(globalObject);
-    return Object.defineProperties(Object.create(ctorRegistry["%Object.prototype%"]), Object.getOwnPropertyDescriptors(object));
+    return Object.defineProperties(Object.create(ctorRegistry["%Object.prototype%"]), Object.getOwnPropertyDescriptors(object2));
   }
   var wrapperSymbol = Symbol("wrapper");
   var implSymbol = Symbol("impl");
@@ -14805,7 +14805,7 @@ var require_utils2 = __commonJS((exports, module) => {
   var asyncIteratorInit = Symbol("async iterator initialization steps");
   var asyncIteratorEOI = Symbol("async iterator end of iteration");
   module.exports = exports = {
-    isObject,
+    isObject: isObject2,
     hasOwn,
     define,
     newObjectInRealm,
@@ -14854,7 +14854,7 @@ var require_punycode = __commonJS((exports, module) => {
   var regexPunycode = /^xn--/;
   var regexNonASCII = /[^\0-\x7F]/;
   var regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g;
-  var errors = {
+  var errors3 = {
     overflow: "Overflow: input needs wider integers to process",
     "not-basic": "Illegal input >= 0x80 (not a basic code point)",
     "invalid-input": "Invalid input"
@@ -14862,37 +14862,37 @@ var require_punycode = __commonJS((exports, module) => {
   var baseMinusTMin = base - tMin;
   var floor = Math.floor;
   var stringFromCharCode = String.fromCharCode;
-  function error(type) {
-    throw new RangeError(errors[type]);
+  function error48(type) {
+    throw new RangeError(errors3[type]);
   }
-  function map(array, callback) {
+  function map2(array2, callback) {
     const result = [];
-    let length = array.length;
+    let length = array2.length;
     while (length--) {
-      result[length] = callback(array[length]);
+      result[length] = callback(array2[length]);
     }
     return result;
   }
-  function mapDomain(domain, callback) {
-    const parts = domain.split("@");
+  function mapDomain(domain2, callback) {
+    const parts = domain2.split("@");
     let result = "";
     if (parts.length > 1) {
       result = parts[0] + "@";
-      domain = parts[1];
+      domain2 = parts[1];
     }
-    domain = domain.replace(regexSeparators, ".");
-    const labels = domain.split(".");
-    const encoded = map(labels, callback).join(".");
+    domain2 = domain2.replace(regexSeparators, ".");
+    const labels = domain2.split(".");
+    const encoded = map2(labels, callback).join(".");
     return result + encoded;
   }
-  function ucs2decode(string) {
+  function ucs2decode(string4) {
     const output = [];
     let counter = 0;
-    const length = string.length;
+    const length = string4.length;
     while (counter < length) {
-      const value = string.charCodeAt(counter++);
+      const value = string4.charCodeAt(counter++);
       if (value >= 55296 && value <= 56319 && counter < length) {
-        const extra = string.charCodeAt(counter++);
+        const extra = string4.charCodeAt(counter++);
         if ((extra & 64512) == 56320) {
           output.push(((value & 1023) << 10) + (extra & 1023) + 65536);
         } else {
@@ -14930,7 +14930,7 @@ var require_punycode = __commonJS((exports, module) => {
     }
     return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
   };
-  var decode = function(input) {
+  var decode3 = function(input) {
     const output = [];
     const inputLength = input.length;
     let i = 0;
@@ -14942,7 +14942,7 @@ var require_punycode = __commonJS((exports, module) => {
     }
     for (let j = 0;j < basic; ++j) {
       if (input.charCodeAt(j) >= 128) {
-        error("not-basic");
+        error48("not-basic");
       }
       output.push(input.charCodeAt(j));
     }
@@ -14950,14 +14950,14 @@ var require_punycode = __commonJS((exports, module) => {
       const oldi = i;
       for (let w = 1, k = base;; k += base) {
         if (index >= inputLength) {
-          error("invalid-input");
+          error48("invalid-input");
         }
         const digit = basicToDigit(input.charCodeAt(index++));
         if (digit >= base) {
-          error("invalid-input");
+          error48("invalid-input");
         }
         if (digit > floor((maxInt - i) / w)) {
-          error("overflow");
+          error48("overflow");
         }
         i += digit * w;
         const t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
@@ -14966,14 +14966,14 @@ var require_punycode = __commonJS((exports, module) => {
         }
         const baseMinusT = base - t;
         if (w > floor(maxInt / baseMinusT)) {
-          error("overflow");
+          error48("overflow");
         }
         w *= baseMinusT;
       }
       const out = output.length + 1;
       bias = adapt(i - oldi, out, oldi == 0);
       if (floor(i / out) > maxInt - n) {
-        error("overflow");
+        error48("overflow");
       }
       n += floor(i / out);
       i %= out;
@@ -14981,7 +14981,7 @@ var require_punycode = __commonJS((exports, module) => {
     }
     return String.fromCodePoint(...output);
   };
-  var encode = function(input) {
+  var encode3 = function(input) {
     const output = [];
     input = ucs2decode(input);
     const inputLength = input.length;
@@ -15007,13 +15007,13 @@ var require_punycode = __commonJS((exports, module) => {
       }
       const handledCPCountPlusOne = handledCPCount + 1;
       if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
-        error("overflow");
+        error48("overflow");
       }
       delta += (m - n) * handledCPCountPlusOne;
       n = m;
       for (const currentValue of input) {
         if (currentValue < n && ++delta > maxInt) {
-          error("overflow");
+          error48("overflow");
         }
         if (currentValue === n) {
           let q = delta;
@@ -15039,13 +15039,13 @@ var require_punycode = __commonJS((exports, module) => {
     return output.join("");
   };
   var toUnicode = function(input) {
-    return mapDomain(input, function(string) {
-      return regexPunycode.test(string) ? decode(string.slice(4).toLowerCase()) : string;
+    return mapDomain(input, function(string4) {
+      return regexPunycode.test(string4) ? decode3(string4.slice(4).toLowerCase()) : string4;
     });
   };
   var toASCII = function(input) {
-    return mapDomain(input, function(string) {
-      return regexNonASCII.test(string) ? "xn--" + encode(string) : string;
+    return mapDomain(input, function(string4) {
+      return regexNonASCII.test(string4) ? "xn--" + encode3(string4) : string4;
     });
   };
   var punycode = {
@@ -15054,8 +15054,8 @@ var require_punycode = __commonJS((exports, module) => {
       decode: ucs2decode,
       encode: ucs2encode
     },
-    decode,
-    encode,
+    decode: decode3,
+    encode: encode3,
     toASCII,
     toUnicode
   };
@@ -15254,7 +15254,7 @@ var require_tr46 = __commonJS((exports, module) => {
     return true;
   }
   function isBidiDomain(labels) {
-    const domain = labels.map((label) => {
+    const domain2 = labels.map((label) => {
       if (label.startsWith("xn--")) {
         try {
           return punycode.decode(label.substring(4));
@@ -15264,37 +15264,37 @@ var require_tr46 = __commonJS((exports, module) => {
       }
       return label;
     }).join(".");
-    return regexes.bidiDomain.test(domain);
+    return regexes.bidiDomain.test(domain2);
   }
   function processing(domainName, options) {
-    let string = mapChars(domainName, options);
-    string = string.normalize("NFC");
-    const labels = string.split(".");
+    let string4 = mapChars(domainName, options);
+    string4 = string4.normalize("NFC");
+    const labels = string4.split(".");
     const isBidi = isBidiDomain(labels);
-    let error = false;
+    let error48 = false;
     for (const [i, origLabel] of labels.entries()) {
       let label = origLabel;
       let transitionalProcessingForThisLabel = options.transitionalProcessing;
       if (label.startsWith("xn--")) {
         if (containsNonASCII(label)) {
-          error = true;
+          error48 = true;
           continue;
         }
         try {
           label = punycode.decode(label.substring(4));
         } catch {
           if (!options.ignoreInvalidPunycode) {
-            error = true;
+            error48 = true;
             continue;
           }
         }
         labels[i] = label;
         if (label === "" || !containsNonASCII(label)) {
-          error = true;
+          error48 = true;
         }
         transitionalProcessingForThisLabel = false;
       }
-      if (error) {
+      if (error48) {
         continue;
       }
       const validation = validateLabel(label, {
@@ -15303,12 +15303,12 @@ var require_tr46 = __commonJS((exports, module) => {
         isBidi
       });
       if (!validation) {
-        error = true;
+        error48 = true;
       }
     }
     return {
       string: labels.join("."),
-      error
+      error: error48
     };
   }
   function toASCII(domainName, {
@@ -15409,8 +15409,8 @@ var require_infra = __commonJS((exports, module) => {
 var require_encoding = __commonJS((exports, module) => {
   var utf8Encoder = new TextEncoder;
   var utf8Decoder = new TextDecoder("utf-8", { ignoreBOM: true });
-  function utf8Encode(string) {
-    return utf8Encoder.encode(string);
+  function utf8Encode(string4) {
+    return utf8Encoder.encode(string4);
   }
   function utf8DecodeWithoutBOM(bytes) {
     return utf8Decoder.decode(bytes);
@@ -15429,11 +15429,11 @@ var require_percent_encoding = __commonJS((exports, module) => {
     return char.codePointAt(0);
   }
   function percentEncode(c) {
-    let hex = c.toString(16).toUpperCase();
-    if (hex.length === 1) {
-      hex = `0${hex}`;
+    let hex3 = c.toString(16).toUpperCase();
+    if (hex3.length === 1) {
+      hex3 = `0${hex3}`;
     }
-    return `%${hex}`;
+    return `%${hex3}`;
   }
   function percentDecodeBytes(input) {
     const output = new Uint8Array(input.byteLength);
@@ -15572,26 +15572,26 @@ var require_url_state_machine = __commonJS((exports, module) => {
   function isWindowsDriveLetterCodePoints(cp1, cp2) {
     return infra.isASCIIAlpha(cp1) && (cp2 === p(":") || cp2 === p("|"));
   }
-  function isWindowsDriveLetterString(string) {
-    return string.length === 2 && infra.isASCIIAlpha(string.codePointAt(0)) && (string[1] === ":" || string[1] === "|");
+  function isWindowsDriveLetterString(string4) {
+    return string4.length === 2 && infra.isASCIIAlpha(string4.codePointAt(0)) && (string4[1] === ":" || string4[1] === "|");
   }
-  function isNormalizedWindowsDriveLetterString(string) {
-    return string.length === 2 && infra.isASCIIAlpha(string.codePointAt(0)) && string[1] === ":";
+  function isNormalizedWindowsDriveLetterString(string4) {
+    return string4.length === 2 && infra.isASCIIAlpha(string4.codePointAt(0)) && string4[1] === ":";
   }
-  function containsForbiddenHostCodePoint(string) {
-    return string.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|\/|:|<|>|\?|@|\[|\\|\]|\^|\|/u) !== -1;
+  function containsForbiddenHostCodePoint(string4) {
+    return string4.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|\/|:|<|>|\?|@|\[|\\|\]|\^|\|/u) !== -1;
   }
-  function containsForbiddenDomainCodePoint(string) {
-    return containsForbiddenHostCodePoint(string) || string.search(/[\u0000-\u001F]|%|\u007F/u) !== -1;
+  function containsForbiddenDomainCodePoint(string4) {
+    return containsForbiddenHostCodePoint(string4) || string4.search(/[\u0000-\u001F]|%|\u007F/u) !== -1;
   }
   function isSpecialScheme(scheme) {
     return specialSchemes[scheme] !== undefined;
   }
-  function isSpecial(url) {
-    return isSpecialScheme(url.scheme);
+  function isSpecial(url2) {
+    return isSpecialScheme(url2.scheme);
   }
-  function isNotSpecial(url) {
-    return !isSpecialScheme(url.scheme);
+  function isNotSpecial(url2) {
+    return !isSpecialScheme(url2.scheme);
   }
   function defaultPort(scheme) {
     return specialSchemes[scheme];
@@ -15649,13 +15649,13 @@ var require_url_state_machine = __commonJS((exports, module) => {
     if (numbers[numbers.length - 1] >= 256 ** (5 - numbers.length)) {
       return failure;
     }
-    let ipv4 = numbers.pop();
+    let ipv43 = numbers.pop();
     let counter = 0;
     for (const n of numbers) {
-      ipv4 += n * 256 ** (3 - counter);
+      ipv43 += n * 256 ** (3 - counter);
       ++counter;
     }
-    return ipv4;
+    return ipv43;
   }
   function serializeIPv4(address) {
     let output = "";
@@ -15725,13 +15725,13 @@ var require_url_state_machine = __commonJS((exports, module) => {
             return failure;
           }
           while (infra.isASCIIDigit(input[pointer])) {
-            const number = parseInt(at(input, pointer));
+            const number4 = parseInt(at(input, pointer));
             if (ipv4Piece === null) {
-              ipv4Piece = number;
+              ipv4Piece = number4;
             } else if (ipv4Piece === 0) {
               return failure;
             } else {
-              ipv4Piece = ipv4Piece * 10 + number;
+              ipv4Piece = ipv4Piece * 10 + number4;
             }
             if (ipv4Piece > 255) {
               return failure;
@@ -15807,8 +15807,8 @@ var require_url_state_machine = __commonJS((exports, module) => {
     if (isOpaque) {
       return parseOpaqueHost(input);
     }
-    const domain = utf8DecodeWithoutBOM(percentDecodeString(input));
-    const asciiDomain = domainToASCII(domain);
+    const domain2 = utf8DecodeWithoutBOM(percentDecodeString(input));
+    const asciiDomain = domainToASCII(domain2);
     if (asciiDomain === failure) {
       return failure;
     }
@@ -15874,8 +15874,8 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return host;
   }
-  function domainToASCII(domain, beStrict = false) {
-    const result = tr46.toASCII(domain, {
+  function domainToASCII(domain2, beStrict = false) {
+    const result = tr46.toASCII(domain2, {
       checkHyphens: beStrict,
       checkBidi: true,
       checkJoiners: true,
@@ -15897,53 +15897,53 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return result;
   }
-  function trimControlChars(string) {
+  function trimControlChars(string4) {
     let start = 0;
-    let end = string.length;
+    let end = string4.length;
     for (;start < end; ++start) {
-      if (string.charCodeAt(start) > 32) {
+      if (string4.charCodeAt(start) > 32) {
         break;
       }
     }
     for (;end > start; --end) {
-      if (string.charCodeAt(end - 1) > 32) {
+      if (string4.charCodeAt(end - 1) > 32) {
         break;
       }
     }
-    return string.substring(start, end);
+    return string4.substring(start, end);
   }
-  function trimTabAndNewline(url) {
-    return url.replace(/\u0009|\u000A|\u000D/ug, "");
+  function trimTabAndNewline(url2) {
+    return url2.replace(/\u0009|\u000A|\u000D/ug, "");
   }
-  function shortenPath(url) {
-    const { path } = url;
+  function shortenPath(url2) {
+    const { path } = url2;
     if (path.length === 0) {
       return;
     }
-    if (url.scheme === "file" && path.length === 1 && isNormalizedWindowsDriveLetter(path[0])) {
+    if (url2.scheme === "file" && path.length === 1 && isNormalizedWindowsDriveLetter(path[0])) {
       return;
     }
     path.pop();
   }
-  function includesCredentials(url) {
-    return url.username !== "" || url.password !== "";
+  function includesCredentials(url2) {
+    return url2.username !== "" || url2.password !== "";
   }
-  function cannotHaveAUsernamePasswordPort(url) {
-    return url.host === null || url.host === "" || url.scheme === "file";
+  function cannotHaveAUsernamePasswordPort(url2) {
+    return url2.host === null || url2.host === "" || url2.scheme === "file";
   }
-  function hasAnOpaquePath(url) {
-    return typeof url.path === "string";
+  function hasAnOpaquePath(url2) {
+    return typeof url2.path === "string";
   }
-  function isNormalizedWindowsDriveLetter(string) {
-    return /^[A-Za-z]:$/u.test(string);
+  function isNormalizedWindowsDriveLetter(string4) {
+    return /^[A-Za-z]:$/u.test(string4);
   }
-  function URLStateMachine(input, base, encodingOverride, url, stateOverride) {
+  function URLStateMachine(input, base, encodingOverride, url2, stateOverride) {
     this.pointer = 0;
     this.input = input;
     this.base = base || null;
     this.encodingOverride = encodingOverride || "utf-8";
     this.stateOverride = stateOverride;
-    this.url = url;
+    this.url = url2;
     this.failure = false;
     this.parseError = false;
     if (!this.url) {
@@ -16469,58 +16469,58 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return true;
   };
-  function serializeURL(url, excludeFragment) {
-    let output = `${url.scheme}:`;
-    if (url.host !== null) {
+  function serializeURL(url2, excludeFragment) {
+    let output = `${url2.scheme}:`;
+    if (url2.host !== null) {
       output += "//";
-      if (url.username !== "" || url.password !== "") {
-        output += url.username;
-        if (url.password !== "") {
-          output += `:${url.password}`;
+      if (url2.username !== "" || url2.password !== "") {
+        output += url2.username;
+        if (url2.password !== "") {
+          output += `:${url2.password}`;
         }
         output += "@";
       }
-      output += serializeHost(url.host);
-      if (url.port !== null) {
-        output += `:${url.port}`;
+      output += serializeHost(url2.host);
+      if (url2.port !== null) {
+        output += `:${url2.port}`;
       }
     }
-    if (url.host === null && !hasAnOpaquePath(url) && url.path.length > 1 && url.path[0] === "") {
+    if (url2.host === null && !hasAnOpaquePath(url2) && url2.path.length > 1 && url2.path[0] === "") {
       output += "/.";
     }
-    output += serializePath(url);
-    if (url.query !== null) {
-      output += `?${url.query}`;
+    output += serializePath(url2);
+    if (url2.query !== null) {
+      output += `?${url2.query}`;
     }
-    if (!excludeFragment && url.fragment !== null) {
-      output += `#${url.fragment}`;
+    if (!excludeFragment && url2.fragment !== null) {
+      output += `#${url2.fragment}`;
     }
     return output;
   }
-  function serializeOrigin(tuple) {
-    let result = `${tuple.scheme}://`;
-    result += serializeHost(tuple.host);
-    if (tuple.port !== null) {
-      result += `:${tuple.port}`;
+  function serializeOrigin(tuple2) {
+    let result = `${tuple2.scheme}://`;
+    result += serializeHost(tuple2.host);
+    if (tuple2.port !== null) {
+      result += `:${tuple2.port}`;
     }
     return result;
   }
-  function serializePath(url) {
-    if (hasAnOpaquePath(url)) {
-      return url.path;
+  function serializePath(url2) {
+    if (hasAnOpaquePath(url2)) {
+      return url2.path;
     }
     let output = "";
-    for (const segment of url.path) {
+    for (const segment of url2.path) {
       output += `/${segment}`;
     }
     return output;
   }
   exports.serializeURL = serializeURL;
   exports.serializePath = serializePath;
-  exports.serializeURLOrigin = function(url) {
-    switch (url.scheme) {
+  exports.serializeURLOrigin = function(url2) {
+    switch (url2.scheme) {
       case "blob": {
-        const pathURL = exports.parseURL(serializePath(url));
+        const pathURL = exports.parseURL(serializePath(url2));
         if (pathURL === null) {
           return "null";
         }
@@ -16535,9 +16535,9 @@ var require_url_state_machine = __commonJS((exports, module) => {
       case "ws":
       case "wss":
         return serializeOrigin({
-          scheme: url.scheme,
-          host: url.host,
-          port: url.port
+          scheme: url2.scheme,
+          host: url2.host,
+          port: url2.port
         });
       case "file":
         return "null";
@@ -16555,17 +16555,17 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return usm.url;
   };
-  exports.setTheUsername = function(url, username) {
-    url.username = utf8PercentEncodeString(username, isUserinfoPercentEncode);
+  exports.setTheUsername = function(url2, username) {
+    url2.username = utf8PercentEncodeString(username, isUserinfoPercentEncode);
   };
-  exports.setThePassword = function(url, password) {
-    url.password = utf8PercentEncodeString(password, isUserinfoPercentEncode);
+  exports.setThePassword = function(url2, password) {
+    url2.password = utf8PercentEncodeString(password, isUserinfoPercentEncode);
   };
   exports.serializeHost = serializeHost;
   exports.cannotHaveAUsernamePasswordPort = cannotHaveAUsernamePasswordPort;
   exports.hasAnOpaquePath = hasAnOpaquePath;
-  exports.serializeInteger = function(integer) {
-    return String(integer);
+  exports.serializeInteger = function(integer2) {
+    return String(integer2);
   };
   exports.parseURL = function(input, options) {
     if (options === undefined) {
@@ -16611,9 +16611,9 @@ var require_urlencoded = __commonJS((exports, module) => {
   }
   function serializeUrlencoded(tuples) {
     let output = "";
-    for (const [i, tuple] of tuples.entries()) {
-      const name = utf8PercentEncodeString(tuple[0], isURLEncodedPercentEncode, true);
-      const value = utf8PercentEncodeString(tuple[1], isURLEncodedPercentEncode, true);
+    for (const [i, tuple2] of tuples.entries()) {
+      const name = utf8PercentEncodeString(tuple2[0], isURLEncodedPercentEncode, true);
+      const value = utf8PercentEncodeString(tuple2[1], isURLEncodedPercentEncode, true);
       if (i !== 0) {
         output += "&";
       }
@@ -16736,25 +16736,25 @@ var require_URLSearchParams_impl = __commonJS((exports) => {
       this._updateSteps();
     }
     get(name) {
-      for (const tuple of this._list) {
-        if (tuple[0] === name) {
-          return tuple[1];
+      for (const tuple2 of this._list) {
+        if (tuple2[0] === name) {
+          return tuple2[1];
         }
       }
       return null;
     }
     getAll(name) {
       const output = [];
-      for (const tuple of this._list) {
-        if (tuple[0] === name) {
-          output.push(tuple[1]);
+      for (const tuple2 of this._list) {
+        if (tuple2[0] === name) {
+          output.push(tuple2[1]);
         }
       }
       return output;
     }
     has(name, value) {
-      for (const tuple of this._list) {
-        if (tuple[0] === name && (value === undefined || tuple[1] === value)) {
+      for (const tuple2 of this._list) {
+        if (tuple2[0] === name && (value === undefined || tuple2[1] === value)) {
           return true;
         }
       }
@@ -17220,7 +17220,7 @@ var require_URL_impl = __commonJS((exports) => {
   var urlencoded = require_urlencoded();
   var URLSearchParams = require_URLSearchParams();
   exports.implementation = class URLImpl {
-    constructor(globalObject, [url, base]) {
+    constructor(globalObject, [url2, base]) {
       let parsedBase = null;
       if (base !== undefined) {
         parsedBase = usm.basicURLParse(base);
@@ -17228,9 +17228,9 @@ var require_URL_impl = __commonJS((exports) => {
           throw new TypeError(`Invalid base URL: ${base}`);
         }
       }
-      const parsedURL = usm.basicURLParse(url, { baseURL: parsedBase });
+      const parsedURL = usm.basicURLParse(url2, { baseURL: parsedBase });
       if (parsedURL === null) {
-        throw new TypeError(`Invalid URL: ${url}`);
+        throw new TypeError(`Invalid URL: ${url2}`);
       }
       const query = parsedURL.query !== null ? parsedURL.query : "";
       this._url = parsedURL;
@@ -17244,7 +17244,7 @@ var require_URL_impl = __commonJS((exports) => {
         return null;
       }
     }
-    static canParse(url, base) {
+    static canParse(url2, base) {
       let parsedBase = null;
       if (base !== undefined) {
         parsedBase = usm.basicURLParse(base);
@@ -17252,7 +17252,7 @@ var require_URL_impl = __commonJS((exports) => {
           return false;
         }
       }
-      const parsedURL = usm.basicURLParse(url, { baseURL: parsedBase });
+      const parsedURL = usm.basicURLParse(url2, { baseURL: parsedBase });
       if (parsedURL === null) {
         return false;
       }
@@ -17301,14 +17301,14 @@ var require_URL_impl = __commonJS((exports) => {
       usm.setThePassword(this._url, v);
     }
     get host() {
-      const url = this._url;
-      if (url.host === null) {
+      const url2 = this._url;
+      if (url2.host === null) {
         return "";
       }
-      if (url.port === null) {
-        return usm.serializeHost(url.host);
+      if (url2.port === null) {
+        return usm.serializeHost(url2.host);
       }
-      return `${usm.serializeHost(url.host)}:${usm.serializeInteger(url.port)}`;
+      return `${usm.serializeHost(url2.host)}:${usm.serializeInteger(url2.port)}`;
     }
     set host(v) {
       if (usm.hasAnOpaquePath(this._url)) {
@@ -17361,15 +17361,15 @@ var require_URL_impl = __commonJS((exports) => {
       return `?${this._url.query}`;
     }
     set search(v) {
-      const url = this._url;
+      const url2 = this._url;
       if (v === "") {
-        url.query = null;
+        url2.query = null;
         this._query._list = [];
         return;
       }
       const input = v[0] === "?" ? v.substring(1) : v;
-      url.query = "";
-      usm.basicURLParse(input, { url, stateOverride: "query" });
+      url2.query = "";
+      usm.basicURLParse(input, { url: url2, stateOverride: "query" });
       this._query._list = urlencoded.parseUrlencodedString(input);
     }
     get searchParams() {
@@ -17468,7 +17468,7 @@ var require_URL = __commonJS((exports) => {
     const ctorRegistry = utils.initCtorRegistry(globalObject);
 
     class URL2 {
-      constructor(url) {
+      constructor(url2) {
         if (arguments.length < 1) {
           throw new globalObject.TypeError(`Failed to construct 'URL': 1 argument required, but only ${arguments.length} present.`);
         }
@@ -17703,7 +17703,7 @@ var require_URL = __commonJS((exports) => {
         });
         esValue[implSymbol]["hash"] = V;
       }
-      static parse(url) {
+      static parse(url2) {
         if (arguments.length < 1) {
           throw new globalObject.TypeError(`Failed to execute 'parse' on 'URL': 1 argument required, but only ${arguments.length} present.`);
         }
@@ -17728,7 +17728,7 @@ var require_URL = __commonJS((exports) => {
         }
         return utils.tryWrapperForImpl(Impl.implementation.parse(globalObject, ...args));
       }
-      static canParse(url) {
+      static canParse(url2) {
         if (arguments.length < 1) {
           throw new globalObject.TypeError(`Failed to execute 'canParse' on 'URL': 1 argument required, but only ${arguments.length} present.`);
         }
@@ -17873,32 +17873,32 @@ var require_redact = __commonJS((exports) => {
   exports.redactConnectionString = redactConnectionString;
   var index_1 = __importStar(require_lib2());
   function redactValidConnectionString(inputUrl, options) {
-    const url = inputUrl.clone();
+    const url2 = inputUrl.clone();
     const replacementString = options?.replacementString ?? "_credentials_";
     const redactUsernames = options?.redactUsernames ?? true;
-    if ((url.username || url.password) && redactUsernames) {
-      url.username = replacementString;
-      url.password = "";
-    } else if (url.password) {
-      url.password = replacementString;
+    if ((url2.username || url2.password) && redactUsernames) {
+      url2.username = replacementString;
+      url2.password = "";
+    } else if (url2.password) {
+      url2.password = replacementString;
     }
-    if (url.searchParams.has("authMechanismProperties")) {
-      const props = new index_1.CommaAndColonSeparatedRecord(url.searchParams.get("authMechanismProperties"));
+    if (url2.searchParams.has("authMechanismProperties")) {
+      const props = new index_1.CommaAndColonSeparatedRecord(url2.searchParams.get("authMechanismProperties"));
       if (props.get("AWS_SESSION_TOKEN")) {
         props.set("AWS_SESSION_TOKEN", replacementString);
-        url.searchParams.set("authMechanismProperties", props.toString());
+        url2.searchParams.set("authMechanismProperties", props.toString());
       }
     }
-    if (url.searchParams.has("tlsCertificateKeyFilePassword")) {
-      url.searchParams.set("tlsCertificateKeyFilePassword", replacementString);
+    if (url2.searchParams.has("tlsCertificateKeyFilePassword")) {
+      url2.searchParams.set("tlsCertificateKeyFilePassword", replacementString);
     }
-    if (url.searchParams.has("proxyUsername") && redactUsernames) {
-      url.searchParams.set("proxyUsername", replacementString);
+    if (url2.searchParams.has("proxyUsername") && redactUsernames) {
+      url2.searchParams.set("proxyUsername", replacementString);
     }
-    if (url.searchParams.has("proxyPassword")) {
-      url.searchParams.set("proxyPassword", replacementString);
+    if (url2.searchParams.has("proxyPassword")) {
+      url2.searchParams.set("proxyPassword", replacementString);
     }
-    return url;
+    return url2;
   }
   function redactConnectionString(uri, options) {
     const replacementString = options?.replacementString ?? "<credentials>";
@@ -18132,7 +18132,7 @@ var require_lib2 = __commonJS((exports) => {
       return this.searchParams;
     }
     [Symbol.for("nodejs.util.inspect.custom")]() {
-      const { href, origin, protocol, username, password, hosts, pathname, search, searchParams, hash } = this;
+      const { href, origin, protocol, username, password, hosts, pathname, search, searchParams, hash: hash2 } = this;
       return {
         href,
         origin,
@@ -18143,7 +18143,7 @@ var require_lib2 = __commonJS((exports) => {
         pathname,
         search,
         searchParams,
-        hash
+        hash: hash2
       };
     }
   }
@@ -18392,8 +18392,8 @@ var require_commands = __commonJS((exports) => {
       this.chunks.push(buffer);
       this.header = buffer;
       if (documents) {
-        for (const doc of documents) {
-          this.push(doc, BSON.serialize(doc));
+        for (const doc2 of documents) {
+          this.push(doc2, BSON.serialize(doc2));
         }
       }
     }
@@ -18731,7 +18731,7 @@ var require_errors = __commonJS((exports) => {
     }
   }
   exports.MongoCryptError = MongoCryptError;
-  var defaultErrorWrapper = (error) => new MongoCryptError(error.message, { cause: error });
+  var defaultErrorWrapper = (error48) => new MongoCryptError(error48.message, { cause: error48 });
   exports.defaultErrorWrapper = defaultErrorWrapper;
 
   class MongoCryptInvalidArgumentError extends MongoCryptError {
@@ -18846,8 +18846,8 @@ var require_aws_temporary_credentials = __commonJS((exports) => {
           Token: creds.sessionToken,
           Expiration: creds.expiration
         };
-      } catch (error) {
-        throw new error_1.MongoAWSError(error.message, { cause: error });
+      } catch (error48) {
+        throw new error_1.MongoAWSError(error48.message, { cause: error48 });
       }
     }
   }
@@ -18935,30 +18935,30 @@ var require_azure = __commonJS((exports) => {
       expiresOnTimestamp: Date.now() + expiresInMS
     };
   }
-  function addAzureParams(url, resource, username) {
-    url.searchParams.append("api-version", "2018-02-01");
-    url.searchParams.append("resource", resource);
+  function addAzureParams(url2, resource, username) {
+    url2.searchParams.append("api-version", "2018-02-01");
+    url2.searchParams.append("resource", resource);
     if (username) {
-      url.searchParams.append("client_id", username);
+      url2.searchParams.append("client_id", username);
     }
-    return url;
+    return url2;
   }
   function prepareRequest(options) {
-    const url = new URL(options.url?.toString() ?? exports.AZURE_BASE_URL);
-    addAzureParams(url, "https://vault.azure.net");
+    const url2 = new URL(options.url?.toString() ?? exports.AZURE_BASE_URL);
+    addAzureParams(url2, "https://vault.azure.net");
     const headers = { ...options.headers, "Content-Type": "application/json", Metadata: true };
-    return { headers, url };
+    return { headers, url: url2 };
   }
   async function fetchAzureKMSToken(options = {}) {
-    const { headers, url } = prepareRequest(options);
+    const { headers, url: url2 } = prepareRequest(options);
     try {
-      const response = await (0, utils_1.get)(url, { headers });
+      const response = await (0, utils_1.get)(url2, { headers });
       return await parseResponse(response);
-    } catch (error) {
-      if (error instanceof error_1.MongoNetworkTimeoutError) {
-        throw new errors_1.MongoCryptAzureKMSRequestError(`[Azure KMS] ${error.message}`);
+    } catch (error48) {
+      if (error48 instanceof error_1.MongoNetworkTimeoutError) {
+        throw new errors_1.MongoCryptAzureKMSRequestError(`[Azure KMS] ${error48.message}`);
       }
-      throw error;
+      throw error48;
     }
   }
   async function loadAzureCredentials(kmsProviders) {
@@ -19192,9 +19192,9 @@ var require_state_machine = __commonJS((exports) => {
         const kmsProvider = request.kmsProvider;
         const providerTlsOptions = tlsOptions[kmsProvider];
         if (providerTlsOptions) {
-          const error = this.validateTlsOptions(kmsProvider, providerTlsOptions);
-          if (error) {
-            throw error;
+          const error48 = this.validateTlsOptions(kmsProvider, providerTlsOptions);
+          if (error48) {
+            throw error48;
           }
           try {
             await this.setTlsOptions(providerTlsOptions, socketOptions);
@@ -19256,10 +19256,10 @@ var require_state_machine = __commonJS((exports) => {
           willResolveKmsRequest,
           timeout_1.Timeout.expires(options.timeoutContext?.remainingTimeMS)
         ]) : willResolveKmsRequest);
-      } catch (error) {
-        if (error instanceof timeout_1.TimeoutError)
+      } catch (error48) {
+        if (error48 instanceof timeout_1.TimeoutError)
           throw new error_1.MongoOperationTimeoutError("KMS request timed out");
-        throw error;
+        throw error48;
       } finally {
         destroySockets();
         abortListener?.[utils_1.kDispose]();
@@ -19680,7 +19680,7 @@ var require_mongocryptd_manager = __commonJS((exports) => {
 
 // node_modules/mongodb/lib/client-side-encryption/auto_encrypter.js
 var require_auto_encrypter = __commonJS((exports) => {
-  var _a;
+  var _a2;
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.AutoEncrypter = exports.AutoEncryptionLoggerLevel = undefined;
   var net = __require("net");
@@ -19705,7 +19705,7 @@ var require_auto_encrypter = __commonJS((exports) => {
 
   class AutoEncrypter {
     static {
-      _a = constants_1.kDecorateResult;
+      _a2 = constants_1.kDecorateResult;
     }
     static getMongoCrypt() {
       const encryption = (0, deps_1.getMongoDBClientEncryption)();
@@ -19715,7 +19715,7 @@ var require_auto_encrypter = __commonJS((exports) => {
       return encryption.MongoCrypt;
     }
     constructor(client, options) {
-      this[_a] = false;
+      this[_a2] = false;
       this._client = client;
       this._bypassEncryption = options.bypassAutoEncryption === true;
       this._keyVaultNamespace = options.keyVaultNamespace || "admin.datakeys";
@@ -19792,8 +19792,8 @@ var require_auto_encrypter = __commonJS((exports) => {
       try {
         const client = await this._mongocryptdClient.connect();
         return client;
-      } catch (error) {
-        throw new error_1.MongoRuntimeError("Unable to connect to `mongocryptd`, please make sure it is running or in your PATH for auto-spawn", { cause: error });
+      } catch (error48) {
+        throw new error_1.MongoRuntimeError("Unable to connect to `mongocryptd`, please make sure it is running or in your PATH for auto-spawn", { cause: error48 });
       }
     }
     async close() {
@@ -19921,18 +19921,18 @@ var require_encrypter = __commonJS((exports) => {
       }
     }
     async close(client) {
-      let error;
+      let error48;
       try {
         await this.autoEncrypter.close();
       } catch (autoEncrypterError) {
-        error = autoEncrypterError;
+        error48 = autoEncrypterError;
       }
       const internalClient = this.internalClient;
       if (internalClient != null && client !== internalClient) {
         return await internalClient.close();
       }
-      if (error != null) {
-        throw error;
+      if (error48 != null) {
+        throw error48;
       }
     }
     static checkForMongoCrypt() {
@@ -20004,7 +20004,7 @@ var require_command_monitoring_events = __commonJS((exports) => {
   exports.CommandSucceededEvent = CommandSucceededEvent;
 
   class CommandFailedEvent {
-    constructor(connection, command, error, started, serverConnectionId) {
+    constructor(connection, command, error48, started, serverConnectionId) {
       this.name = constants_1.COMMAND_FAILED;
       const cmd = extractCommand(command);
       const commandName = extractCommandName(cmd);
@@ -20015,7 +20015,7 @@ var require_command_monitoring_events = __commonJS((exports) => {
       this.requestId = command.requestId;
       this.commandName = commandName;
       this.duration = (0, utils_1.calculateDurationInMs)(started);
-      this.failure = maybeRedact(commandName, cmd, error);
+      this.failure = maybeRedact(commandName, cmd, error48);
       this.serverConnectionId = serverConnectionId;
       this.databaseName = command.databaseName;
     }
@@ -20317,7 +20317,7 @@ var require_on_data = __commonJS((exports) => {
     signal?.throwIfAborted();
     const unconsumedEvents = new utils_1.List;
     const unconsumedPromises = new utils_1.List;
-    let error = null;
+    let error48 = null;
     let finished = false;
     const iterator = {
       next() {
@@ -20325,16 +20325,16 @@ var require_on_data = __commonJS((exports) => {
         if (value != null) {
           return Promise.resolve({ value, done: false });
         }
-        if (error != null) {
-          const p = Promise.reject(error);
-          error = null;
+        if (error48 != null) {
+          const p = Promise.reject(error48);
+          error48 = null;
           return p;
         }
         if (finished)
           return closeHandler();
-        const { promise, resolve, reject } = (0, utils_1.promiseWithResolvers)();
+        const { promise: promise2, resolve, reject } = (0, utils_1.promiseWithResolvers)();
         unconsumedPromises.push({ resolve, reject });
-        return promise;
+        return promise2;
       },
       return() {
         return closeHandler();
@@ -20360,18 +20360,18 @@ var require_on_data = __commonJS((exports) => {
     timeoutForSocketRead?.then(undefined, errorHandler2);
     return iterator;
     function eventHandler(value) {
-      const promise = unconsumedPromises.shift();
-      if (promise != null)
-        promise.resolve({ value, done: false });
+      const promise2 = unconsumedPromises.shift();
+      if (promise2 != null)
+        promise2.resolve({ value, done: false });
       else
         unconsumedEvents.push(value);
     }
     function errorHandler2(err) {
-      const promise = unconsumedPromises.shift();
-      if (promise != null)
-        promise.reject(err);
+      const promise2 = unconsumedPromises.shift();
+      if (promise2 != null)
+        promise2.reject(err);
       else
-        error = err;
+        error48 = err;
       closeHandler();
     }
     function closeHandler() {
@@ -20381,8 +20381,8 @@ var require_on_data = __commonJS((exports) => {
       finished = true;
       timeoutForSocketRead?.clear();
       const doneResult = { value: undefined, done: finished };
-      for (const promise of unconsumedPromises) {
-        promise.resolve(doneResult);
+      for (const promise2 of unconsumedPromises) {
+        promise2.resolve(doneResult);
       }
       return Promise.resolve(doneResult);
     }
@@ -20458,10 +20458,10 @@ var require_topology_description = __commonJS((exports) => {
       const currentHostnames = new Set(this.servers.keys());
       const hostnamesToAdd = new Set(incomingHostnames);
       const hostnamesToRemove = new Set;
-      for (const hostname of currentHostnames) {
-        hostnamesToAdd.delete(hostname);
-        if (!incomingHostnames.has(hostname)) {
-          hostnamesToRemove.add(hostname);
+      for (const hostname3 of currentHostnames) {
+        hostnamesToAdd.delete(hostname3);
+        if (!incomingHostnames.has(hostname3)) {
+          hostnamesToRemove.add(hostname3);
         }
       }
       if (hostnamesToAdd.size === 0 && hostnamesToRemove.size === 0) {
@@ -20838,11 +20838,11 @@ var require_connection = __commonJS((exports) => {
     onSocketError(cause) {
       this.onError(new error_1.MongoNetworkError(cause.message, { cause }));
     }
-    onTransformError(error) {
-      this.onError(error);
+    onTransformError(error48) {
+      this.onError(error48);
     }
-    onError(error) {
-      this.cleanup(error);
+    onError(error48) {
+      this.cleanup(error48);
     }
     onClose() {
       const message = `connection ${this.id} to ${this.address} closed`;
@@ -20864,13 +20864,13 @@ var require_connection = __commonJS((exports) => {
       const message = `connection ${this.id} to ${this.address} closed`;
       this.cleanup(new error_1.MongoNetworkError(message));
     }
-    cleanup(error) {
+    cleanup(error48) {
       if (this.closed) {
         return;
       }
       this.socket.destroy();
-      this.error = error;
-      this.dataEvents?.throw(error).then(undefined, utils_1.squashError);
+      this.error = error48;
+      this.dataEvents?.throw(error48).then(undefined, utils_1.squashError);
       this.closed = true;
       this.emit(Connection.CLOSE);
     }
@@ -20880,8 +20880,8 @@ var require_connection = __commonJS((exports) => {
       const session = options?.session;
       let clusterTime = this.clusterTime;
       if (this.serverApi) {
-        const { version, strict, deprecationErrors } = this.serverApi;
-        cmd.apiVersion = version;
+        const { version: version2, strict, deprecationErrors } = this.serverApi;
+        cmd.apiVersion = version2;
         if (strict != null)
           cmd.apiStrict = strict;
         if (deprecationErrors != null)
@@ -20968,11 +20968,11 @@ var require_connection = __commonJS((exports) => {
         fieldsAsRaw: { [options.documentsReturnedIn]: true }
       };
       let document = undefined;
-      let object = undefined;
+      let object2 = undefined;
       try {
         this.throwIfAborted();
         for await (document of this.sendWire(message, options, responseType)) {
-          object = undefined;
+          object2 = undefined;
           if (options.session != null) {
             (0, sessions_1.updateSessionFromResponse)(options.session, document);
           }
@@ -20983,26 +20983,26 @@ var require_connection = __commonJS((exports) => {
           if (document.ok === 0) {
             if (options.timeoutContext?.csotEnabled() && document.isMaxTimeExpiredError) {
               throw new error_1.MongoOperationTimeoutError("Server reported a timeout error", {
-                cause: new error_1.MongoServerError(object ??= document.toObject(bsonOptions))
+                cause: new error_1.MongoServerError(object2 ??= document.toObject(bsonOptions))
               });
             }
-            throw new error_1.MongoServerError(object ??= document.toObject(bsonOptions));
+            throw new error_1.MongoServerError(object2 ??= document.toObject(bsonOptions));
           }
           if (this.shouldEmitAndLogCommand) {
-            this.emitAndLogCommand(this.monitorCommands, Connection.COMMAND_SUCCEEDED, message.databaseName, this.established, new command_monitoring_events_1.CommandSucceededEvent(this, message, message.moreToCome ? { ok: 1 } : object ??= document.toObject(bsonOptions), started, this.description.serverConnectionId));
+            this.emitAndLogCommand(this.monitorCommands, Connection.COMMAND_SUCCEEDED, message.databaseName, this.established, new command_monitoring_events_1.CommandSucceededEvent(this, message, message.moreToCome ? { ok: 1 } : object2 ??= document.toObject(bsonOptions), started, this.description.serverConnectionId));
           }
           if (responseType == null) {
-            yield object ??= document.toObject(bsonOptions);
+            yield object2 ??= document.toObject(bsonOptions);
           } else {
             yield document;
           }
           this.throwIfAborted();
         }
-      } catch (error) {
+      } catch (error48) {
         if (this.shouldEmitAndLogCommand) {
-          this.emitAndLogCommand(this.monitorCommands, Connection.COMMAND_FAILED, message.databaseName, this.established, new command_monitoring_events_1.CommandFailedEvent(this, message, error, started, this.description.serverConnectionId));
+          this.emitAndLogCommand(this.monitorCommands, Connection.COMMAND_FAILED, message.databaseName, this.established, new command_monitoring_events_1.CommandFailedEvent(this, message, error48, started, this.description.serverConnectionId));
         }
-        throw error;
+        throw error48;
       }
     }
     async command(ns, command, options = {}, responseType) {
@@ -21017,7 +21017,7 @@ var require_connection = __commonJS((exports) => {
               });
             }
           } else {
-            if (Array.isArray(document?.writeErrors) && document.writeErrors.some((error) => error?.code === error_1.MONGODB_ERROR_CODES.MaxTimeMSExpired) || document?.writeConcernError?.code === error_1.MONGODB_ERROR_CODES.MaxTimeMSExpired) {
+            if (Array.isArray(document?.writeErrors) && document.writeErrors.some((error48) => error48?.code === error_1.MONGODB_ERROR_CODES.MaxTimeMSExpired) || document?.writeConcernError?.code === error_1.MONGODB_ERROR_CODES.MaxTimeMSExpired) {
               throw new error_1.MongoOperationTimeoutError("Server reported a timeout error", {
                 cause: new error_1.MongoServerError(document)
               });
@@ -21211,9 +21211,9 @@ var require_connect = __commonJS((exports) => {
       connection = makeConnection(options, socket);
       await performInitialHandshake(connection, options);
       return connection;
-    } catch (error) {
+    } catch (error48) {
       connection?.destroy();
-      throw error;
+      throw error48;
     }
   }
   function makeConnection(options, socket) {
@@ -21280,14 +21280,14 @@ var require_connect = __commonJS((exports) => {
       }
       try {
         await provider.auth(authContext);
-      } catch (error) {
-        if (error instanceof error_1.MongoError) {
-          error.addErrorLabel(error_1.MongoErrorLabel.HandshakeError);
-          if ((0, error_1.needsRetryableWriteLabel)(error, response.maxWireVersion, conn.description.type)) {
-            error.addErrorLabel(error_1.MongoErrorLabel.RetryableWriteError);
+      } catch (error48) {
+        if (error48 instanceof error_1.MongoError) {
+          error48.addErrorLabel(error_1.MongoErrorLabel.HandshakeError);
+          if ((0, error_1.needsRetryableWriteLabel)(error48, response.maxWireVersion, conn.description.type)) {
+            error48.addErrorLabel(error_1.MongoErrorLabel.RetryableWriteError);
           }
         }
-        throw error;
+        throw error48;
       }
     }
     conn.established = true;
@@ -21295,11 +21295,11 @@ var require_connect = __commonJS((exports) => {
       try {
         const handshakeResponse = await conn.command((0, utils_1.ns)("admin.$cmd"), handshakeDoc2, handshakeOptions2);
         return handshakeResponse;
-      } catch (error) {
-        if (error instanceof error_1.MongoError) {
-          error.addErrorLabel(error_1.MongoErrorLabel.HandshakeError);
+      } catch (error48) {
+        if (error48 instanceof error_1.MongoError) {
+          error48.addErrorLabel(error_1.MongoErrorLabel.HandshakeError);
         }
-        throw error;
+        throw error48;
       }
     }
   }
@@ -21444,9 +21444,9 @@ var require_connect = __commonJS((exports) => {
     try {
       socket = await connectedSocket;
       return socket;
-    } catch (error) {
+    } catch (error48) {
       socket.destroy();
-      throw error;
+      throw error48;
     } finally {
       socket.setTimeout(0);
       if (cancellationHandler != null) {
@@ -21575,10 +21575,10 @@ var require_events = __commonJS((exports) => {
   exports.ServerHeartbeatStartedEvent = ServerHeartbeatStartedEvent;
 
   class ServerHeartbeatSucceededEvent {
-    constructor(connectionId, duration, reply, awaited) {
+    constructor(connectionId, duration3, reply, awaited) {
       this.name = constants_1.SERVER_HEARTBEAT_SUCCEEDED;
       this.connectionId = connectionId;
-      this.duration = duration;
+      this.duration = duration3;
       this.reply = reply ?? {};
       this.awaited = awaited;
     }
@@ -21586,10 +21586,10 @@ var require_events = __commonJS((exports) => {
   exports.ServerHeartbeatSucceededEvent = ServerHeartbeatSucceededEvent;
 
   class ServerHeartbeatFailedEvent {
-    constructor(connectionId, duration, failure, awaited) {
+    constructor(connectionId, duration3, failure, awaited) {
       this.name = constants_1.SERVER_HEARTBEAT_FAILED;
       this.connectionId = connectionId;
-      this.duration = duration;
+      this.duration = duration3;
       this.failure = failure;
       this.awaited = awaited;
     }
@@ -21658,13 +21658,13 @@ var require_connection_pool_events = __commonJS((exports) => {
   exports.ConnectionReadyEvent = ConnectionReadyEvent;
 
   class ConnectionClosedEvent extends ConnectionPoolMonitoringEvent {
-    constructor(pool, connection, reason, error) {
+    constructor(pool, connection, reason, error48) {
       super(pool);
       this.name = constants_1.CONNECTION_CLOSED;
       this.connectionId = connection.id;
       this.reason = reason;
       this.serviceId = connection.serviceId;
-      this.error = error ?? null;
+      this.error = error48 ?? null;
     }
   }
   exports.ConnectionClosedEvent = ConnectionClosedEvent;
@@ -21678,12 +21678,12 @@ var require_connection_pool_events = __commonJS((exports) => {
   exports.ConnectionCheckOutStartedEvent = ConnectionCheckOutStartedEvent;
 
   class ConnectionCheckOutFailedEvent extends ConnectionPoolMonitoringEvent {
-    constructor(pool, reason, checkoutTime, error) {
+    constructor(pool, reason, checkoutTime, error48) {
       super(pool);
       this.name = constants_1.CONNECTION_CHECK_OUT_FAILED;
       this.durationMS = (0, utils_1.now)() - checkoutTime;
       this.reason = reason;
-      this.error = error;
+      this.error = error48;
     }
   }
   exports.ConnectionCheckOutFailedEvent = ConnectionCheckOutFailedEvent;
@@ -21907,7 +21907,7 @@ var require_connection_pool = __commonJS((exports) => {
     async checkOut(options) {
       const checkoutTime = (0, utils_1.now)();
       this.emitAndLog(ConnectionPool.CONNECTION_CHECK_OUT_STARTED, new connection_pool_events_1.ConnectionCheckOutStartedEvent(this));
-      const { promise, resolve, reject } = (0, utils_1.promiseWithResolvers)();
+      const { promise: promise2, resolve, reject } = (0, utils_1.promiseWithResolvers)();
       const timeout = options.timeoutContext.connectionCheckoutTimeout;
       const waitQueueMember = {
         resolve,
@@ -21923,9 +21923,9 @@ var require_connection_pool = __commonJS((exports) => {
       process.nextTick(() => this.processWaitQueue());
       try {
         timeout?.throwIfExpired();
-        return await (timeout ? Promise.race([promise, timeout]) : promise);
-      } catch (error) {
-        if (timeout_1.TimeoutError.is(error)) {
+        return await (timeout ? Promise.race([promise2, timeout]) : promise2);
+      } catch (error48) {
+        if (timeout_1.TimeoutError.is(error48)) {
           timeout?.clear();
           waitQueueMember.cancelled = true;
           this.emitAndLog(ConnectionPool.CONNECTION_CHECK_OUT_FAILED, new connection_pool_events_1.ConnectionCheckOutFailedEvent(this, "timeout", waitQueueMember.checkoutTime));
@@ -21937,7 +21937,7 @@ var require_connection_pool = __commonJS((exports) => {
           }
           throw timeoutError;
         }
-        throw error;
+        throw error48;
       } finally {
         abortListener?.[utils_1.kDispose]();
         timeout?.clear();
@@ -22118,14 +22118,14 @@ var require_connection_pool = __commonJS((exports) => {
         this.emitAndLog(ConnectionPool.CONNECTION_READY, new connection_pool_events_1.ConnectionReadyEvent(this, connection, connectionCreatedTime));
         this.pending--;
         callback(undefined, connection);
-      }, (error) => {
+      }, (error48) => {
         this.pending--;
-        this.server.handleError(error);
-        this.emitAndLog(ConnectionPool.CONNECTION_CLOSED, new connection_pool_events_1.ConnectionClosedEvent(this, { id: connectOptions.id, serviceId: undefined }, "error", error));
-        if (error instanceof error_1.MongoNetworkError || error instanceof error_1.MongoServerError) {
-          error.connectionGeneration = connectOptions.generation;
+        this.server.handleError(error48);
+        this.emitAndLog(ConnectionPool.CONNECTION_CLOSED, new connection_pool_events_1.ConnectionClosedEvent(this, { id: connectOptions.id, serviceId: undefined }, "error", error48));
+        if (error48 instanceof error_1.MongoNetworkError || error48 instanceof error_1.MongoServerError) {
+          error48.connectionGeneration = connectOptions.generation;
         }
-        callback(error ?? new error_1.MongoRuntimeError("Connection creation failed without error"));
+        callback(error48 ?? new error_1.MongoRuntimeError("Connection creation failed without error"));
       });
     }
     ensureMinPoolSize() {
@@ -22167,10 +22167,10 @@ var require_connection_pool = __commonJS((exports) => {
         }
         if (this.poolState !== exports.PoolState.ready) {
           const reason = this.closed ? "poolClosed" : "connectionError";
-          const error = this.closed ? new errors_1.PoolClosedError(this) : new errors_1.PoolClearedError(this);
-          this.emitAndLog(ConnectionPool.CONNECTION_CHECK_OUT_FAILED, new connection_pool_events_1.ConnectionCheckOutFailedEvent(this, reason, waitQueueMember.checkoutTime, error));
+          const error48 = this.closed ? new errors_1.PoolClosedError(this) : new errors_1.PoolClearedError(this);
+          this.emitAndLog(ConnectionPool.CONNECTION_CHECK_OUT_FAILED, new connection_pool_events_1.ConnectionCheckOutFailedEvent(this, reason, waitQueueMember.checkoutTime, error48));
           this.waitQueue.shift();
-          waitQueueMember.reject(error);
+          waitQueueMember.reject(error48);
           continue;
         }
         if (!this.availableConnectionCount) {
@@ -22291,7 +22291,7 @@ var require_server = __commonJS((exports) => {
       for (const event of constants_1.HEARTBEAT_EVENTS) {
         this.monitor.on(event, (e) => this.emit(event, e));
       }
-      this.monitor.on("resetServer", (error) => markServerUnknown(this, error));
+      this.monitor.on("resetServer", (error48) => markServerUnknown(this, error48));
       this.monitor.on(Server.SERVER_HEARTBEAT_SUCCEEDED, (event) => {
         this.emit(Server.DESCRIPTION_RECEIVED, new server_description_1.ServerDescription(this.description.hostAddress, event.reply, {
           roundTripTime: this.monitor?.roundTripTime,
@@ -22418,9 +22418,9 @@ var require_server = __commonJS((exports) => {
       } catch (operationError) {
         if (operationError instanceof error_1.MongoError && operationError.code === error_1.MONGODB_ERROR_CODES.Reauthenticate) {
           reauthPromise = this.pool.reauthenticate(conn);
-          reauthPromise.then(undefined, (error) => {
+          reauthPromise.then(undefined, (error48) => {
             reauthPromise = null;
-            (0, utils_1.squashError)(error);
+            (0, utils_1.squashError)(error48);
           });
           await (0, utils_1.abortable)(reauthPromise, options);
           reauthPromise = null;
@@ -22438,76 +22438,76 @@ var require_server = __commonJS((exports) => {
         cleanup();
       }
     }
-    handleError(error, connection) {
-      if (!(error instanceof error_1.MongoError)) {
+    handleError(error48, connection) {
+      if (!(error48 instanceof error_1.MongoError)) {
         return;
       }
-      const isStaleError = error.connectionGeneration && error.connectionGeneration < this.pool.generation;
+      const isStaleError = error48.connectionGeneration && error48.connectionGeneration < this.pool.generation;
       if (isStaleError) {
         return;
       }
-      const isNetworkNonTimeoutError = error instanceof error_1.MongoNetworkError && !(error instanceof error_1.MongoNetworkTimeoutError);
-      const isNetworkTimeoutBeforeHandshakeError = error instanceof error_1.MongoNetworkError && error.beforeHandshake;
-      const isAuthHandshakeError = error.hasErrorLabel(error_1.MongoErrorLabel.HandshakeError);
+      const isNetworkNonTimeoutError = error48 instanceof error_1.MongoNetworkError && !(error48 instanceof error_1.MongoNetworkTimeoutError);
+      const isNetworkTimeoutBeforeHandshakeError = error48 instanceof error_1.MongoNetworkError && error48.beforeHandshake;
+      const isAuthHandshakeError = error48.hasErrorLabel(error_1.MongoErrorLabel.HandshakeError);
       if (isNetworkNonTimeoutError || isNetworkTimeoutBeforeHandshakeError || isAuthHandshakeError) {
         if (!this.loadBalanced) {
-          error.addErrorLabel(error_1.MongoErrorLabel.ResetPool);
-          markServerUnknown(this, error);
+          error48.addErrorLabel(error_1.MongoErrorLabel.ResetPool);
+          markServerUnknown(this, error48);
         } else if (connection) {
           this.pool.clear({ serviceId: connection.serviceId });
         }
       } else {
-        if ((0, error_1.isSDAMUnrecoverableError)(error)) {
-          if (shouldHandleStateChangeError(this, error)) {
-            const shouldClearPool = (0, error_1.isNodeShuttingDownError)(error);
+        if ((0, error_1.isSDAMUnrecoverableError)(error48)) {
+          if (shouldHandleStateChangeError(this, error48)) {
+            const shouldClearPool = (0, error_1.isNodeShuttingDownError)(error48);
             if (this.loadBalanced && connection && shouldClearPool) {
               this.pool.clear({ serviceId: connection.serviceId });
             }
             if (!this.loadBalanced) {
               if (shouldClearPool) {
-                error.addErrorLabel(error_1.MongoErrorLabel.ResetPool);
+                error48.addErrorLabel(error_1.MongoErrorLabel.ResetPool);
               }
-              markServerUnknown(this, error);
+              markServerUnknown(this, error48);
               process.nextTick(() => this.requestCheck());
             }
           }
         }
       }
     }
-    decorateCommandError(connection, cmd, options, error) {
-      if (typeof error !== "object" || error == null || !("name" in error)) {
-        throw new error_1.MongoRuntimeError("An unexpected error type: " + typeof error);
+    decorateCommandError(connection, cmd, options, error48) {
+      if (typeof error48 !== "object" || error48 == null || !("name" in error48)) {
+        throw new error_1.MongoRuntimeError("An unexpected error type: " + typeof error48);
       }
-      if (error.name === "AbortError" && "cause" in error && error.cause instanceof error_1.MongoError) {
-        error = error.cause;
+      if (error48.name === "AbortError" && "cause" in error48 && error48.cause instanceof error_1.MongoError) {
+        error48 = error48.cause;
       }
-      if (!(error instanceof error_1.MongoError)) {
-        return error;
+      if (!(error48 instanceof error_1.MongoError)) {
+        return error48;
       }
       if (connectionIsStale(this.pool, connection)) {
-        return error;
+        return error48;
       }
       const session = options?.session;
-      if (error instanceof error_1.MongoNetworkError) {
+      if (error48 instanceof error_1.MongoNetworkError) {
         if (session && !session.hasEnded && session.serverSession) {
           session.serverSession.isDirty = true;
         }
-        if (inActiveTransaction(session, cmd) && !error.hasErrorLabel(error_1.MongoErrorLabel.TransientTransactionError)) {
-          error.addErrorLabel(error_1.MongoErrorLabel.TransientTransactionError);
+        if (inActiveTransaction(session, cmd) && !error48.hasErrorLabel(error_1.MongoErrorLabel.TransientTransactionError)) {
+          error48.addErrorLabel(error_1.MongoErrorLabel.TransientTransactionError);
         }
         if ((isRetryableWritesEnabled(this.topology) || (0, transactions_1.isTransactionCommand)(cmd)) && (0, utils_1.supportsRetryableWrites)(this) && !inActiveTransaction(session, cmd)) {
-          error.addErrorLabel(error_1.MongoErrorLabel.RetryableWriteError);
+          error48.addErrorLabel(error_1.MongoErrorLabel.RetryableWriteError);
         }
       } else {
-        if ((isRetryableWritesEnabled(this.topology) || (0, transactions_1.isTransactionCommand)(cmd)) && (0, error_1.needsRetryableWriteLabel)(error, (0, utils_1.maxWireVersion)(this), this.description.type) && !inActiveTransaction(session, cmd)) {
-          error.addErrorLabel(error_1.MongoErrorLabel.RetryableWriteError);
+        if ((isRetryableWritesEnabled(this.topology) || (0, transactions_1.isTransactionCommand)(cmd)) && (0, error_1.needsRetryableWriteLabel)(error48, (0, utils_1.maxWireVersion)(this), this.description.type) && !inActiveTransaction(session, cmd)) {
+          error48.addErrorLabel(error_1.MongoErrorLabel.RetryableWriteError);
         }
       }
-      if (session && session.isPinned && error.hasErrorLabel(error_1.MongoErrorLabel.TransientTransactionError)) {
+      if (session && session.isPinned && error48.hasErrorLabel(error_1.MongoErrorLabel.TransientTransactionError)) {
         session.unpin({ force: true });
       }
-      this.handleError(error, connection);
-      return error;
+      this.handleError(error48, connection);
+      return error48;
     }
     decrementOperationCount() {
       return this.s.operationCount -= 1;
@@ -22517,14 +22517,14 @@ var require_server = __commonJS((exports) => {
     }
   }
   exports.Server = Server;
-  function markServerUnknown(server, error) {
+  function markServerUnknown(server, error48) {
     if (server.loadBalanced) {
       return;
     }
-    if (error instanceof error_1.MongoNetworkError && !(error instanceof error_1.MongoNetworkTimeoutError)) {
+    if (error48 instanceof error_1.MongoNetworkError && !(error48 instanceof error_1.MongoNetworkTimeoutError)) {
       server.monitor?.reset();
     }
-    server.emit(Server.DESCRIPTION_RECEIVED, new server_description_1.ServerDescription(server.description.hostAddress, undefined, { error }));
+    server.emit(Server.DESCRIPTION_RECEIVED, new server_description_1.ServerDescription(server.description.hostAddress, undefined, { error: error48 }));
   }
   function isPinnableCommand(cmd, session) {
     if (session) {
@@ -22718,21 +22718,21 @@ var require_monitor = __commonJS((exports) => {
       monitor.connection?.destroy();
       monitor.connection = null;
       monitor.emitAndLogHeartbeat(server_1.Server.SERVER_HEARTBEAT_FAILED, monitor.server.topology.s.id, undefined, new events_1.ServerHeartbeatFailedEvent(monitor.address, (0, utils_1.calculateDurationInMs)(start), err, awaited));
-      const error = !(err instanceof error_1.MongoError) ? new error_1.MongoError(error_1.MongoError.buildErrorMessage(err), { cause: err }) : err;
-      error.addErrorLabel(error_1.MongoErrorLabel.ResetPool);
-      if (error instanceof error_1.MongoNetworkTimeoutError) {
-        error.addErrorLabel(error_1.MongoErrorLabel.InterruptInUseConnections);
+      const error48 = !(err instanceof error_1.MongoError) ? new error_1.MongoError(error_1.MongoError.buildErrorMessage(err), { cause: err }) : err;
+      error48.addErrorLabel(error_1.MongoErrorLabel.ResetPool);
+      if (error48 instanceof error_1.MongoNetworkTimeoutError) {
+        error48.addErrorLabel(error_1.MongoErrorLabel.InterruptInUseConnections);
       }
-      monitor.emit("resetServer", error);
+      monitor.emit("resetServer", error48);
       callback(err);
     }
     function onHeartbeatSucceeded(hello) {
       if (!("isWritablePrimary" in hello)) {
         hello.isWritablePrimary = hello[constants_1.LEGACY_HELLO_COMMAND];
       }
-      const duration = isAwaitable && monitor.rttPinger ? monitor.rttPinger.latestRtt ?? (0, utils_1.calculateDurationInMs)(start) : (0, utils_1.calculateDurationInMs)(start);
-      monitor.addRttSample(duration);
-      monitor.emitAndLogHeartbeat(server_1.Server.SERVER_HEARTBEAT_SUCCEEDED, monitor.server.topology.s.id, hello.connectionId, new events_1.ServerHeartbeatSucceededEvent(monitor.address, duration, hello, isAwaitable));
+      const duration3 = isAwaitable && monitor.rttPinger ? monitor.rttPinger.latestRtt ?? (0, utils_1.calculateDurationInMs)(start) : (0, utils_1.calculateDurationInMs)(start);
+      monitor.addRttSample(duration3);
+      monitor.emitAndLogHeartbeat(server_1.Server.SERVER_HEARTBEAT_SUCCEEDED, monitor.server.topology.s.id, hello.connectionId, new events_1.ServerHeartbeatSucceededEvent(monitor.address, duration3, hello, isAwaitable));
       if (isAwaitable) {
         monitor.emitAndLogHeartbeat(server_1.Server.SERVER_HEARTBEAT_STARTED, monitor.server.topology.s.id, undefined, new events_1.ServerHeartbeatStartedEvent(monitor.address, true));
         start = (0, utils_1.now)();
@@ -22761,9 +22761,9 @@ var require_monitor = __commonJS((exports) => {
       start = (0, utils_1.now)();
       if (isAwaitable) {
         awaited = true;
-        return connection.exhaustCommand((0, utils_1.ns)("admin.$cmd"), cmd, options, (error, hello) => {
-          if (error)
-            return onHeartbeatFailed(error);
+        return connection.exhaustCommand((0, utils_1.ns)("admin.$cmd"), cmd, options, (error48, hello) => {
+          if (error48)
+            return onHeartbeatFailed(error48);
           return onHeartbeatSucceeded(hello);
         });
       }
@@ -22778,24 +22778,24 @@ var require_monitor = __commonJS((exports) => {
       try {
         await (0, connect_1.performInitialHandshake)(connection2, monitor.connectOptions);
         return connection2;
-      } catch (error) {
+      } catch (error48) {
         connection2.destroy();
-        throw error;
+        throw error48;
       }
     })().then((connection2) => {
       if (isInCloseState(monitor)) {
         connection2.destroy();
         return;
       }
-      const duration = (0, utils_1.calculateDurationInMs)(start);
-      monitor.addRttSample(duration);
+      const duration3 = (0, utils_1.calculateDurationInMs)(start);
+      monitor.addRttSample(duration3);
       monitor.connection = connection2;
-      monitor.emitAndLogHeartbeat(server_1.Server.SERVER_HEARTBEAT_SUCCEEDED, monitor.server.topology.s.id, connection2.hello?.connectionId, new events_1.ServerHeartbeatSucceededEvent(monitor.address, duration, connection2.hello, useStreamingProtocol(monitor, connection2.hello?.topologyVersion)));
+      monitor.emitAndLogHeartbeat(server_1.Server.SERVER_HEARTBEAT_SUCCEEDED, monitor.server.topology.s.id, connection2.hello?.connectionId, new events_1.ServerHeartbeatSucceededEvent(monitor.address, duration3, connection2.hello, useStreamingProtocol(monitor, connection2.hello?.topologyVersion)));
       callback(undefined, connection2.hello);
-    }, (error) => {
+    }, (error48) => {
       monitor.connection = null;
       awaited = false;
-      onHeartbeatFailed(error);
+      onHeartbeatFailed(error48);
     });
   }
   function monitorServer(monitor) {
@@ -23048,13 +23048,13 @@ var require_connection_string = __commonJS((exports) => {
   var LB_SINGLE_HOST_ERROR = "loadBalanced option only supported with a single host in the URI";
   var LB_REPLICA_SET_ERROR = "loadBalanced option not supported with a replicaSet option";
   var LB_DIRECT_CONNECTION_ERROR = "loadBalanced option not supported when directConnection is provided";
-  function retryDNSTimeoutFor(api) {
+  function retryDNSTimeoutFor(api2) {
     return async function dnsReqRetryTimeout(lookupAddress) {
       try {
-        return await dns.promises[api](lookupAddress);
+        return await dns.promises[api2](lookupAddress);
       } catch (firstDNSError) {
         if (firstDNSError.code === dns.TIMEOUT) {
-          return await dns.promises[api](lookupAddress);
+          return await dns.promises[api2](lookupAddress);
         } else {
           throw firstDNSError;
         }
@@ -23070,8 +23070,8 @@ var require_connection_string = __commonJS((exports) => {
     const lookupAddress = options.srvHost;
     const txtResolutionPromise = resolveTxt(lookupAddress);
     txtResolutionPromise.then(undefined, utils_1.squashError);
-    const hostname = `_${options.srvServiceName}._tcp.${lookupAddress}`;
-    const addresses = await resolveSrv(hostname);
+    const hostname3 = `_${options.srvServiceName}._tcp.${lookupAddress}`;
+    const addresses = await resolveSrv(hostname3);
     if (addresses.length === 0) {
       throw new error_1.MongoAPIError("No addresses found at host");
     }
@@ -23080,19 +23080,19 @@ var require_connection_string = __commonJS((exports) => {
     }
     const hostAddresses = addresses.map((r) => utils_1.HostAddress.fromString(`${r.name}:${r.port ?? 27017}`));
     validateLoadBalancedOptions(hostAddresses, options, true);
-    let record;
+    let record2;
     try {
-      record = await txtResolutionPromise;
-    } catch (error) {
-      if (error.code !== "ENODATA" && error.code !== "ENOTFOUND") {
-        throw error;
+      record2 = await txtResolutionPromise;
+    } catch (error48) {
+      if (error48.code !== "ENODATA" && error48.code !== "ENOTFOUND") {
+        throw error48;
       }
       return hostAddresses;
     }
-    if (record.length > 1) {
+    if (record2.length > 1) {
       throw new error_1.MongoParseError("Multiple text records not allowed");
     }
-    const txtRecordOptions = new url_1.URLSearchParams(record[0].join(""));
+    const txtRecordOptions = new url_1.URLSearchParams(record2[0].join(""));
     const txtRecordOptionKeys = [...txtRecordOptions.keys()];
     if (txtRecordOptionKeys.some((key) => !VALID_TXT_RECORDS.includes(key))) {
       throw new error_1.MongoParseError(`Text record may only set any of: ${VALID_TXT_RECORDS.join(", ")}`);
@@ -23121,13 +23121,13 @@ var require_connection_string = __commonJS((exports) => {
   function checkTLSOptions(allOptions) {
     if (!allOptions)
       return;
-    const check = (a, b) => {
+    const check2 = (a, b) => {
       if (allOptions.has(a) && allOptions.has(b)) {
         throw new error_1.MongoAPIError(`The '${a}' option cannot be used with the '${b}' option`);
       }
     };
-    check("tlsInsecure", "tlsAllowInvalidCertificates");
-    check("tlsInsecure", "tlsAllowInvalidHostnames");
+    check2("tlsInsecure", "tlsAllowInvalidCertificates");
+    check2("tlsInsecure", "tlsAllowInvalidHostnames");
   }
   function getBoolean(name, value) {
     if (typeof value === "boolean")
@@ -23197,28 +23197,28 @@ var require_connection_string = __commonJS((exports) => {
     if (options.useBigInt64 && typeof options.promoteValues === "boolean" && !options.promoteValues) {
       throw new error_1.MongoAPIError("Must request either bigint or Long for int64 deserialization");
     }
-    const url = new mongodb_connection_string_url_1.default(uri);
-    const { hosts, isSRV } = url;
+    const url2 = new mongodb_connection_string_url_1.default(uri);
+    const { hosts, isSRV } = url2;
     const mongoOptions = Object.create(null);
     mongoOptions.hosts = isSRV ? [] : hosts.map(utils_1.HostAddress.fromString);
     const urlOptions = new CaseInsensitiveMap;
-    if (url.pathname !== "/" && url.pathname !== "") {
-      const dbName = decodeURIComponent(url.pathname[0] === "/" ? url.pathname.slice(1) : url.pathname);
+    if (url2.pathname !== "/" && url2.pathname !== "") {
+      const dbName = decodeURIComponent(url2.pathname[0] === "/" ? url2.pathname.slice(1) : url2.pathname);
       if (dbName) {
         urlOptions.set("dbName", [dbName]);
       }
     }
-    if (url.username !== "") {
+    if (url2.username !== "") {
       const auth = {
-        username: decodeURIComponent(url.username)
+        username: decodeURIComponent(url2.username)
       };
-      if (typeof url.password === "string") {
-        auth.password = decodeURIComponent(url.password);
+      if (typeof url2.password === "string") {
+        auth.password = decodeURIComponent(url2.password);
       }
       urlOptions.set("auth", [auth]);
     }
-    for (const key of url.searchParams.keys()) {
-      const values = url.searchParams.getAll(key);
+    for (const key of url2.searchParams.keys()) {
+      const values = url2.searchParams.getAll(key);
       const isReadPreferenceTags = /readPreferenceTags/i.test(key);
       if (!isReadPreferenceTags && values.length > 1) {
         throw new error_1.MongoInvalidArgumentError(`URI option "${key}" cannot appear more than once in the connection string`);
@@ -23389,7 +23389,7 @@ var require_connection_string = __commonJS((exports) => {
     return;
   }
   function setOption(mongoOptions, key, descriptor, values) {
-    const { target, type, transform } = descriptor;
+    const { target, type, transform: transform2 } = descriptor;
     const name = target ?? key;
     switch (type) {
       case "boolean":
@@ -23417,10 +23417,10 @@ var require_connection_string = __commonJS((exports) => {
         mongoOptions[name] = values[0];
         break;
       default: {
-        if (!transform) {
+        if (!transform2) {
           throw new error_1.MongoParseError("Descriptors missing a type must define a transform");
         }
-        const transformValue = transform({ name, options: mongoOptions, values });
+        const transformValue = transform2({ name, options: mongoOptions, values });
         mongoOptions[name] = transformValue;
         break;
       }
@@ -23512,8 +23512,8 @@ var require_connection_string = __commonJS((exports) => {
     },
     serverApi: {
       target: "serverApi",
-      transform({ values: [version] }) {
-        const serverApiToValidate = typeof version === "string" ? { version } : version;
+      transform({ values: [version2] }) {
+        const serverApiToValidate = typeof version2 === "string" ? { version: version2 } : version2;
         const versionToValidate = serverApiToValidate && serverApiToValidate.version;
         if (!versionToValidate) {
           throw new error_1.MongoParseError(`Invalid \`serverApi\` property; must specify a version from the following enum: ["${Object.values(mongo_client_1.ServerApiVersion).join('", "')}"]`);
@@ -24289,12 +24289,12 @@ var require_automated_callback_workflow = __commonJS((exports) => {
         }
         try {
           return await this.finishAuthentication(connection, credentials, token);
-        } catch (error) {
-          if (error instanceof error_1.MongoError && error.code === error_1.MONGODB_ERROR_CODES.AuthenticationFailed) {
+        } catch (error48) {
+          if (error48 instanceof error_1.MongoError && error48.code === error_1.MONGODB_ERROR_CODES.AuthenticationFailed) {
             this.cache.removeAccessToken();
             return await this.execute(connection, credentials);
           } else {
-            throw error;
+            throw error48;
           }
         }
       }
@@ -24318,12 +24318,12 @@ var require_automated_callback_workflow = __commonJS((exports) => {
       const timeout = timeout_1.Timeout.expires(callback_workflow_1.AUTOMATED_TIMEOUT_MS);
       try {
         return await Promise.race([this.executeAndValidateCallback(params), timeout]);
-      } catch (error) {
-        if (timeout_1.TimeoutError.is(error)) {
+      } catch (error48) {
+        if (timeout_1.TimeoutError.is(error48)) {
           controller.abort();
           throw new error_1.MongoOIDCError(`OIDC callback timed out after ${callback_workflow_1.AUTOMATED_TIMEOUT_MS}ms.`);
         }
-        throw error;
+        throw error48;
       } finally {
         timeout.clear();
       }
@@ -24356,9 +24356,9 @@ var require_azure_machine_workflow = __commonJS((exports) => {
   };
   exports.callback = callback;
   async function getAzureTokenData(tokenAudience, username) {
-    const url = new URL(azure_1.AZURE_BASE_URL);
-    (0, azure_1.addAzureParams)(url, tokenAudience, username);
-    const response = await (0, utils_1.get)(url, {
+    const url2 = new URL(azure_1.AZURE_BASE_URL);
+    (0, azure_1.addAzureParams)(url2, tokenAudience, username);
+    const response = await (0, utils_1.get)(url2, {
       headers: AZURE_HEADERS
     });
     if (response.status !== 200) {
@@ -24395,9 +24395,9 @@ var require_gcp_machine_workflow = __commonJS((exports) => {
   };
   exports.callback = callback;
   async function getGcpTokenData(tokenAudience) {
-    const url = new URL(GCP_BASE_URL);
-    url.searchParams.append("audience", tokenAudience);
-    const response = await (0, utils_1.get)(url, {
+    const url2 = new URL(GCP_BASE_URL);
+    url2.searchParams.append("audience", tokenAudience);
+    const response = await (0, utils_1.get)(url2, {
       headers: GCP_HEADERS
     });
     if (response.status !== 200) {
@@ -24580,13 +24580,13 @@ var require_human_callback_workflow = __commonJS((exports) => {
         connection.accessToken = token;
         try {
           return await this.finishAuthentication(connection, credentials, token);
-        } catch (error) {
-          if (error instanceof error_1.MongoError && error.code === error_1.MONGODB_ERROR_CODES.AuthenticationFailed) {
+        } catch (error48) {
+          if (error48 instanceof error_1.MongoError && error48.code === error_1.MONGODB_ERROR_CODES.AuthenticationFailed) {
             this.cache.removeAccessToken();
             delete connection.accessToken;
             return await this.execute(connection, credentials);
           } else {
-            throw error;
+            throw error48;
           }
         }
       }
@@ -24597,13 +24597,13 @@ var require_human_callback_workflow = __commonJS((exports) => {
         connection.accessToken = result.accessToken;
         try {
           return await this.finishAuthentication(connection, credentials, result.accessToken);
-        } catch (error) {
-          if (error instanceof error_1.MongoError && error.code === error_1.MONGODB_ERROR_CODES.AuthenticationFailed) {
+        } catch (error48) {
+          if (error48 instanceof error_1.MongoError && error48.code === error_1.MONGODB_ERROR_CODES.AuthenticationFailed) {
             this.cache.removeRefreshToken();
             delete connection.accessToken;
             return await this.execute(connection, credentials);
           } else {
-            throw error;
+            throw error48;
           }
         }
       }
@@ -24631,12 +24631,12 @@ var require_human_callback_workflow = __commonJS((exports) => {
       const timeout = timeout_1.Timeout.expires(callback_workflow_1.HUMAN_TIMEOUT_MS);
       try {
         return await Promise.race([this.executeAndValidateCallback(params), timeout]);
-      } catch (error) {
-        if (timeout_1.TimeoutError.is(error)) {
+      } catch (error48) {
+        if (timeout_1.TimeoutError.is(error48)) {
           controller.abort();
           throw new error_1.MongoOIDCError(`OIDC callback timed out after ${callback_workflow_1.HUMAN_TIMEOUT_MS}ms.`);
         }
-        throw error;
+        throw error48;
       } finally {
         timeout.clear();
       }
@@ -25137,7 +25137,7 @@ var require_scram = __commonJS((exports) => {
       withoutProof
     ].join(",");
     const clientSignature = HMAC(cryptoMethod, storedKey, authMessage);
-    const clientProof = `p=${xor(clientKey, clientSignature)}`;
+    const clientProof = `p=${xor2(clientKey, clientSignature)}`;
     const clientFinal = [withoutProof, clientProof].join(",");
     const serverSignature = HMAC(cryptoMethod, serverKey, authMessage);
     const saslContinueCmd = {
@@ -25192,7 +25192,7 @@ var require_scram = __commonJS((exports) => {
     md5.update(`${username}:mongo:${password}`, "utf8");
     return md5.digest("hex");
   }
-  function xor(a, b) {
+  function xor2(a, b) {
     if (!Buffer.isBuffer(a)) {
       a = Buffer.from(a);
     }
@@ -25753,15 +25753,15 @@ var require_results_merger = __commonJS((exports) => {
             }
           } else {
             if (this.options.ordered) {
-              const error = new error_1.MongoClientBulkWriteError({
+              const error48 = new error_1.MongoClientBulkWriteError({
                 message: "Mongo client ordered bulk write encountered a write error."
               });
-              error.writeErrors.set(document.idx + this.currentBatchOffset, {
+              error48.writeErrors.set(document.idx + this.currentBatchOffset, {
                 code: document.code,
                 message: document.errmsg
               });
-              error.partialResult = this.result;
-              throw error;
+              error48.partialResult = this.result;
+              throw error48;
             } else {
               this.writeErrors.set(document.idx + this.currentBatchOffset, {
                 code: document.code,
@@ -25770,9 +25770,9 @@ var require_results_merger = __commonJS((exports) => {
             }
           }
         }
-      } catch (error) {
-        if (error instanceof __1.MongoWriteConcernError) {
-          const result = error.result;
+      } catch (error48) {
+        if (error48 instanceof __1.MongoWriteConcernError) {
+          const result = error48.result;
           writeConcernErrorResult = {
             insertedCount: result.nInserted,
             upsertedCount: result.nUpserted,
@@ -25789,7 +25789,7 @@ var require_results_merger = __commonJS((exports) => {
             }
           }
         } else {
-          throw error;
+          throw error48;
         }
       } finally {
         if (cursor.response) {
@@ -25906,27 +25906,27 @@ var require_executor = __commonJS((exports) => {
           const cursor = new client_bulk_write_cursor_1.ClientBulkWriteCursor(this.client, commandBuilder, options);
           try {
             await resultsMerger.merge(cursor);
-          } catch (error) {
-            if (error instanceof error_1.MongoServerError && !(error instanceof error_1.MongoClientBulkWriteError)) {
+          } catch (error48) {
+            if (error48 instanceof error_1.MongoServerError && !(error48 instanceof error_1.MongoClientBulkWriteError)) {
               const bulkWriteError = new error_1.MongoClientBulkWriteError({
                 message: "Mongo client bulk write encountered an error during execution"
               });
-              bulkWriteError.cause = error;
+              bulkWriteError.cause = error48;
               bulkWriteError.partialResult = resultsMerger.bulkWriteResult;
               throw bulkWriteError;
             } else {
-              throw error;
+              throw error48;
             }
           }
         }
         if (resultsMerger.writeConcernErrors.length > 0 || resultsMerger.writeErrors.size > 0) {
-          const error = new error_1.MongoClientBulkWriteError({
+          const error48 = new error_1.MongoClientBulkWriteError({
             message: "Mongo client bulk write encountered errors during execution."
           });
-          error.writeConcernErrors = resultsMerger.writeConcernErrors;
-          error.writeErrors = resultsMerger.writeErrors;
-          error.partialResult = resultsMerger.bulkWriteResult;
-          throw error;
+          error48.writeConcernErrors = resultsMerger.writeConcernErrors;
+          error48.writeErrors = resultsMerger.writeErrors;
+          error48.partialResult = resultsMerger.bulkWriteResult;
+          throw error48;
         }
         return resultsMerger.bulkWriteResult;
       }
@@ -25998,11 +25998,11 @@ var require_server_selection_events = __commonJS((exports) => {
   exports.ServerSelectionStartedEvent = ServerSelectionStartedEvent;
 
   class ServerSelectionFailedEvent extends ServerSelectionEvent {
-    constructor(selector, topologyDescription, error, operation) {
+    constructor(selector, topologyDescription, error48, operation) {
       super(selector, topologyDescription, operation);
       this.name = constants_1.SERVER_SELECTION_FAILED;
       this.message = "Server selection failed";
-      this.failure = error;
+      this.failure = error48;
     }
   }
   exports.ServerSelectionFailedEvent = ServerSelectionFailedEvent;
@@ -26117,12 +26117,12 @@ var require_srv_polling = __commonJS((exports) => {
         return;
       }
       const finalAddresses = [];
-      for (const record of srvRecords) {
+      for (const record2 of srvRecords) {
         try {
-          (0, utils_1.checkParentDomainMatch)(record.name, this.srvHost);
-          finalAddresses.push(record);
-        } catch (error) {
-          (0, utils_1.squashError)(error);
+          (0, utils_1.checkParentDomainMatch)(record2.name, this.srvHost);
+          finalAddresses.push(record2);
+        } catch (error48) {
+          (0, utils_1.squashError)(error48);
         }
       }
       if (!finalAddresses.length) {
@@ -26342,9 +26342,9 @@ var require_topology = __commonJS((exports) => {
         this.emit(Topology.OPEN, this);
         this.emit(Topology.CONNECT, this);
         return this;
-      } catch (error) {
+      } catch (error48) {
         this.close();
-        throw error;
+        throw error48;
       }
     }
     closeCheckedOutConnections() {
@@ -26436,8 +26436,8 @@ var require_topology = __commonJS((exports) => {
           options.timeoutContext.minRoundTripTime = server.description.minRoundTripTime;
         }
         return server;
-      } catch (error) {
-        if (timeout_1.TimeoutError.is(error)) {
+      } catch (error48) {
+        if (timeout_1.TimeoutError.is(error48)) {
           waitQueueMember.cancelled = true;
           const timeoutError = new error_1.MongoServerSelectionError(`Server selection timed out after ${timeout?.duration} ms`, this.description);
           if (this.client.mongoLogger?.willLog(mongo_logger_1.MongoLoggableComponent.SERVER_SELECTION, mongo_logger_1.SeverityLevel.DEBUG)) {
@@ -26450,7 +26450,7 @@ var require_topology = __commonJS((exports) => {
           }
           throw timeoutError;
         }
-        throw error;
+        throw error48;
       } finally {
         abortListener?.[utils_1.kDispose]();
         if (options.timeoutContext?.clearServerSelectionTimeout)
@@ -26720,17 +26720,17 @@ var require_mongo_client = __commonJS((exports) => {
   });
 
   class MongoClient extends mongo_types_1.TypedEventEmitter {
-    constructor(url, options) {
+    constructor(url2, options) {
       super();
       this.driverInfoList = [];
       this.on("error", utils_1.noop);
-      this.options = (0, connection_string_1.parseOptions)(url, this, options);
+      this.options = (0, connection_string_1.parseOptions)(url2, this, options);
       this.appendMetadata(this.options.driverInfo);
       const shouldSetLogger = Object.values(this.options.mongoLoggerOptions.componentSeverities).some((value) => value !== mongo_logger_1.SeverityLevel.OFF);
       this.mongoLogger = shouldSetLogger ? new mongo_logger_1.MongoLogger(this.options.mongoLoggerOptions) : undefined;
       const client = this;
       this.s = {
-        url,
+        url: url2,
         bsonOptions: (0, bson_1.resolveBSONOptions)(this.options),
         namespace: (0, utils_1.ns)("admin"),
         hasBeenClosed: false,
@@ -26867,9 +26867,9 @@ var require_mongo_client = __commonJS((exports) => {
       const topologyConnect = async () => {
         try {
           await this.topology?.connect(options);
-        } catch (error) {
+        } catch (error48) {
           this.topology?.close();
-          throw error;
+          throw error48;
         }
       };
       if (this.autoEncrypter) {
@@ -26929,8 +26929,8 @@ var require_mongo_client = __commonJS((exports) => {
           if (endSessions2.length !== 0) {
             try {
               await (0, execute_operation_1.executeOperation)(client, new end_sessions_1.EndSessionsOperation(endSessions2));
-            } catch (error) {
-              (0, utils_1.squashError)(error);
+            } catch (error48) {
+              (0, utils_1.squashError)(error48);
             }
           }
         }
@@ -26945,8 +26945,8 @@ var require_mongo_client = __commonJS((exports) => {
       const db = new db_1.Db(this, dbName, finalOptions);
       return db;
     }
-    static async connect(url, options) {
-      const client = new this(url, options);
+    static async connect(url2, options) {
+      const client = new this(url2, options);
       return await client.connect();
     }
     startSession(options) {
@@ -26972,8 +26972,8 @@ var require_mongo_client = __commonJS((exports) => {
       } finally {
         try {
           await session.endSession();
-        } catch (error) {
-          (0, utils_1.squashError)(error);
+        } catch (error48) {
+          (0, utils_1.squashError)(error48);
         }
       }
     }
@@ -27099,19 +27099,19 @@ var require_change_stream = __commonJS((exports) => {
           try {
             const hasNext = await this.cursor.hasNext();
             return hasNext;
-          } catch (error) {
+          } catch (error48) {
             try {
-              await this._processErrorIteratorMode(error, this.cursor.id != null);
-            } catch (error2) {
-              if (error2 instanceof error_1.MongoOperationTimeoutError && this.cursor.id == null) {
-                throw error2;
+              await this._processErrorIteratorMode(error48, this.cursor.id != null);
+            } catch (error49) {
+              if (error49 instanceof error_1.MongoOperationTimeoutError && this.cursor.id == null) {
+                throw error49;
               }
               try {
                 await this.close();
-              } catch (error3) {
-                (0, utils_1.squashError)(error3);
+              } catch (error50) {
+                (0, utils_1.squashError)(error50);
               }
-              throw error2;
+              throw error49;
             }
           }
         }
@@ -27128,19 +27128,19 @@ var require_change_stream = __commonJS((exports) => {
             const change = await this.cursor.next();
             const processedChange = this._processChange(change ?? null);
             return processedChange;
-          } catch (error) {
+          } catch (error48) {
             try {
-              await this._processErrorIteratorMode(error, this.cursor.id != null);
-            } catch (error2) {
-              if (error2 instanceof error_1.MongoOperationTimeoutError && this.cursor.id == null) {
-                throw error2;
+              await this._processErrorIteratorMode(error48, this.cursor.id != null);
+            } catch (error49) {
+              if (error49 instanceof error_1.MongoOperationTimeoutError && this.cursor.id == null) {
+                throw error49;
               }
               try {
                 await this.close();
-              } catch (error3) {
-                (0, utils_1.squashError)(error3);
+              } catch (error50) {
+                (0, utils_1.squashError)(error50);
               }
-              throw error2;
+              throw error49;
             }
           }
         }
@@ -27160,18 +27160,18 @@ var require_change_stream = __commonJS((exports) => {
             }
             const processedChange = this._processChange(change);
             return processedChange;
-          } catch (error) {
+          } catch (error48) {
             try {
-              await this._processErrorIteratorMode(error, this.cursor.id != null);
-            } catch (error2) {
-              if (error2 instanceof error_1.MongoOperationTimeoutError && this.cursor.id == null)
-                throw error2;
+              await this._processErrorIteratorMode(error48, this.cursor.id != null);
+            } catch (error49) {
+              if (error49 instanceof error_1.MongoOperationTimeoutError && this.cursor.id == null)
+                throw error49;
               try {
                 await this.close();
-              } catch (error3) {
-                (0, utils_1.squashError)(error3);
+              } catch (error50) {
+                (0, utils_1.squashError)(error50);
               }
-              throw error2;
+              throw error49;
             }
           }
         }
@@ -27190,8 +27190,8 @@ var require_change_stream = __commonJS((exports) => {
       } finally {
         try {
           await this.close();
-        } catch (error) {
-          (0, utils_1.squashError)(error);
+        } catch (error48) {
+          (0, utils_1.squashError)(error48);
         }
       }
     }
@@ -27249,8 +27249,8 @@ var require_change_stream = __commonJS((exports) => {
       }
       return changeStreamCursor;
     }
-    _closeEmitterModeWithError(error) {
-      this.emit(ChangeStream.ERROR, error);
+    _closeEmitterModeWithError(error48) {
+      this.emit(ChangeStream.ERROR, error48);
       this.close().then(undefined, utils_1.squashError);
     }
     _streamEvents(cursor) {
@@ -27261,12 +27261,12 @@ var require_change_stream = __commonJS((exports) => {
         try {
           const processedChange = this._processChange(change);
           this.emit(ChangeStream.CHANGE, processedChange);
-        } catch (error) {
-          this.emit(ChangeStream.ERROR, error);
+        } catch (error48) {
+          this.emit(ChangeStream.ERROR, error48);
         }
         this.timeoutContext?.refresh();
       });
-      stream.on("error", (error) => this._processErrorStreamMode(error, this.cursor.id != null));
+      stream.on("error", (error48) => this._processErrorStreamMode(error48, this.cursor.id != null));
     }
     _endStream() {
       this.cursorStream?.removeAllListeners("data");
@@ -27312,8 +27312,8 @@ var require_change_stream = __commonJS((exports) => {
       if (cursorInitialized && ((0, error_1.isResumableError)(changeStreamError, this.cursor.maxWireVersion) || changeStreamError instanceof error_1.MongoOperationTimeoutError)) {
         try {
           await this.cursor.close();
-        } catch (error) {
-          (0, utils_1.squashError)(error);
+        } catch (error48) {
+          (0, utils_1.squashError)(error48);
         }
         await this._resume(changeStreamError);
         if (changeStreamError instanceof error_1.MongoOperationTimeoutError)
@@ -27321,8 +27321,8 @@ var require_change_stream = __commonJS((exports) => {
       } else {
         try {
           await this.close();
-        } catch (error) {
-          (0, utils_1.squashError)(error);
+        } catch (error48) {
+          (0, utils_1.squashError)(error48);
         }
         throw changeStreamError;
       }
@@ -27455,12 +27455,12 @@ var require_download = __commonJS((exports) => {
       return;
     if (!stream.s.file)
       return;
-    const handleReadResult = (doc) => {
+    const handleReadResult = (doc2) => {
       if (stream.destroyed)
         return;
-      if (!doc) {
+      if (!doc2) {
         stream.push(null);
-        stream.s.cursor?.close().then(undefined, (error) => stream.destroy(error));
+        stream.s.cursor?.close().then(undefined, (error48) => stream.destroy(error48));
         return;
       }
       if (!stream.s.file)
@@ -27468,16 +27468,16 @@ var require_download = __commonJS((exports) => {
       const bytesRemaining = stream.s.file.length - stream.s.bytesRead;
       const expectedN = stream.s.expected++;
       const expectedLength = Math.min(stream.s.file.chunkSize, bytesRemaining);
-      if (doc.n > expectedN) {
-        return stream.destroy(new error_1.MongoGridFSChunkError(`ChunkIsMissing: Got unexpected n: ${doc.n}, expected: ${expectedN}`));
+      if (doc2.n > expectedN) {
+        return stream.destroy(new error_1.MongoGridFSChunkError(`ChunkIsMissing: Got unexpected n: ${doc2.n}, expected: ${expectedN}`));
       }
-      if (doc.n < expectedN) {
-        return stream.destroy(new error_1.MongoGridFSChunkError(`ExtraChunk: Got unexpected n: ${doc.n}, expected: ${expectedN}`));
+      if (doc2.n < expectedN) {
+        return stream.destroy(new error_1.MongoGridFSChunkError(`ExtraChunk: Got unexpected n: ${doc2.n}, expected: ${expectedN}`));
       }
-      let buf = Buffer.isBuffer(doc.data) ? doc.data : doc.data.buffer;
+      let buf = Buffer.isBuffer(doc2.data) ? doc2.data : doc2.data.buffer;
       if (buf.byteLength !== expectedLength) {
         if (bytesRemaining <= 0) {
-          return stream.destroy(new error_1.MongoGridFSChunkError(`ExtraChunk: Got unexpected n: ${doc.n}, expected file length ${stream.s.file.length} bytes but already read ${stream.s.bytesRead} bytes`));
+          return stream.destroy(new error_1.MongoGridFSChunkError(`ExtraChunk: Got unexpected n: ${doc2.n}, expected file length ${stream.s.file.length} bytes but already read ${stream.s.bytesRead} bytes`));
         }
         return stream.destroy(new error_1.MongoGridFSChunkError(`ChunkIsWrongSize: Got unexpected length: ${buf.byteLength}, expected: ${expectedLength}`));
       }
@@ -27495,7 +27495,7 @@ var require_download = __commonJS((exports) => {
       const bytesLeftToRead = stream.s.options.end - stream.s.bytesToSkip;
       if (atEndOfStream && stream.s.bytesToTrim != null) {
         sliceEnd = stream.s.file.chunkSize - stream.s.bytesToTrim;
-      } else if (stream.s.options.end && bytesLeftToRead < doc.data.byteLength) {
+      } else if (stream.s.options.end && bytesLeftToRead < doc2.data.byteLength) {
         sliceEnd = bytesLeftToRead;
       }
       if (sliceStart != null || sliceEnd != null) {
@@ -27504,10 +27504,10 @@ var require_download = __commonJS((exports) => {
       stream.push(buf);
       return;
     };
-    stream.s.cursor.next().then(handleReadResult, (error) => {
+    stream.s.cursor.next().then(handleReadResult, (error48) => {
       if (stream.destroyed)
         return;
-      stream.destroy(error);
+      stream.destroy(error48);
     });
   }
   function init(stream) {
@@ -27521,17 +27521,17 @@ var require_download = __commonJS((exports) => {
     if (stream.s.options && stream.s.options.skip) {
       findOneOptions.skip = stream.s.options.skip;
     }
-    const handleReadResult = (doc) => {
+    const handleReadResult = (doc2) => {
       if (stream.destroyed)
         return;
-      if (!doc) {
+      if (!doc2) {
         const identifier = stream.s.filter._id ? stream.s.filter._id.toString() : stream.s.filter.filename;
         const errmsg = `FileNotFound: file ${identifier} was not found`;
         const err = new error_1.MongoRuntimeError(errmsg);
         err.code = "ENOENT";
         return stream.destroy(err);
       }
-      if (doc.length <= 0) {
+      if (doc2.length <= 0) {
         stream.push(null);
         return;
       }
@@ -27540,13 +27540,13 @@ var require_download = __commonJS((exports) => {
         return;
       }
       try {
-        stream.s.bytesToSkip = handleStartOption(stream, doc, stream.s.options);
-      } catch (error) {
-        return stream.destroy(error);
+        stream.s.bytesToSkip = handleStartOption(stream, doc2, stream.s.options);
+      } catch (error48) {
+        return stream.destroy(error48);
       }
-      const filter = { files_id: doc._id };
+      const filter = { files_id: doc2._id };
       if (stream.s.options && stream.s.options.start != null) {
-        const skip = Math.floor(stream.s.options.start / doc.chunkSize);
+        const skip = Math.floor(stream.s.options.start / doc2.chunkSize);
         if (skip > 0) {
           filter["n"] = { $gte: skip };
         }
@@ -27554,8 +27554,8 @@ var require_download = __commonJS((exports) => {
       let remainingTimeMS2;
       try {
         remainingTimeMS2 = stream.s.timeoutContext?.getRemainingTimeMSOrThrow(`Download timed out after ${stream.s.timeoutContext?.timeoutMS}ms`);
-      } catch (error) {
-        return stream.destroy(error);
+      } catch (error48) {
+        return stream.destroy(error48);
       }
       stream.s.cursor = stream.s.chunks.find(filter, {
         timeoutMode: stream.s.options.timeoutMS != null ? abstract_cursor_1.CursorTimeoutMode.LIFETIME : undefined,
@@ -27564,29 +27564,29 @@ var require_download = __commonJS((exports) => {
       if (stream.s.readPreference) {
         stream.s.cursor.withReadPreference(stream.s.readPreference);
       }
-      stream.s.expectedEnd = Math.ceil(doc.length / doc.chunkSize);
-      stream.s.file = doc;
+      stream.s.expectedEnd = Math.ceil(doc2.length / doc2.chunkSize);
+      stream.s.file = doc2;
       try {
-        stream.s.bytesToTrim = handleEndOption(stream, doc, stream.s.cursor, stream.s.options);
-      } catch (error) {
-        return stream.destroy(error);
+        stream.s.bytesToTrim = handleEndOption(stream, doc2, stream.s.cursor, stream.s.options);
+      } catch (error48) {
+        return stream.destroy(error48);
       }
-      stream.emit(GridFSBucketReadStream.FILE, doc);
+      stream.emit(GridFSBucketReadStream.FILE, doc2);
       return;
     };
     let remainingTimeMS;
     try {
       remainingTimeMS = stream.s.timeoutContext?.getRemainingTimeMSOrThrow(`Download timed out after ${stream.s.timeoutContext?.timeoutMS}ms`);
-    } catch (error) {
+    } catch (error48) {
       if (!stream.destroyed)
-        stream.destroy(error);
+        stream.destroy(error48);
       return;
     }
     findOneOptions.timeoutMS = remainingTimeMS;
-    stream.s.files.findOne(stream.s.filter, findOneOptions).then(handleReadResult, (error) => {
+    stream.s.files.findOne(stream.s.filter, findOneOptions).then(handleReadResult, (error48) => {
       if (stream.destroyed)
         return;
-      stream.destroy(error);
+      stream.destroy(error48);
     });
   }
   function waitForFile(stream, callback) {
@@ -27601,10 +27601,10 @@ var require_download = __commonJS((exports) => {
       callback();
     });
   }
-  function handleStartOption(stream, doc, options) {
+  function handleStartOption(stream, doc2, options) {
     if (options && options.start != null) {
-      if (options.start > doc.length) {
-        throw new error_1.MongoInvalidArgumentError(`Stream start (${options.start}) must not be more than the length of the file (${doc.length})`);
+      if (options.start > doc2.length) {
+        throw new error_1.MongoInvalidArgumentError(`Stream start (${options.start}) must not be more than the length of the file (${doc2.length})`);
       }
       if (options.start < 0) {
         throw new error_1.MongoInvalidArgumentError(`Stream start (${options.start}) must not be negative`);
@@ -27612,24 +27612,24 @@ var require_download = __commonJS((exports) => {
       if (options.end != null && options.end < options.start) {
         throw new error_1.MongoInvalidArgumentError(`Stream start (${options.start}) must not be greater than stream end (${options.end})`);
       }
-      stream.s.bytesRead = Math.floor(options.start / doc.chunkSize) * doc.chunkSize;
-      stream.s.expected = Math.floor(options.start / doc.chunkSize);
+      stream.s.bytesRead = Math.floor(options.start / doc2.chunkSize) * doc2.chunkSize;
+      stream.s.expected = Math.floor(options.start / doc2.chunkSize);
       return options.start - stream.s.bytesRead;
     }
     throw new error_1.MongoInvalidArgumentError("Start option must be defined");
   }
-  function handleEndOption(stream, doc, cursor, options) {
+  function handleEndOption(stream, doc2, cursor, options) {
     if (options && options.end != null) {
-      if (options.end > doc.length) {
-        throw new error_1.MongoInvalidArgumentError(`Stream end (${options.end}) must not be more than the length of the file (${doc.length})`);
+      if (options.end > doc2.length) {
+        throw new error_1.MongoInvalidArgumentError(`Stream end (${options.end}) must not be more than the length of the file (${doc2.length})`);
       }
       if (options.start == null || options.start < 0) {
         throw new error_1.MongoInvalidArgumentError(`Stream end (${options.end}) must not be negative`);
       }
-      const start = options.start != null ? Math.floor(options.start / doc.chunkSize) : 0;
-      cursor.limit(Math.ceil(options.end / doc.chunkSize) - start);
-      stream.s.expectedEnd = Math.ceil(options.end / doc.chunkSize);
-      return Math.ceil(options.end / doc.chunkSize) * doc.chunkSize - options.end;
+      const start = options.start != null ? Math.floor(options.start / doc2.chunkSize) : 0;
+      cursor.limit(Math.ceil(options.end / doc2.chunkSize) - start);
+      stream.s.expectedEnd = Math.ceil(options.end / doc2.chunkSize);
+      return Math.ceil(options.end / doc2.chunkSize) * doc2.chunkSize - options.end;
     }
     throw new error_1.MongoInvalidArgumentError("End option must be defined");
   }
@@ -27684,11 +27684,11 @@ var require_upload = __commonJS((exports) => {
           this.bucket.s.checkedIndexes = true;
           this.bucket.emit("index");
           callback();
-        }, (error) => {
-          if (error instanceof error_1.MongoOperationTimeoutError) {
-            return handleError(this, error, callback);
+        }, (error48) => {
+          if (error48 instanceof error_1.MongoOperationTimeoutError) {
+            return handleError(this, error48, callback);
           }
-          (0, utils_1.squashError)(error);
+          (0, utils_1.squashError)(error48);
           callback();
         });
       } else {
@@ -27718,13 +27718,13 @@ var require_upload = __commonJS((exports) => {
     }
   }
   exports.GridFSBucketWriteStream = GridFSBucketWriteStream;
-  function handleError(stream, error, callback) {
+  function handleError(stream, error48, callback) {
     if (stream.state.errored) {
       process.nextTick(callback);
       return;
     }
     stream.state.errored = true;
-    process.nextTick(callback, error);
+    process.nextTick(callback, error48);
   }
   function createChunkDoc(filesId, n, data) {
     return {
@@ -27744,11 +27744,11 @@ var require_upload = __commonJS((exports) => {
         timeoutMode: remainingTimeMS != null ? abstract_cursor_1.CursorTimeoutMode.LIFETIME : undefined,
         timeoutMS: remainingTimeMS
       }).toArray();
-    } catch (error) {
-      if (error instanceof error_1.MongoError && error.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound) {
+    } catch (error48) {
+      if (error48 instanceof error_1.MongoError && error48.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound) {
         indexes = [];
       } else {
-        throw error;
+        throw error48;
       }
     }
     const hasChunksIndex = !!indexes.find((index2) => {
@@ -27785,8 +27785,8 @@ var require_upload = __commonJS((exports) => {
       stream.files.insertOne(gridFSFile, { writeConcern: stream.writeConcern, timeoutMS: remainingTimeMS }).then(() => {
         stream.gridFSFile = gridFSFile;
         callback();
-      }, (error) => {
-        return handleError(stream, error, callback);
+      }, (error48) => {
+        return handleError(stream, error48, callback);
       });
       return;
     }
@@ -27794,11 +27794,11 @@ var require_upload = __commonJS((exports) => {
   }
   async function checkIndexes(stream) {
     let remainingTimeMS = stream.timeoutContext?.getRemainingTimeMSOrThrow(`Upload timed out after ${stream.timeoutContext?.timeoutMS}ms`);
-    const doc = await stream.files.findOne({}, {
+    const doc2 = await stream.files.findOne({}, {
       projection: { _id: 1 },
       timeoutMS: remainingTimeMS
     });
-    if (doc != null) {
+    if (doc2 != null) {
       return;
     }
     const index = { filename: 1, uploadDate: 1 };
@@ -27810,11 +27810,11 @@ var require_upload = __commonJS((exports) => {
     };
     try {
       indexes = await stream.files.listIndexes(listIndexesOptions).toArray();
-    } catch (error) {
-      if (error instanceof error_1.MongoError && error.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound) {
+    } catch (error48) {
+      if (error48 instanceof error_1.MongoError && error48.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound) {
         indexes = [];
       } else {
-        throw error;
+        throw error48;
       }
     }
     const hasFileIndex = !!indexes.find((index2) => {
@@ -27864,9 +27864,9 @@ var require_upload = __commonJS((exports) => {
       inputBuf.copy(stream.bufToStore, stream.pos, inputBufPos, inputBufPos + numToCopy);
       stream.pos += numToCopy;
       spaceRemaining -= numToCopy;
-      let doc;
+      let doc2;
       if (spaceRemaining === 0) {
-        doc = createChunkDoc(stream.id, stream.n, Buffer.from(stream.bufToStore));
+        doc2 = createChunkDoc(stream.id, stream.n, Buffer.from(stream.bufToStore));
         const remainingTimeMS = stream.timeoutContext?.remainingTimeMS;
         if (remainingTimeMS != null && remainingTimeMS <= 0) {
           return handleError(stream, new error_1.MongoOperationTimeoutError(`Upload timed out after ${stream.timeoutContext?.timeoutMS}ms`), callback);
@@ -27876,14 +27876,14 @@ var require_upload = __commonJS((exports) => {
         if (isAborted(stream, callback)) {
           return;
         }
-        stream.chunks.insertOne(doc, { writeConcern: stream.writeConcern, timeoutMS: remainingTimeMS }).then(() => {
+        stream.chunks.insertOne(doc2, { writeConcern: stream.writeConcern, timeoutMS: remainingTimeMS }).then(() => {
           --stream.state.outstandingRequests;
           --outstandingRequests;
           if (!outstandingRequests) {
             checkDone(stream, callback);
           }
-        }, (error) => {
-          return handleError(stream, error, callback);
+        }, (error48) => {
+          return handleError(stream, error48, callback);
         });
         spaceRemaining = stream.chunkSizeBytes;
         stream.pos = 0;
@@ -27899,7 +27899,7 @@ var require_upload = __commonJS((exports) => {
     }
     const remnant = Buffer.alloc(stream.pos);
     stream.bufToStore.copy(remnant, 0, 0, stream.pos);
-    const doc = createChunkDoc(stream.id, stream.n, remnant);
+    const doc2 = createChunkDoc(stream.id, stream.n, remnant);
     if (isAborted(stream, callback)) {
       return;
     }
@@ -27908,11 +27908,11 @@ var require_upload = __commonJS((exports) => {
       return handleError(stream, new error_1.MongoOperationTimeoutError(`Upload timed out after ${stream.timeoutContext?.timeoutMS}ms`), callback);
     }
     ++stream.state.outstandingRequests;
-    stream.chunks.insertOne(doc, { writeConcern: stream.writeConcern, timeoutMS: remainingTimeMS }).then(() => {
+    stream.chunks.insertOne(doc2, { writeConcern: stream.writeConcern, timeoutMS: remainingTimeMS }).then(() => {
       --stream.state.outstandingRequests;
       checkDone(stream, callback);
-    }, (error) => {
-      return handleError(stream, error, callback);
+    }, (error48) => {
+      return handleError(stream, error48, callback);
     });
   }
   function isAborted(stream, callback) {
@@ -30043,264 +30043,6 @@ var Hono2 = class extends Hono {
     });
   }
 };
-
-// database/index.ts
-var import_mongodb = __toESM(require_lib3(), 1);
-var client = new import_mongodb.MongoClient(Bun.env.MONGODB_URI || "mongodb://localhost:27017");
-
-class MongoDB {
-  database;
-  client;
-  constructor() {
-    this.database = client.db("mtg");
-    this.client = client;
-  }
-  async setup() {
-    const connect = await this.client.connect();
-    if (!connect)
-      throw new Error("Failed to connect to database");
-    this.database = this.client.db("mtg");
-    return this.database;
-  }
-}
-var database_default = MongoDB;
-
-// services/controller.ts
-var import_mongodb2 = __toESM(require_lib3(), 1);
-class Controller {
-  mongo;
-  db;
-  constructor() {
-    this.mongo = new database_default;
-  }
-  async setup() {
-    if (!this.db)
-      this.db = await this.mongo.setup();
-    console.log("Database connected");
-  }
-  GetDB() {
-    if (!this.db) {
-      throw new Error("Database not connected");
-    }
-    return this.db;
-  }
-  async getUserByEmail(email) {
-    const collection = this.GetDB().collection("users" /* users */);
-    return await collection.findOne({ email });
-  }
-  async passwordHash(password) {
-    return await Bun.password.hash(password, { algorithm: "bcrypt", cost: 10 });
-  }
-  async isAuthenticated(authorization) {
-    const collection = this.GetDB().collection("sessions" /* sessions */);
-    const session = await collection.findOne({ uuid: authorization });
-    if (session && session.expires > new Date)
-      return session;
-    return null;
-  }
-  async createSearch(data, auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    data.email_user = getMe.email;
-    data.timestamp = Date.now();
-    const collection = this.GetDB().collection("searches" /* searches */);
-    const create = await collection.insertOne(data);
-    if (!create)
-      return { success: false, error: "Failed to create search" };
-    return { success: true, uuid: create.insertedId };
-  }
-  async getSearches(auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    const collection = this.GetDB().collection("searches" /* searches */);
-    const searches = await collection.find({ email_user: getMe.email }).toArray();
-    if (!searches)
-      return { success: false, error: "Failed to get searches" };
-    return { success: true, searches };
-  }
-  async deleteSearch(data, auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    const collection = this.GetDB().collection("searches" /* searches */);
-    const search = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.searchId) });
-    if (!search)
-      return { success: false, error: "Search not found" };
-    if (search.email_user !== getMe.email)
-      return { success: false, error: "Unauthorized" };
-    const deleteSearch = await collection?.deleteOne({ _id: new import_mongodb2.ObjectId(data.searchId) });
-    if (!deleteSearch)
-      return { success: false, error: "Failed to delete search" };
-    return { success: true };
-  }
-  async deleteCollection(data, auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    const collection = this.GetDB().collection("collections_mtg" /* collections */);
-    const collectionData = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
-    if (!collectionData)
-      return { success: false, error: "Collection not found" };
-    if (collectionData.email_user !== getMe.email) {
-      return { success: false, error: "Unauthorized" };
-    }
-    const deleteCollection = await collection?.deleteOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
-    if (!deleteCollection)
-      return { success: false, error: "Failed to delete collection" };
-    return { success: true };
-  }
-  async updateCollection(data, auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    const collection = this.GetDB().collection("collections_mtg" /* collections */);
-    const collectionData = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
-    if (!collectionData)
-      return { success: false, error: "Collection not found" };
-    if (collectionData.email_user !== getMe.email) {
-      return { success: false, error: "Unauthorized" };
-    }
-    if (!collectionData.quantities)
-      collectionData.quantities = {};
-    if (!collectionData.ownedCardIds)
-      collectionData.ownedCardIds = [];
-    if (!collectionData.buyListIds)
-      collectionData.buyListIds = [];
-    if (!collectionData.printListIds)
-      collectionData.printListIds = [];
-    if (data.action === "add") {
-      if (collectionData.ownedCardIds.includes(data.cardId)) {
-        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $inc: { [`quantities.${data.cardId}`]: data.quantity } });
-      } else {
-        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $push: { ownedCardIds: data.cardId } });
-        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $set: { [`quantities.${data.cardId}`]: data.quantity } });
-      }
-    }
-    if (data.action === "addToBuy") {
-      if (!collectionData.buyListIds.includes(data.cardId)) {
-        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $push: { buyListIds: data.cardId } });
-      }
-    }
-    if (data.action === "removeFromBuy") {
-      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $pull: { buyListIds: { $eq: data.cardId } } });
-    }
-    if (data.action === "addToPrint") {
-      if (!collectionData.printListIds.includes(data.cardId)) {
-        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $push: { printListIds: data.cardId } });
-      }
-    }
-    if (data.action === "removeFromPrint") {
-      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $pull: { printListIds: { $eq: data.cardId } } });
-    }
-    if (data.action === "remove") {
-      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $pull: { ownedCardIds: { $eq: data.cardId } } });
-    }
-    if (data.action === "update") {
-      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $set: { [`quantities.${data.cardId}`]: data.quantity } });
-    }
-    return { success: true };
-  }
-  async MeCollections(auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    const collection = this.GetDB().collection("collections_mtg" /* collections */);
-    const all = await collection.find({ email_user: getMe.email }).toArray();
-    if (!all)
-      return { success: false, error: "Collections not found" };
-    return { success: true, collections: all };
-  }
-  async createCollection(data, auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found", uuid: null };
-    data.email_user = getMe.email;
-    data.createdAt = new Date;
-    data.updatedAt = new Date;
-    data.ownedCardIds = [];
-    data.quantities = {};
-    data.buyListIds = [];
-    data.printListIds = [];
-    const collection = this.GetDB().collection("collections_mtg" /* collections */);
-    const create = await collection.insertOne(data);
-    if (!create)
-      return { success: false, error: "Failed to create collection", uuid: null };
-    return { success: true, uuid: create.insertedId };
-  }
-  async renameCollection(data, auth) {
-    const getMe = await this.GetMe(auth);
-    if (!getMe.success)
-      return { success: false, error: "User not found" };
-    const collection = this.GetDB().collection("collections_mtg" /* collections */);
-    const target = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
-    if (!target)
-      return { success: false, error: "Collection not found" };
-    if (target.email_user !== getMe.email)
-      return { success: false, error: "Unauthorized" };
-    const update = await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $set: { name: data.newName, updatedAt: new Date } });
-    if (!update.modifiedCount)
-      return { success: false, error: "Failed to rename (or name unchanged)" };
-    return { success: true };
-  }
-  async create_session(email) {
-    const uuid = crypto.randomUUID();
-    const expires = new Date;
-    expires.setHours(expires.getHours() + 1);
-    const collection = this.GetDB().collection("sessions" /* sessions */);
-    const session = await collection.insertOne({ email, uuid, expires });
-    if (!session)
-      return { success: false, error: "Failed to create session" };
-    return { success: true, authorization: uuid, expires };
-  }
-  async register(data) {
-    const user = await this.getUserByEmail(data.email);
-    if (user && user.name === data.name)
-      return { success: false, error: "Username already exists" };
-    if (user && user.email === data.email)
-      return { success: false, error: "Email already exists" };
-    data.password = await this.passwordHash(data.password);
-    data.avatarUrl = "https://i.ibb.co/BKnqns0n/magic-the-gathering-dominaria-unida-ajani-capa-tbd7.webp" /* picture */;
-    data.joinDate = new Date;
-    const collection = this.GetDB().collection("users" /* users */);
-    const register = await collection.insertOne(data);
-    if (!register)
-      return { success: false, error: "Failed to register" };
-    const session = await this.create_session(data.email);
-    if (!session)
-      return { success: false, error: "Failed to create session" };
-    return { success: true, authorization: session.authorization };
-  }
-  async login(data) {
-    const user = await this.getUserByEmail(data.email);
-    if (!user)
-      return { success: false, error: "User not found" };
-    const isMatch = await Bun.password.verify(data.password, user.password);
-    if (!isMatch)
-      return { success: false, error: "Invalid password" };
-    const session = await this.create_session(data.email);
-    if (!session)
-      return { success: false, error: "Failed to create session" };
-    return { success: true, authorization: session.authorization };
-  }
-  async GetMe(authorization) {
-    const session = await this.isAuthenticated(authorization);
-    if (!session)
-      return { success: false, error: "Session not found" };
-    const user = await this.getUserByEmail(session.email);
-    if (!user)
-      return { success: false, error: "User not found" };
-    return {
-      success: true,
-      name: user.name,
-      email: user.email,
-      avatarUrl: user.avatarUrl,
-      joinDate: user.joinDate
-    };
-  }
-}
-var controller_default = Controller;
 
 // node_modules/hono/dist/utils/cookie.js
 var validCookieNameRegEx = /^[\w!#$%&'*.^`|~+-]+$/;
@@ -44194,14 +43936,124 @@ var cors = (options) => {
   };
 };
 
+// database/index.ts
+var import_mongodb = __toESM(require_lib3(), 1);
+var client = new import_mongodb.MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+
+class MongoDB {
+  database;
+  client;
+  constructor() {
+    this.database = client.db(process.env.DATABASE_NAME || "mtg");
+    this.client = client;
+  }
+  async setup() {
+    const connect = await this.client.connect();
+    if (!connect)
+      throw new Error("Failed to connect to database");
+    this.database = this.client.db(process.env.DATABASE_NAME || "mtg");
+    return this.database;
+  }
+}
+var database_default = MongoDB;
+
+// services/modules/database/db.service.ts
+class IDBService {
+  static instance;
+  mongo;
+  db;
+  constructor() {
+    this.mongo = new database_default;
+  }
+  async setup() {
+    if (!this.db) {
+      this.db = await this.mongo.setup();
+      console.log("Database connected");
+    }
+  }
+  GetDB() {
+    return this.db;
+  }
+  static GetInstance() {
+    if (!IDBService.instance) {
+      IDBService.instance = new IDBService;
+    }
+    return IDBService.instance;
+  }
+}
+
+// services/modules/auth/auth.service.ts
+class AuthService {
+  IDatabase;
+  constructor(database) {
+    this.IDatabase = database;
+  }
+  async getUserByEmail(email3) {
+    const collection = this.IDatabase.GetDB().collection("users" /* users */);
+    return await collection.findOne({ email: email3 });
+  }
+  async passwordHash(password) {
+    return await Bun.password.hash(password, { algorithm: "bcrypt", cost: 10 });
+  }
+  async create_session(email3) {
+    const uuid3 = crypto.randomUUID();
+    const expires = new Date;
+    expires.setHours(expires.getHours() + 1);
+    const collection = this.IDatabase.GetDB().collection("sessions" /* sessions */);
+    const session = await collection.insertOne({ email: email3, uuid: uuid3, expires });
+    if (!session)
+      return { success: false, error: "Failed to create session" };
+    return { success: true, authorization: uuid3, expires };
+  }
+  async register(data) {
+    const user = await this.getUserByEmail(data.email);
+    if (user && user.name === data.name)
+      return { success: false, error: "Username already exists" };
+    if (user && user.email === data.email)
+      return { success: false, error: "Email already exists" };
+    data.password = await this.passwordHash(data.password);
+    data.avatarUrl = "https://i.ibb.co/BKnqns0n/magic-the-gathering-dominaria-unida-ajani-capa-tbd7.webp" /* picture */;
+    data.joinDate = new Date;
+    const collection = this.IDatabase.GetDB().collection("users" /* users */);
+    const register = await collection.insertOne(data);
+    if (!register)
+      return { success: false, error: "Failed to register" };
+    const session = await this.create_session(data.email);
+    if (!session)
+      return { success: false, error: "Failed to create session" };
+    return { success: true, authorization: session.authorization };
+  }
+  async login(data) {
+    const user = await this.getUserByEmail(data.email);
+    if (!user)
+      return { success: false, error: "User not found" };
+    const isMatch = await Bun.password.verify(data.password, user.password);
+    if (!isMatch)
+      return { success: false, error: "Invalid password" };
+    const session = await this.create_session(data.email);
+    if (!session)
+      return { success: false, error: "Failed to create session" };
+    return { success: true, authorization: session.authorization };
+  }
+  async isAuthenticated(authorization) {
+    const collection = this.IDatabase.GetDB().collection("sessions" /* sessions */);
+    const session = await collection.findOne({ uuid: authorization });
+    if (session && session.expires > new Date)
+      return session;
+    return null;
+  }
+}
+
 // middlewares/auth.middleware.ts
-function makeAuthMiddleware(controller) {
+var database = IDBService.GetInstance();
+var auth = new AuthService(database);
+function makeAuthMiddleware() {
   return async (c, next) => {
     let authHeader = c.req.header("authorization");
     if (!authHeader)
       authHeader = "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
-    const session = await controller.isAuthenticated(token);
+    const session = await auth.isAuthenticated(token);
     if (!session)
       return c.json({ success: false, error: "Invalid session" }, 401);
     c.set("session", session);
@@ -44209,63 +44061,253 @@ function makeAuthMiddleware(controller) {
   };
 }
 
+// services/modules/mtg/mtg.service.ts
+var import_mongodb2 = __toESM(require_lib3(), 1);
+
+class MTG {
+  database;
+  auth;
+  constructor(database2) {
+    this.database = database2;
+    this.auth = new AuthService(this.database);
+  }
+  async createSearch(data, auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    data.email_user = getMe.email;
+    data.timestamp = Date.now();
+    const collection = this.database.GetDB().collection("searches" /* searches */);
+    const create = await collection.insertOne(data);
+    if (!create)
+      return { success: false, error: "Failed to create search" };
+    return { success: true, uuid: create.insertedId };
+  }
+  async getSearches(auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    const collection = this.database.GetDB().collection("searches" /* searches */);
+    const searches = await collection.find({ email_user: getMe.email }).toArray();
+    if (!searches)
+      return { success: false, error: "Failed to get searches" };
+    return { success: true, searches };
+  }
+  async deleteSearch(data, auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    const collection = this.database.GetDB().collection("searches" /* searches */);
+    const search = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.searchId) });
+    if (!search)
+      return { success: false, error: "Search not found" };
+    if (search.email_user !== getMe.email)
+      return { success: false, error: "Unauthorized" };
+    const deleteSearch = await collection?.deleteOne({ _id: new import_mongodb2.ObjectId(data.searchId) });
+    if (!deleteSearch)
+      return { success: false, error: "Failed to delete search" };
+    return { success: true };
+  }
+  async deleteCollection(data, auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    const collection = this.database.GetDB().collection("collections_mtg" /* collections */);
+    const collectionData = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
+    if (!collectionData)
+      return { success: false, error: "Collection not found" };
+    if (collectionData.email_user !== getMe.email) {
+      return { success: false, error: "Unauthorized" };
+    }
+    const deleteCollection = await collection?.deleteOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
+    if (!deleteCollection)
+      return { success: false, error: "Failed to delete collection" };
+    return { success: true };
+  }
+  async updateCollection(data, auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    const collection = this.database.GetDB().collection("collections_mtg" /* collections */);
+    const collectionData = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
+    if (!collectionData)
+      return { success: false, error: "Collection not found" };
+    if (collectionData.email_user !== getMe.email) {
+      return { success: false, error: "Unauthorized" };
+    }
+    if (!collectionData.quantities)
+      collectionData.quantities = {};
+    if (!collectionData.ownedCardIds)
+      collectionData.ownedCardIds = [];
+    if (!collectionData.buyListIds)
+      collectionData.buyListIds = [];
+    if (!collectionData.printListIds)
+      collectionData.printListIds = [];
+    if (data.action === "add") {
+      if (collectionData.ownedCardIds.includes(data.cardId)) {
+        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $inc: { [`quantities.${data.cardId}`]: data.quantity } });
+      } else {
+        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $push: { ownedCardIds: data.cardId } });
+        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $set: { [`quantities.${data.cardId}`]: data.quantity } });
+      }
+    }
+    if (data.action === "addToBuy") {
+      if (!collectionData.buyListIds.includes(data.cardId)) {
+        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $push: { buyListIds: data.cardId } });
+      }
+    }
+    if (data.action === "removeFromBuy") {
+      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $pull: { buyListIds: { $eq: data.cardId } } });
+    }
+    if (data.action === "addToPrint") {
+      if (!collectionData.printListIds.includes(data.cardId)) {
+        await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $push: { printListIds: data.cardId } });
+      }
+    }
+    if (data.action === "removeFromPrint") {
+      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $pull: { printListIds: { $eq: data.cardId } } });
+    }
+    if (data.action === "remove") {
+      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $pull: { ownedCardIds: { $eq: data.cardId } } });
+    }
+    if (data.action === "update") {
+      await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $set: { [`quantities.${data.cardId}`]: data.quantity } });
+    }
+    return { success: true };
+  }
+  async MeCollections(auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    const collection = this.database.GetDB().collection("collections_mtg" /* collections */);
+    const all = await collection.find({ email_user: getMe.email }).toArray();
+    if (!all)
+      return { success: false, error: "Collections not found" };
+    return { success: true, collections: all };
+  }
+  async createCollection(data, auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found", uuid: null };
+    data.email_user = getMe.email;
+    data.createdAt = new Date;
+    data.updatedAt = new Date;
+    data.ownedCardIds = [];
+    data.quantities = {};
+    data.buyListIds = [];
+    data.printListIds = [];
+    const collection = this.database.GetDB().collection("collections_mtg" /* collections */);
+    const create = await collection.insertOne(data);
+    if (!create)
+      return { success: false, error: "Failed to create collection", uuid: null };
+    return { success: true, uuid: create.insertedId };
+  }
+  async renameCollection(data, auth2) {
+    const getMe = await this.GetMe(auth2);
+    if (!getMe.success)
+      return { success: false, error: "User not found" };
+    const collection = this.database.GetDB().collection("collections_mtg" /* collections */);
+    const target = await collection.findOne({ _id: new import_mongodb2.ObjectId(data.collectionId) });
+    if (!target)
+      return { success: false, error: "Collection not found" };
+    if (target.email_user !== getMe.email)
+      return { success: false, error: "Unauthorized" };
+    const update = await collection.updateOne({ _id: new import_mongodb2.ObjectId(data.collectionId) }, { $set: { name: data.newName, updatedAt: new Date } });
+    if (!update.modifiedCount)
+      return { success: false, error: "Failed to rename (or name unchanged)" };
+    return { success: true };
+  }
+  async GetMe(authorization) {
+    const session = await this.auth.isAuthenticated(authorization);
+    if (!session)
+      return { success: false, error: "Session not found" };
+    const user = await this.auth.getUserByEmail(session.email);
+    if (!user)
+      return { success: false, error: "User not found" };
+    return {
+      success: true,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      joinDate: user.joinDate
+    };
+  }
+  async getPublicCollection(collectionId) {
+    try {
+      const collection = this.database.GetDB().collection("collections_mtg" /* collections */);
+      const data = await collection.findOne({ _id: new import_mongodb2.ObjectId(collectionId) });
+      if (!data)
+        return { success: false, error: "Collection not found" };
+      return { success: true, collection: data };
+    } catch (e) {
+      return { success: false, error: "Invalid ID" };
+    }
+  }
+}
+
 // src/index.ts
-var controller = new controller_default;
 var app = new Hono2;
-var setup = controller.setup();
-app.use(cors());
+var api2 = new Hono2;
+app.use("*", cors());
+var db = IDBService.GetInstance();
+var MTGService = new MTG(db);
+var auth2 = new AuthService(db);
 app.use("*", async (c, next) => {
-  await setup;
+  await db.setup();
   await next();
 });
-app.use("/me/*", makeAuthMiddleware(controller));
-app.use("/create/*", makeAuthMiddleware(controller));
-var routes = app.get("/", async (c) => {
+app.use("/api/me/*", makeAuthMiddleware());
+app.use("/api/create/*", makeAuthMiddleware());
+var routes = api2.get("/", async (c) => {
   return c.json({ message: "Hello World", status: 200 });
+}).get("/public/collection/:id", async (c) => {
+  const id = c.req.param("id");
+  return c.json(await MTGService.getPublicCollection(id));
 }).get("/me", async (c) => {
   const session = c.get("session");
-  return c.json(await controller.GetMe(session.uuid));
+  return c.json(await MTGService.GetMe(session.uuid));
 }).get("/me/collections", async (c) => {
   const session = c.get("session");
-  return c.json(await controller.MeCollections(session.uuid));
+  return c.json(await MTGService.MeCollections(session.uuid));
 }).get("/me/searches", async (c) => {
   const session = c.get("session");
-  return c.json(await controller.getSearches(session.uuid));
+  return c.json(await MTGService.getSearches(session.uuid));
 }).delete("/me/searches", zValidator("json", schemaDeleteSearch), async (c) => {
   const session = c.get("session");
   const data = await c.req.json();
-  return c.json(await controller.deleteSearch(data, session.uuid));
+  return c.json(await MTGService.deleteSearch(data, session.uuid));
 }).delete("/me/collection", zValidator("json", schemaDeleteCollection), async (c) => {
   const session = c.get("session");
   const data = await c.req.json();
-  return c.json(await controller.deleteCollection(data, session.uuid));
+  return c.json(await MTGService.deleteCollection(data, session.uuid));
 }).post("/me/collection/card", zValidator("json", schemaCardOperation), async (c) => {
   const session = c.get("session");
   const data = await c.req.json();
-  return c.json(await controller.updateCollection(data, session.uuid));
+  return c.json(await MTGService.updateCollection(data, session.uuid));
 }).post("/me/collection/rename", zValidator("json", schemaRenameCollection), async (c) => {
   const session = c.get("session");
   const data = await c.req.json();
-  return c.json(await controller.renameCollection(data, session.uuid));
+  return c.json(await MTGService.renameCollection(data, session.uuid));
 }).post("/create/search", zValidator("json", schemaSavedSearch), async (c) => {
   const session = c.get("session");
   const data = await c.req.json();
-  return c.json(await controller.createSearch(data, session.uuid));
+  return c.json(await MTGService.createSearch(data, session.uuid));
 }).post("/create/collection", zValidator("json", schemaCreateCollection), async (c) => {
   const session = c.get("session");
   const data = await c.req.json();
-  return c.json(await controller.createCollection(data, session.uuid));
+  return c.json(await MTGService.createCollection(data, session.uuid));
 }).post("/register", zValidator("json", schemaRegister), async (c) => {
   const data = await c.req.json();
-  return c.json(await controller.register(data));
+  return c.json(await auth2.register(data));
 }).post("/login", zValidator("json", schemaLogin), async (c) => {
   const data = await c.req.json();
-  return c.json(await controller.login(data));
+  return c.json(await auth2.login(data));
 });
+app.route("/api", routes);
 var src_default = {
-  port: 4000,
+  port: Bun.env.HONO_PORT || 4000,
   fetch: async (req, env, ctx) => {
-    return routes.fetch(req, env, ctx);
+    return app.fetch(req, env, ctx);
   }
 };
 export {

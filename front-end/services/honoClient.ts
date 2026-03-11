@@ -7,7 +7,18 @@ import { z } from 'zod';
 // 2. CLIENT CONFIGURATION
 // ==========================================
 
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:4000';
+const normalizeApiUrl = (value?: string) => {
+    const normalizedValue = value?.trim();
+
+    if (!normalizedValue || normalizedValue === '/') {
+        return '/api';
+    }
+
+    const withoutTrailingSlash = normalizedValue.replace(/\/+$/, '');
+    return withoutTrailingSlash.endsWith('/api') ? withoutTrailingSlash : `${withoutTrailingSlash}/api`;
+};
+
+const API_URL = normalizeApiUrl((import.meta as any).env?.VITE_API_URL);
 
 const getAuthHeaders = (): HeadersInit => {
     const token = localStorage.getItem('portal_auth_token');
