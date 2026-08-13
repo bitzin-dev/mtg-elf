@@ -20,6 +20,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+
           script: |
             set -e
 
@@ -45,15 +46,21 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
-            echo "Instalando dependências do frontend..."
-            cd front-end
+            echo "Atualizando frontend..."
+            cd /home/exedev/documents/mtg-elf/front-end
             npm install
 
-            echo "Instalando dependências do backend..."
-            cd ../backend
+            echo "Atualizando backend..."
+            cd /home/exedev/documents/mtg-elf/backend
             npm install
 
-            echo "Reiniciando PM2..."
-            pm2 restart all
+            echo "Reiniciando frontend..."
+            pm2 restart frontend
+
+            echo "Reiniciando backend..."
+            pm2 restart backend
+
+            echo "Status dos processos:"
+            pm2 status
 
             echo "Deploy concluído."
