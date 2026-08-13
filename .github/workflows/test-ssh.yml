@@ -1,0 +1,41 @@
+name: Test SSH
+
+
+
+on:
+
+  workflow_dispatch:
+
+
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+
+
+    steps:
+
+      - name: Testar conexão com VPS
+
+        uses: appleboy/ssh-action@v1
+
+        with:
+
+          host: ${{ secrets.VPS_HOST }}
+
+          username: ${{ secrets.VPS_USER }}
+
+          key: ${{ secrets.VPS_SSH_KEY }}
+
+          script: |
+
+            echo "SSH funcionando"
+
+            whoami
+
+            hostname
+
+            pwd
