@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { X } from 'lucide-react';
 import { AdvancedFilters } from '../types';
 
 interface AdvancedFilterBarProps {
@@ -8,91 +8,76 @@ interface AdvancedFilterBarProps {
   onClear: () => void;
 }
 
+const mana = [
+  ['W', 'Branco'], ['U', 'Azul'], ['B', 'Preto'], ['R', 'Vermelho'], ['G', 'Verde'], ['C', 'Incolor'], ['M', 'Multicolorida'],
+] as const;
+
 export const AdvancedFilterBar: React.FC<AdvancedFilterBarProps> = ({ filters, onFilterChange, onClear }) => {
+  const activeCount = Object.values(filters).filter(Boolean).length;
+  const field = 'w-full bg-portal-bg/70 rounded-xl text-xs px-3 py-2.5 text-portal-text placeholder-portal-muted focus:ring-2 focus:ring-portal-accent/35 focus:outline-none transition-colors shadow-inner';
+
   return (
-    <div className="px-8 pb-6 animate-in slide-in-from-top-2 duration-200 fade-in">
-      <div className="bg-[#050a07] border border-gray-800/60 rounded-xl p-5 shadow-inner">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          
-          {/* Raridade */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Raridade</label>
-            <select 
-              value={filters.rarity}
-              onChange={(e) => onFilterChange('rarity', e.target.value)}
-              className="w-full bg-black/40 border border-gray-700 rounded-lg text-sm px-3 py-2 text-gray-300 focus:border-portal-accent focus:outline-none transition-colors appearance-none cursor-pointer"
-            >
+    <div className="px-4 sm:px-8 pb-4 animate-in slide-in-from-top-2 duration-200 fade-in">
+      <div className="glass-panel rounded-2xl p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3 mb-4 pb-3">
+          <div>
+            <div className="text-[10px] font-black text-portal-accent uppercase tracking-[0.22em]">Filtros do grimório</div>
+            <div className="text-xs text-portal-muted mt-1">Refine por mana, raridade, custo e corpo.</div>
+          </div>
+          {activeCount > 0 && (
+            <button onClick={onClear} className="shrink-0 inline-flex items-center gap-1.5 text-xs text-portal-muted hover:text-portal-danger transition-colors">
+              <X size={14} /> Limpar ({activeCount})
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-2">
+            <label className="block text-[10px] font-bold text-portal-muted uppercase tracking-wider mb-2">Cor</label>
+            <div className="flex flex-wrap gap-2">
+              {mana.map(([id, label]) => {
+                const selected = filters.color === id;
+                return (
+                  <button
+                    key={id}
+                    title={label}
+                    onClick={() => onFilterChange('color', selected ? '' : id)}
+                    className={`h-9 min-w-9 rounded-full text-xs font-black transition-all ${selected ? 'bg-portal-accent text-black shadow-[0_0_18px_rgba(16,185,129,0.35)] scale-105' : 'bg-portal-bg/70 text-portal-muted hover:text-portal-text hover:bg-white/10'}`}
+                  >
+                    {id}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <label className="block">
+            <span className="block text-[10px] font-bold text-portal-muted uppercase tracking-wider mb-2">Raridade</span>
+            <select value={filters.rarity} onChange={(e) => onFilterChange('rarity', e.target.value)} className={field}>
               <option value="">Todas</option>
               <option value="common">Comum</option>
               <option value="uncommon">Incomum</option>
               <option value="rare">Rara</option>
               <option value="mythic">Mítica</option>
             </select>
-          </div>
+          </label>
 
-          {/* Cor */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Cor</label>
-            <select 
-              value={filters.color}
-              onChange={(e) => onFilterChange('color', e.target.value)}
-              className="w-full bg-black/40 border border-gray-700 rounded-lg text-sm px-3 py-2 text-gray-300 focus:border-portal-accent focus:outline-none transition-colors appearance-none cursor-pointer"
-            >
-              <option value="">Todas</option>
-              <option value="W">Branco</option>
-              <option value="U">Azul</option>
-              <option value="B">Preto</option>
-              <option value="R">Vermelho</option>
-              <option value="G">Verde</option>
-              <option value="C">Incolor</option>
-              <option value="M">Multicolorida</option>
-            </select>
-          </div>
-
-          {/* Custo de Mana */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Custo de Mana (CMC)</label>
-            <select 
-              value={filters.cmc}
-              onChange={(e) => onFilterChange('cmc', e.target.value)}
-              className="w-full bg-black/40 border border-gray-700 rounded-lg text-sm px-3 py-2 text-gray-300 focus:border-portal-accent focus:outline-none transition-colors appearance-none cursor-pointer"
-            >
-              <option value="">Todos</option>
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
+          <label className="block">
+            <span className="block text-[10px] font-bold text-portal-muted uppercase tracking-wider mb-2">CMC</span>
+            <select value={filters.cmc} onChange={(e) => onFilterChange('cmc', e.target.value)} className={field}>
+              <option value="">Qualquer</option>
+              {[0, 1, 2, 3, 4, 5, 6].map(v => <option key={v} value={v}>{v}</option>)}
               <option value="7+">7+</option>
             </select>
-          </div>
+          </label>
 
-          {/* Poder */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Poder</label>
-            <input 
-              type="number" 
-              placeholder="Ex: 2"
-              value={filters.power}
-              onChange={(e) => onFilterChange('power', e.target.value)}
-              className="w-full bg-black/40 border border-gray-700 rounded-lg text-sm px-3 py-2 text-gray-300 placeholder-gray-600 focus:border-portal-accent focus:outline-none transition-colors"
-            />
+          <div>
+            <span className="block text-[10px] font-bold text-portal-muted uppercase tracking-wider mb-2">P / R</span>
+            <div className="grid grid-cols-2 gap-2">
+              <input type="number" placeholder="Poder" value={filters.power} onChange={(e) => onFilterChange('power', e.target.value)} className={field} />
+              <input type="number" placeholder="Resist." value={filters.toughness} onChange={(e) => onFilterChange('toughness', e.target.value)} className={field} />
+            </div>
           </div>
-
-          {/* Resistência */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Resistência</label>
-            <input 
-              type="number" 
-              placeholder="Ex: 2" 
-              value={filters.toughness}
-              onChange={(e) => onFilterChange('toughness', e.target.value)}
-              className="w-full bg-black/40 border border-gray-700 rounded-lg text-sm px-3 py-2 text-gray-300 placeholder-gray-600 focus:border-portal-accent focus:outline-none transition-colors"
-            />
-          </div>
-
         </div>
       </div>
     </div>

@@ -25,21 +25,25 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
   activeTab,
   isOwnedViewActive
 }) => {
+  const itemClass = 'flex-1 flex flex-col items-center justify-center gap-1 h-full text-portal-muted hover:text-portal-text active:scale-95 transition-all';
+  const activeClass = 'text-portal-accent';
+
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 h-[80px] bg-[#020604] border-t border-gray-800 z-[90] pb-2">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 h-[84px] glass-panel z-[90] pb-[env(safe-area-inset-bottom)]">
+      <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-portal-accent/70 to-transparent" />
       <div className="flex items-center justify-between px-2 h-full relative">
         
         {/* Center Main Action - Owned/Stats - Toggles "My Collection" View */}
-        <div className="absolute left-1/2 -translate-x-1/2 -top-6">
+        <div className="absolute left-1/2 -translate-x-1/2 -top-7">
             <button 
                 onClick={onToggleOwned}
-                className={`flex flex-col items-center justify-center w-16 h-16 rounded-full border-[4px] border-[#020604] shadow-[0_0_20px_rgba(16,185,129,0.4)] text-black hover:scale-105 transition-all ${isOwnedViewActive ? 'bg-white' : 'bg-emerald-600'}`}
+                className={`flex flex-col items-center justify-center w-[68px] h-[68px] rounded-2xl shadow-[0_20px_38px_rgba(0,0,0,0.45),0_0_28px_rgba(16,185,129,0.24)] hover:scale-105 active:scale-95 transition-all ${isOwnedViewActive ? 'bg-portal-text text-portal-bg' : 'bg-portal-accent text-black'}`}
             >
-                <Trophy size={24} fill="currentColor" className={isOwnedViewActive ? 'text-emerald-600' : 'text-white'} />
-                <span className={`text-[9px] font-black mt-0.5 ${isOwnedViewActive ? 'text-emerald-600' : 'text-white'}`}>{ownedCount}</span>
+                <Trophy size={24} fill="currentColor" />
+                <span className="text-[9px] font-black mt-0.5">{ownedCount}</span>
             </button>
             <div className="text-center mt-1">
-                 <span className="text-[10px] font-bold text-emerald-500 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-900 shadow-sm whitespace-nowrap">
+                 <span className="text-[10px] font-mono font-bold text-portal-gold bg-black/70 px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
                     R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                  </span>
             </div>
@@ -47,37 +51,39 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
 
         <button 
             onClick={onOpenCollections}
-            className="flex-1 flex flex-col items-center justify-center gap-1 h-full text-gray-500 hover:text-white active:scale-95 transition-all"
+            className={itemClass}
         >
-            <Layers size={22} className={activeTab === 'collections' ? 'text-emerald-500' : ''} />
-            <span className={`text-[10px] font-medium ${activeTab === 'collections' ? 'text-emerald-500' : ''}`}>Coleções</span>
+            <Layers size={22} className={activeTab === 'collections' ? activeClass : ''} />
+            <span className={`text-[10px] font-semibold ${activeTab === 'collections' ? activeClass : ''}`}>Coleções</span>
         </button>
 
         <button 
             onClick={onOpenList}
-            className="flex-1 flex flex-col items-center justify-center gap-1 h-full text-gray-500 hover:text-white active:scale-95 transition-all mr-8"
+            className={`${itemClass} mr-9`}
         >
-            <List size={22} className={activeTab === 'list' ? 'text-blue-500' : ''} />
-            <span className={`text-[10px] font-medium ${activeTab === 'list' ? 'text-blue-500' : ''}`}>Lista</span>
+            <List size={22} className={activeTab === 'list' ? activeClass : ''} />
+            <span className={`text-[10px] font-semibold ${activeTab === 'list' ? activeClass : ''}`}>Lista</span>
         </button>
 
         <button 
             onClick={onShare}
-            className="flex-1 flex flex-col items-center justify-center gap-1 h-full text-gray-500 hover:text-white active:scale-95 transition-all ml-8"
+            className={`${itemClass} ml-9`}
         >
-            <Share2 size={22} className={activeTab === 'share' ? 'text-pink-500' : ''} />
-            <span className={`text-[10px] font-medium ${activeTab === 'share' ? 'text-pink-500' : ''}`}>Compartilhar</span>
+            <Share2 size={22} className={activeTab === 'share' ? activeClass : ''} />
+            <span className={`text-[10px] font-semibold ${activeTab === 'share' ? activeClass : ''}`}>Enviar</span>
         </button>
 
         <button 
             onClick={onOpenProfile}
-            className="flex-1 flex flex-col items-center justify-center gap-1 h-full text-gray-500 hover:text-white active:scale-95 transition-all"
+            className={itemClass}
         >
-            <User size={22} className={activeTab === 'profile' ? 'text-purple-500' : ''} />
-            <span className={`text-[10px] font-medium ${activeTab === 'profile' ? 'text-purple-500' : ''}`}>Perfil</span>
+            <User size={22} className={activeTab === 'profile' ? activeClass : ''} />
+            <span className={`text-[10px] font-semibold ${activeTab === 'profile' ? activeClass : ''}`}>Perfil</span>
         </button>
 
       </div>
     </div>
   );
 };
+
+

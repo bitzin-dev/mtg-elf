@@ -19,7 +19,7 @@ import { SpoilersPage } from './components/SpoilersPage';
 import { searchScryfall, getRandomCardArt, getLandingPageCards, clearSessionCache, getLigaMagicPrice, fetchCardsFromIdentifiers } from './services/scryfallService';
 import { Card, CollectionFilterType, SavedSearch, AdvancedFilters, CardColor, FrontendCollection } from './types';
 import { parseImportFile } from './utils/importUtils';
-import { Search, Settings, RefreshCw, Save, LogOut, Filter, Trash2, Scan, Database, Download, Upload, List as ListIcon, ExternalLink, X, Check, ArrowDown, Loader2, Layers, ShieldCheck, ShoppingCart, Printer, ArrowUp, Menu, AlertTriangle, ArrowLeft, Camera, DollarSign, ArrowRight, Sparkles, Shuffle, Share2, Wrench } from 'lucide-react';
+import { Search, Settings, RefreshCw, Save, LogOut, Filter, Trash2, Scan, Database, Download, Upload, List as ListIcon, ExternalLink, X, Check, ArrowDown, Loader2, Layers, ShieldCheck, ShoppingCart, Printer, ArrowUp, Menu, AlertTriangle, ArrowLeft, Camera, DollarSign, ArrowRight, Sparkles, Shuffle, Share2, Wrench, Crown, Gem, CircleDot, Calendar } from 'lucide-react';
 import { backendService, clearAuthSession } from './services/honoClient';
 import { UserCollection } from '../backend/services/types';
 
@@ -83,7 +83,7 @@ const LandingPage: React.FC<{ onAuth: (mode: 'login' | 'register') => void }> = 
       <button
         onClick={handleRandomizeBg}
         disabled={isLoadingBg}
-        className="fixed bottom-6 left-6 z-50 p-3 bg-black/40 hover:bg-black/80 backdrop-blur-md border border-white/10 rounded-full text-white/50 hover:text-white transition-all duration-300 hover:rotate-180 disabled:opacity-50"
+        className="fixed bottom-6 left-6 z-50 p-3 bg-black/40 hover:bg-black/80 backdrop-blur-md rounded-full text-white/50 hover:text-white transition-all duration-300 hover:rotate-180 disabled:opacity-50"
         title="Trocar Arte de Fundo"
       >
         {isLoadingBg ? <Loader2 size={20} className="animate-spin" /> : <Shuffle size={20} />}
@@ -99,7 +99,7 @@ const LandingPage: React.FC<{ onAuth: (mode: 'login' | 'register') => void }> = 
             <div className="space-y-6 md:space-y-8 z-20 flex flex-col items-center md:items-start text-center md:text-left pt-8 md:pt-0">
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-white drop-shadow-xl">
                 Gerencie suas<br />
-                <span className="text-emerald-500">Coleções de Magic</span>
+                <span className="text-portal-accent">Coleções de Magic</span>
               </h1>
               <p className="text-base md:text-lg text-gray-400 max-w-lg leading-relaxed drop-shadow-md">
                 Organize, rastreie preços e complete seus sets favoritos com a ajuda de inteligência artificial.
@@ -107,7 +107,7 @@ const LandingPage: React.FC<{ onAuth: (mode: 'login' | 'register') => void }> = 
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full md:w-auto">
                 <button
                   onClick={() => onAuth('register')}
-                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black py-3 md:py-4 px-8 md:px-10 rounded-xl shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto bg-portal-accent hover:bg-portal-accentHover text-black font-black py-3 md:py-4 px-8 md:px-10 rounded-xl shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   Começar Agora <ArrowRight size={20} />
                 </button>
@@ -126,12 +126,12 @@ const LandingPage: React.FC<{ onAuth: (mode: 'login' | 'register') => void }> = 
                 <div className="relative w-64 h-96 flex items-center justify-center">
                   {/* Right/Back Card */}
                   <div className="absolute transform -translate-x-24 -rotate-[15deg] transition-transform duration-700 ease-out z-0 hover:z-40 hover:scale-110 hover:rotate-0 top-8">
-                    <img src={featuredCards[2].imageUrl} alt="Back Card" className="w-64 rounded-xl shadow-2xl border border-gray-800 brightness-75 hover:brightness-100" />
+                    <img src={featuredCards[2].imageUrl} alt="Back Card" className="w-64 rounded-xl shadow-2xl brightness-75 hover:brightness-100" />
                   </div>
 
                   {/* Left/Middle Card */}
                   <div className="absolute transform translate-x-24 rotate-[15deg] transition-transform duration-700 ease-out z-10 hover:z-40 hover:scale-110 hover:rotate-0 top-8">
-                    <img src={featuredCards[1].imageUrl} alt="Middle Card" className="w-64 rounded-xl shadow-2xl border border-gray-800 brightness-90 hover:brightness-100" />
+                    <img src={featuredCards[1].imageUrl} alt="Middle Card" className="w-64 rounded-xl shadow-2xl brightness-90 hover:brightness-100" />
                   </div>
 
                   {/* Center/Front Card */}
@@ -140,7 +140,7 @@ const LandingPage: React.FC<{ onAuth: (mode: 'login' | 'register') => void }> = 
                   </div>
                 </div>
               ) : (
-                <div className="w-72 h-96 bg-gray-900/50 rounded-2xl border border-gray-800 animate-pulse flex items-center justify-center">
+                <div className="w-72 h-96 bg-gray-900/50 rounded-2xl animate-pulse flex items-center justify-center">
                   <Loader2 className="text-gray-700 animate-spin" size={48} />
                 </div>
               )}
@@ -154,10 +154,15 @@ const LandingPage: React.FC<{ onAuth: (mode: 'login' | 'register') => void }> = 
   );
 };
 
-const StatsCounter: React.FC<{ label: string; count: number }> = ({ label, count }) => (
-  <div className="flex flex-col items-center">
-    <span className="text-2xl font-bold text-portal-accent leading-none">{count}</span>
-    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{label}</span>
+const StatsCounter: React.FC<{ label: string; count: number; icon: React.ReactNode }> = ({ label, count, icon }) => (
+  <div className="flex items-center gap-3 rounded-2xl bg-white/[0.045] px-3.5 py-2.5">
+    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/[0.055] text-portal-accent">
+      {icon}
+    </div>
+    <div className="min-w-0">
+      <div className="font-mono text-lg font-black leading-none text-white">{count}</div>
+      <div className="mt-1 text-[9px] font-black uppercase tracking-[0.18em] text-portal-muted">{label}</div>
+    </div>
   </div>
 );
 
@@ -165,15 +170,15 @@ const ToolbarButton: React.FC<{ icon: React.ReactNode; label: string; onClick?: 
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`relative overflow-hidden flex items-center gap-2 bg-gray-900 hover:bg-gray-800 border border-gray-700 px-3 py-1.5 rounded text-xs font-bold text-gray-300 transition-colors uppercase tracking-wide shadow-sm whitespace-nowrap ${disabled ? 'cursor-not-allowed' : ''}`}
+    className={`group relative overflow-hidden flex items-center gap-2 portal-chip hover:text-white px-4 py-2.5 rounded-2xl text-xs font-black text-gray-300 transition-all uppercase tracking-[0.16em] shadow-[0_14px_34px_rgba(0,0,0,0.20)] whitespace-nowrap ${disabled ? 'cursor-not-allowed opacity-70' : 'hover:-translate-y-0.5'}`}
   >
     {progress !== undefined && progress > 0 && (
       <div
-        className="absolute left-0 top-0 bottom-0 bg-emerald-900/60 transition-all duration-300 ease-out"
+        className="absolute left-0 top-0 bottom-0 bg-portal-accent/25 transition-all duration-300 ease-out"
         style={{ width: `${progress}%` }}
       />
     )}
-    <div className="relative z-10 flex items-center gap-2">
+    <div className="relative z-10 flex items-center gap-2 [&>svg]:text-portal-accent [&>svg]:transition-transform group-hover:[&>svg]:scale-110">
       {icon} {label}
     </div>
   </button>
@@ -399,6 +404,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
   // Mobile specific state
   const [showMobileOwned, setShowMobileOwned] = useState(false);
   const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
 
   // Scanner Modal State
   const [isScannerOpen, setIsScannerOpen] = useState(false);
@@ -1241,8 +1247,8 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
     if (isLoadingCollections) {
       return (
         <div className="flex h-screen w-full bg-portal-bg text-gray-200 font-sans overflow-hidden items-center justify-center flex-col gap-4">
-          <Loader2 size={48} className="animate-spin text-emerald-500" />
-          {sharedId && <div className="text-emerald-500 font-bold">Carregando coleção compartilhada...</div>}
+          <Loader2 size={48} className="animate-spin text-portal-accent" />
+          {sharedId && <div className="text-portal-accent font-bold">Carregando coleção compartilhada...</div>}
         </div>
       );
     }
@@ -1255,7 +1261,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
             <AlertTriangle size={48} className="text-red-500 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-white mb-2">Coleção não encontrada</h2>
             <p className="text-gray-400 mb-6">O link de compartilhamento pode estar expirado ou incorreto.</p>
-            <button onClick={() => { window.location.href = '/'; }} className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors">
+            <button onClick={() => { window.location.href = '/'; }} className="px-6 py-2 bg-emerald-600 hover:bg-portal-accent text-white font-bold rounded-lg transition-colors">
               Ir para Início
             </button>
           </div>
@@ -1278,7 +1284,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
         />
 
         <div className="absolute top-4 right-4 z-50">
-          <button onClick={onExit} className="flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-red-900/40 text-gray-400 hover:text-red-400 rounded-lg border border-gray-800 transition-colors">
+          <button onClick={onExit} className="flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-red-900/40 text-gray-400 hover:text-red-400 rounded-lg transition-colors">
             <LogOut size={16} /> <span className="text-sm font-bold">Sair</span>
           </button>
         </div>
@@ -1342,7 +1348,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
               <div className="flex gap-3 w-full pt-4">
                 <button
                   onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
-                  className="flex-1 py-3 rounded-lg border border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 font-bold transition-all"
+                  className="flex-1 py-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 font-bold transition-all"
                 >
                   Cancelar
                 </button>
@@ -1451,7 +1457,7 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
       {currentView === 'dashboard' && (
         <button
           onClick={handleScanClick}
-          className="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-[160] bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-lg shadow-emerald-900/30 transition-transform hover:scale-105"
+          className="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-[160] bg-emerald-600 hover:bg-portal-accent text-white p-4 rounded-full shadow-lg shadow-emerald-900/30 transition-transform hover:scale-105"
           title="Escanear Carta"
         >
           <Camera size={24} />
@@ -1459,19 +1465,19 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
       )}
 
       <main className="flex-1 lg:ml-64 h-screen flex flex-col bg-portal-bg overflow-hidden relative w-full pb-20 lg:pb-0">
-        <header className="h-auto py-4 lg:py-0 lg:h-24 bg-black/20 border-b border-portal-border flex flex-col md:flex-row items-start md:items-center justify-between px-4 lg:px-8 shrink-0 gap-4">
-          <div className="flex items-center gap-4 lg:gap-6 w-full md:w-auto">
+        <header className="m-4 mb-3 lg:m-6 lg:mb-4 h-auto py-4 lg:py-0 lg:h-24 rounded-[1.75rem] bg-[#07130c]/95 ring-1 ring-white/[0.055] backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between px-4 lg:px-6 shrink-0 gap-4 relative z-[80]">
+          <div className="relative z-10 flex items-center gap-4 lg:gap-6 w-full md:w-auto">
             {/* Mobile Header: Burger + Title + Actions */}
             <div className="flex md:hidden items-center justify-between w-full">
               <div className="flex items-center gap-3">
-                <button onClick={() => setIsMobileSidebarOpen(true)} className="p-2 text-gray-400 hover:text-white bg-gray-800 rounded-lg"><Menu size={20} /></button>
+                <button onClick={() => setIsMobileSidebarOpen(true)} className="p-2.5 text-portal-muted hover:text-white portal-chip rounded-2xl"><Menu size={20} /></button>
                 <div>
-                  <div className="font-bold text-white text-lg leading-tight uppercase tracking-tight">Portal de Coleções</div>
-                  <div className="text-[10px] text-gray-500 font-bold">MTG</div>
+                  <div className="font-display text-white text-lg leading-tight tracking-wide">Portal de Coleções</div>
+                  <div className="text-[10px] text-portal-accent font-mono font-bold tracking-[0.3em]">MTG</div>
                 </div>
               </div>
               <div className="relative">
-                <button onClick={() => setIsMobileToolsOpen(!isMobileToolsOpen)} className="p-2 text-gray-300 bg-gray-800 rounded-lg border border-gray-700 hover:text-white flex items-center gap-2">
+                <button onClick={() => setIsMobileToolsOpen(!isMobileToolsOpen)} className="p-2.5 text-portal-text portal-chip rounded-2xl hover:text-white flex items-center gap-2">
                   <Wrench size={18} />
                 </button>
 
@@ -1479,39 +1485,42 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
                 {isMobileToolsOpen && (
                   <>
                     <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setIsMobileToolsOpen(false)}></div>
-                    <div className="absolute right-0 top-12 z-50 w-48 bg-[#0a1410] border border-gray-700 rounded-lg shadow-xl p-2 flex flex-col gap-1 animate-in fade-in zoom-in-95">
-                      <button onClick={() => { setIsMobileToolsOpen(false); handleOpenSpoilers(); }} className="flex items-center gap-2 p-2 text-sm text-pink-400 hover:bg-gray-800 rounded text-left"><Sparkles size={14} /> Spoilers</button>
-                      <button onClick={() => { setIsMobileToolsOpen(false); handleManualReload(); }} className="flex items-center gap-2 p-2 text-sm text-blue-400 hover:bg-gray-800 rounded text-left"><RefreshCw size={14} /> Recarregar</button>
-                      <button onClick={() => { setIsMobileToolsOpen(false); handleShareClick(); }} className="flex items-center gap-2 p-2 text-sm text-amber-500 hover:bg-gray-800 rounded text-left"><Share2 size={14} /> Compartilhar</button>
-                      <button onClick={() => { setIsMobileToolsOpen(false); handleSaveSearch(); }} className="flex items-center gap-2 p-2 text-sm text-emerald-500 hover:bg-gray-800 rounded text-left"><Save size={14} /> Salvar Pesquisa</button>
-                      <div className="h-px bg-gray-800 my-1"></div>
-                      <button onClick={() => { setIsMobileToolsOpen(false); handleDashboardImportClick(); }} className="flex items-center gap-2 p-2 text-sm text-gray-300 hover:bg-gray-800 rounded text-left"><Download size={14} /> Importar</button>
-                      <button onClick={() => { setIsMobileToolsOpen(false); setIsExportModalOpen(true); }} className="flex items-center gap-2 p-2 text-sm text-gray-300 hover:bg-gray-800 rounded text-left"><Upload size={14} /> Exportar</button>
+                    <div className="absolute right-0 top-12 z-50 w-56 portal-menu rounded-2xl p-2 flex flex-col gap-1 animate-in fade-in zoom-in-95">
+                      <button onClick={() => { setIsMobileToolsOpen(false); handleOpenSpoilers(); }} className="flex items-center gap-2 p-2 text-sm text-portal-accent hover:bg-white/10 rounded text-left"><Sparkles size={14} /> Spoilers</button>
+                      <button onClick={() => { setIsMobileToolsOpen(false); handleManualReload(); }} className="flex items-center gap-2 p-2 text-sm text-portal-accent hover:bg-white/10 rounded text-left"><RefreshCw size={14} /> Recarregar</button>
+                      <button onClick={() => { setIsMobileToolsOpen(false); handleShareClick(); }} className="flex items-center gap-2 p-2 text-sm text-amber-500 hover:bg-white/10 rounded text-left"><Share2 size={14} /> Compartilhar</button>
+                      <button onClick={() => { setIsMobileToolsOpen(false); handleSaveSearch(); }} className="flex items-center gap-2 p-2 text-sm text-portal-accent hover:bg-white/10 rounded text-left"><Save size={14} /> Salvar Pesquisa</button>
+                      <div className="h-px bg-white/10 my-1"></div>
+                      <button onClick={() => { setIsMobileToolsOpen(false); handleDashboardImportClick(); }} className="flex items-center gap-2 p-2 text-sm text-gray-300 hover:bg-white/10 rounded text-left"><Download size={14} /> Importar</button>
+                      <button onClick={() => { setIsMobileToolsOpen(false); setIsExportModalOpen(true); }} className="flex items-center gap-2 p-2 text-sm text-gray-300 hover:bg-white/10 rounded text-left"><Upload size={14} /> Exportar</button>
                     </div>
                   </>
                 )}
               </div>
             </div>
 
-            <div className="hidden md:block p-3 bg-portal-surface rounded-full border border-gray-800 shadow-md"><Settings className="text-portal-accent" size={28} /></div>
-
-            <div className="hidden md:block flex-1 md:flex-none">
+            <div className="hidden md:block flex-1 md:flex-none min-w-0">
               {currentView === 'profile' ? (
                 <>
-                  <h2 className="text-xl lg:text-2xl font-bold text-white leading-tight truncate">Meu Perfil</h2>
-                  <div className="text-xs lg:text-sm text-gray-500 mt-1">Gerencie sua conta e assinatura</div>
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-portal-accent"><ShieldCheck size={13} /> Conta</div>
+                  <h2 className="mt-1 font-display text-2xl lg:text-3xl text-white leading-tight truncate tracking-wide">Meu Perfil</h2>
+                  <div className="mt-1 flex items-center gap-2 text-xs lg:text-sm text-portal-muted"><Settings size={13} /> Gerencie sua conta e assinatura</div>
                 </>
               ) : currentView === 'spoilers' ? (
                 <>
-                  <h2 className="text-xl lg:text-2xl font-bold text-white leading-tight truncate">Spoilers & Novas Edicoes</h2>
-                  <div className="text-xs lg:text-sm text-gray-500 mt-1">Explore cartas recem reveladas e adicione direto na colecao</div>
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-portal-accent"><Sparkles size={13} /> Novidades</div>
+                  <h2 className="mt-1 font-display text-2xl lg:text-3xl text-white leading-tight truncate tracking-wide">Spoilers & Novas Edicoes</h2>
+                  <div className="mt-1 flex items-center gap-2 text-xs lg:text-sm text-portal-muted"><Database size={13} /> Explore cartas recem reveladas e adicione direto na colecao</div>
                 </>
               ) : (
                 <>
-                  <h2 className="text-xl lg:text-2xl font-bold text-white leading-tight truncate">{activeCollection?.name || "Selecione uma Coleção"}</h2>
-                  <div className="text-xs lg:text-sm text-gray-500 mt-1 truncate max-w-[200px] lg:max-w-none">
-                    Criado: {activeCollection ? new Date(activeCollection.createdAt).toLocaleDateString() : "-"} •
-                    Query: <span className="text-gray-600 font-mono text-xs hidden lg:inline">{activeCollection?.filterValue || "-"}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-portal-accent/10 text-portal-accent"><Database size={15} /></span>
+                    <h2 className="font-display text-2xl lg:text-3xl text-white leading-tight truncate tracking-wide">{activeCollection?.name || "Selecione uma Coleção"}</h2>
+                  </div>
+                  <div className="mt-2 flex max-w-[720px] flex-wrap items-center gap-2 text-xs text-portal-muted pl-11">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.045] px-2.5 py-1"><Calendar size={12} /> Criada em {activeCollection ? new Date(activeCollection.createdAt).toLocaleDateString() : "-"}</span>
+                    <span className="hidden lg:inline-flex min-w-0 max-w-[420px] items-center gap-1.5 rounded-full bg-white/[0.045] px-2.5 py-1 font-mono text-[11px]"><Search size={12} /> <span className="truncate">{activeCollection?.filterValue || "-"}</span></span>
                   </div>
                 </>
               )}
@@ -1519,34 +1528,30 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
           </div>
 
           {currentView === 'dashboard' && (
-            <div className="hidden xl:flex gap-10">
-              <StatsCounter label="Míticas" count={currentOwnedCards.filter(c => c.rarity === 'Mythic Rare').length} />
-              <StatsCounter label="Raras" count={currentOwnedCards.filter(c => c.rarity === 'Rare').length} />
-              <StatsCounter label="Incomuns" count={currentOwnedCards.filter(c => c.rarity === 'Uncommon').length} />
-              <StatsCounter label="Comuns" count={currentOwnedCards.filter(c => c.rarity === 'Common').length} />
+            <div className="relative z-10 hidden xl:grid grid-cols-4 gap-2">
+              <StatsCounter icon={<Crown size={16} />} label="Míticas" count={currentOwnedCards.filter(c => c.rarity === 'Mythic Rare').length} />
+              <StatsCounter icon={<Gem size={16} />} label="Raras" count={currentOwnedCards.filter(c => c.rarity === 'Rare').length} />
+              <StatsCounter icon={<Sparkles size={16} />} label="Incomuns" count={currentOwnedCards.filter(c => c.rarity === 'Uncommon').length} />
+              <StatsCounter icon={<CircleDot size={16} />} label="Comuns" count={currentOwnedCards.filter(c => c.rarity === 'Common').length} />
             </div>
           )}
 
-          <div className="hidden md:flex gap-2 lg:gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+          <div className="relative z-10 hidden md:flex gap-2 lg:gap-3 w-full md:w-auto overflow-visible">
             {currentView === 'profile' ? (
               <>
-                <button onClick={() => setCurrentView('dashboard')} className="flex items-center gap-1 bg-gray-800 text-gray-300 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white hover:bg-gray-700 transition-colors whitespace-nowrap"><ArrowLeft size={14} /> <span className="hidden sm:inline">VOLTAR</span></button>
-                <button className="flex items-center gap-1 bg-red-900/30 text-red-400 border border-red-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-red-900/50 transition-colors whitespace-nowrap" onClick={onExit}><LogOut size={14} /> <span className="hidden sm:inline">SAIR</span></button>
+                <button onClick={() => setCurrentView('dashboard')} className="flex items-center gap-1 portal-chip text-gray-300 px-3 py-2 lg:px-4 rounded-xl text-xs font-bold hover:text-white transition-colors whitespace-nowrap"><ArrowLeft size={14} /> <span className="hidden sm:inline">VOLTAR</span></button>
+                <button className="flex items-center gap-1 bg-red-500/10 text-red-300 px-3 py-2 lg:px-4 rounded-xl text-xs font-bold hover:bg-red-500/15 transition-colors whitespace-nowrap" onClick={onExit}><LogOut size={14} /> <span className="hidden sm:inline">SAIR</span></button>
               </>
             ) : currentView === 'spoilers' ? (
               <>
-                <button onClick={() => setCurrentView('dashboard')} className="flex items-center gap-1 bg-gray-800 text-gray-300 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white hover:bg-gray-700 transition-colors whitespace-nowrap"><ArrowLeft size={14} /> <span className="hidden sm:inline">VOLTAR</span></button>
-                <button onClick={handleShareClick} className="flex items-center gap-1 bg-amber-900/40 text-amber-500 border border-amber-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-amber-900/60 hover:text-amber-400 transition-colors whitespace-nowrap"><Share2 size={14} /> <span className="hidden sm:inline">COMPARTILHAR</span></button>
+                <button onClick={() => setCurrentView('dashboard')} className="flex items-center gap-1 portal-chip text-gray-300 px-3 py-2 lg:px-4 rounded-xl text-xs font-bold hover:text-white transition-colors whitespace-nowrap"><ArrowLeft size={14} /> <span className="hidden sm:inline">VOLTAR</span></button>
+                <button onClick={handleShareClick} className="flex items-center gap-1 bg-amber-400/12 text-amber-300 px-3 py-2 lg:px-4 rounded-xl text-xs font-bold hover:bg-amber-400/20 transition-colors whitespace-nowrap"><Share2 size={14} /> <span className="hidden sm:inline">COMPARTILHAR</span></button>
               </>
             ) : (
-              <>
-                <button onClick={handleOpenSpoilers} className="flex items-center gap-1 bg-pink-900/30 text-pink-400 border border-pink-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-pink-900/50 transition-colors whitespace-nowrap"><Sparkles size={14} /> <span className="hidden sm:inline">SPOILERS</span></button>
-                <button onClick={handleManualReload} className="flex items-center gap-1 bg-blue-900/30 text-blue-400 border border-blue-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-blue-900/50 transition-colors whitespace-nowrap"><RefreshCw size={14} /> <span className="hidden sm:inline">RECARREGAR</span></button>
-                <button onClick={handleShareClick} className="flex items-center gap-1 bg-amber-900/40 text-amber-500 border border-amber-800/50 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-amber-900/60 hover:text-amber-400 transition-colors whitespace-nowrap"><Share2 size={14} /> <span className="hidden sm:inline">COMPARTILHAR</span></button>
-                <button onClick={handleSaveSearch} className="flex items-center gap-1 bg-portal-accent text-black px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:bg-portal-accentHover shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all whitespace-nowrap"><Save size={14} /> <span className="hidden sm:inline">SALVAR</span></button>
-                <button onClick={() => setIsExportModalOpen(true)} className="flex items-center gap-1 bg-gray-800 text-gray-400 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white transition-colors whitespace-nowrap"><Upload size={14} className="text-blue-400" /> <span className="hidden sm:inline">EXPORTAR</span></button>
-                <button onClick={handleDashboardImportClick} className="flex items-center gap-1 bg-gray-800 text-gray-400 border border-gray-700 px-3 py-2 lg:px-4 rounded-md text-xs font-bold hover:text-white transition-colors whitespace-nowrap"><Download size={14} className="text-red-400" /> <span className="hidden sm:inline">IMPORTAR</span></button>
-              </>
+              <div className="relative z-[120] overflow-visible">
+                <button onClick={() => setIsActionMenuOpen(!isActionMenuOpen)} className="flex items-center gap-2 bg-portal-accent text-black px-4 py-2.5 rounded-2xl text-xs font-black hover:bg-portal-accentHover transition-colors whitespace-nowrap"><Sparkles size={15} /> AÇÕES <ArrowDown size={13} className={`transition-transform ${isActionMenuOpen ? 'rotate-180' : ''}`} /></button>
+                {isActionMenuOpen && (<><div className="fixed inset-0 z-[110] bg-transparent" onClick={() => setIsActionMenuOpen(false)} /><div className="fixed right-8 top-24 z-[130] w-64 portal-menu rounded-2xl p-2 flex flex-col gap-1 animate-in fade-in zoom-in-95"><button onClick={() => { setIsActionMenuOpen(false); handleOpenSpoilers(); }} className="flex items-center gap-3 p-3 text-sm text-portal-text hover:text-white hover:bg-white/10 rounded-xl text-left"><Sparkles size={16} className="text-portal-accent" /> Spoilers</button><button onClick={() => { setIsActionMenuOpen(false); handleManualReload(); }} className="flex items-center gap-3 p-3 text-sm text-portal-text hover:text-white hover:bg-white/10 rounded-xl text-left"><RefreshCw size={16} className="text-portal-accent" /> Recarregar</button><button onClick={() => { setIsActionMenuOpen(false); handleShareClick(); }} className="flex items-center gap-3 p-3 text-sm text-portal-text hover:text-white hover:bg-white/10 rounded-xl text-left"><Share2 size={16} className="text-amber-400" /> Compartilhar</button><button onClick={() => { setIsActionMenuOpen(false); handleSaveSearch(); }} className="flex items-center gap-3 p-3 text-sm text-portal-text hover:text-white hover:bg-white/10 rounded-xl text-left"><Save size={16} className="text-portal-accent" /> Salvar pesquisa</button><div className="h-px bg-white/10 my-1" /><button onClick={() => { setIsActionMenuOpen(false); setIsExportModalOpen(true); }} className="flex items-center gap-3 p-3 text-sm text-portal-text hover:text-white hover:bg-white/10 rounded-xl text-left"><Upload size={16} /> Exportar</button><button onClick={() => { setIsActionMenuOpen(false); handleDashboardImportClick(); }} className="flex items-center gap-3 p-3 text-sm text-portal-text hover:text-white hover:bg-white/10 rounded-xl text-left"><Download size={16} /> Importar</button></div></>)}
+              </div>
             )}
           </div>
         </header>
@@ -1572,42 +1577,42 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
             <div className="px-4 lg:px-8 py-4 lg:py-6 bg-portal-bg shrink-0">
               <div className="flex justify-between items-end mb-2">
                 <h3 className="flex items-center gap-3 font-bold text-sm lg:text-base text-white">
-                  <div className="w-5 h-5 rounded-full border-2 border-pink-500 flex items-center justify-center shadow-[0_0_10px_rgba(236,72,153,0.4)]"><div className="w-2 h-2 bg-pink-500 rounded-full"></div></div>
+                  <div className="w-5 h-5 rounded-full border-2 border-portal-accent flex items-center justify-center shadow-[0_0_10px_rgba(52,211,153,0.35)]"><div className="w-2 h-2 bg-portal-accent rounded-full"></div></div>
                   Progresso <span className="hidden sm:inline">da Coleção</span> {selectedSet ? <span className="text-gray-400 text-xs font-normal ml-1">(Filtrado)</span> : ''}
                 </h3>
-                <span className="text-emerald-500 font-bold text-sm lg:text-base">{currentOwnedCards.length}/{filteredCollectionCards.length}<span className="ml-2 text-gray-500 font-normal text-xs lg:text-sm">({filteredCollectionCards.length > 0 ? Math.round((currentOwnedCards.length / filteredCollectionCards.length) * 100) : 0}%)</span></span>
+                <span className="text-portal-accent font-bold text-sm lg:text-base">{currentOwnedCards.length}/{filteredCollectionCards.length}<span className="ml-2 text-gray-500 font-normal text-xs lg:text-sm">({filteredCollectionCards.length > 0 ? Math.round((currentOwnedCards.length / filteredCollectionCards.length) * 100) : 0}%)</span></span>
               </div>
-              <div className="h-3 lg:h-5 bg-gray-900 rounded-full border border-gray-800 overflow-hidden relative shadow-inner">
+              <div className="h-3 lg:h-5 bg-white/5 rounded-full overflow-hidden relative shadow-inner">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/10 to-emerald-900/30 w-full h-full"></div>
-                <div className="h-full bg-emerald-500 shadow-[0_0_15px_#10b981] transition-all duration-500 ease-out" style={{ width: `${filteredCollectionCards.length > 0 ? (currentOwnedCards.length / filteredCollectionCards.length) * 100 : 0}%` }}></div>
+                <div className="h-full bg-portal-accent shadow-[0_0_15px_#10b981] transition-all duration-500 ease-out" style={{ width: `${filteredCollectionCards.length > 0 ? (currentOwnedCards.length / filteredCollectionCards.length) * 100 : 0}%` }}></div>
               </div>
             </div>
             <div className={`px-4 lg:px-8 ${showAdvancedFilters ? 'pb-2' : 'pb-6'} shrink-0 transition-all duration-300`}>
-              <div className="bg-portal-panel border border-portal-border rounded-xl p-3 lg:p-4 flex flex-col md:flex-row flex-wrap items-center gap-3 lg:gap-4 shadow-lg">
+              <div className="glass-panel rounded-2xl p-3 lg:p-4 flex flex-col md:flex-row flex-wrap items-center gap-3 lg:gap-4 shadow-lg">
                 <div className="flex gap-2 w-full md:w-auto flex-1">
                   <div className="relative flex-1 w-full md:min-w-[240px]">
                     <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-portal-accent" />
-                    <input type="text" placeholder="Filtrar nesta lista..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-black/50 border border-gray-700 rounded-lg text-sm py-2.5 pl-11 pr-4 focus:border-portal-accent focus:ring-1 focus:ring-portal-accent focus:outline-none text-white placeholder-gray-600 transition-all" />
+                    <input type="text" placeholder="Filtrar nesta lista..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-white/5 rounded-lg text-sm py-2.5 pl-11 pr-4 focus:border-portal-accent focus:ring-1 focus:ring-portal-accent focus:outline-none text-white placeholder-gray-600 transition-all" />
 
                     {/* Mobile Filter Toggle inside search bar area */}
-                    <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)} className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 bg-gray-800 rounded-md border border-gray-700">
+                    <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)} className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 bg-gray-800 rounded-md">
                       <Filter size={16} />
                     </button>
                   </div>
                   {/* Mobile Print Button */}
-                  <button onClick={() => handleOpenGlobalList('print')} className="md:hidden p-2.5 text-purple-400 bg-gray-900/50 border border-gray-700 rounded-lg hover:text-white hover:bg-gray-800 transition-colors">
+                  <button onClick={() => handleOpenGlobalList('print')} className="md:hidden p-2.5 text-portal-accent bg-white/5 rounded-lg hover:text-white hover:bg-white/10 transition-colors">
                     <Printer size={20} />
                   </button>
                 </div>
 
                 <div className="relative w-full md:w-48 hidden md:block">
-                  <select className="w-full bg-black/50 border border-gray-700 rounded-lg text-sm py-2.5 px-4 text-white appearance-none focus:border-portal-accent outline-none cursor-pointer hover:border-gray-600 transition-colors"><option>Todos os Sets</option></select>
+                  <select className="w-full bg-white/5 rounded-lg text-sm py-2.5 px-4 text-white appearance-none focus:border-portal-accent outline-none cursor-pointer  transition-colors"><option>Todos os Sets</option></select>
                   <ArrowDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
                 <div className="hidden md:block h-8 w-px bg-gray-700 mx-2"></div>
                 <div className="hidden md:flex gap-2 w-full md:w-auto">
-                  <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)} className={`flex-1 md:flex-none flex items-center justify-center gap-2 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors border ${showAdvancedFilters ? 'bg-pink-900/20 text-pink-400 border-pink-900/50' : 'bg-gray-800/50 hover:bg-gray-700 text-pink-400 border-gray-700/50'}`}><Filter size={14} /> Filtros</button>
-                  <button onClick={handleClearAdvancedFilters} className="flex-1 md:flex-none flex items-center justify-center gap-2 text-xs font-bold bg-gray-800/50 hover:bg-gray-700 text-gray-400 border border-gray-700/50 px-4 py-2.5 rounded-lg transition-colors"><Trash2 size={14} /> Limpar</button>
+                  <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)} className={`flex-1 md:flex-none flex items-center justify-center gap-2 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors ${showAdvancedFilters ? 'bg-portal-accent/10 text-portal-accent shadow-[0_0_0_1px_rgba(16,185,129,0.18)]' : 'bg-gray-800/50 hover:bg-white/10 text-portal-accent '}`}><Filter size={14} /> Filtros</button>
+                  <button onClick={handleClearAdvancedFilters} className="flex-1 md:flex-none flex items-center justify-center gap-2 text-xs font-bold bg-gray-800/50 hover:bg-white/10 text-gray-400 px-4 py-2.5 rounded-lg transition-colors"><Trash2 size={14} /> Limpar</button>
                 </div>
                 <div className="hidden md:block ml-auto text-sm font-bold text-gray-500 w-full md:w-auto text-right">Total: <span className="text-white ml-1">{filteredCollectionCards.length}</span></div>
               </div>
@@ -1615,31 +1620,31 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
             {showAdvancedFilters && <AdvancedFilterBar filters={advancedFilters} onFilterChange={handleAdvancedFilterChange} onClear={handleClearAdvancedFilters} />}
             <div className="px-4 lg:px-8 pb-6 shrink-0 gap-3 overflow-x-auto scrollbar-hide hidden md:flex">
               <ToolbarButton icon={<Scan size={16} />} label="ESCANEAR" onClick={handleScanClick} />
-              <ToolbarButton icon={<ListIcon size={16} />} label="LISTA" onClick={() => handleOpenGlobalList('buy', 'standard')} />
-              <ToolbarButton icon={<ExternalLink size={16} className="text-orange-400" />} label="COMPRAR NA LIGA" onClick={() => handleOpenGlobalList('buy', 'ligamagic')} />
-              <ToolbarButton icon={isUpdatingPrices ? <Loader2 size={16} className="animate-spin text-white" /> : <RefreshCw size={16} className="text-emerald-400" />} label={isUpdatingPrices ? `ATUALIZANDO ${updateProgress}%` : "ATUALIZAR PREÇOS"} onClick={handleForceUpdatePrices} disabled={isUpdatingPrices} progress={updateProgress} />
+              <ToolbarButton icon={<ListIcon size={16} />} label="COMPRAS" onClick={() => handleOpenGlobalList('buy', 'standard')} />
+              <ToolbarButton icon={<ExternalLink size={16} className="text-amber-400" />} label="LIGA" onClick={() => handleOpenGlobalList('buy', 'ligamagic')} />
+              <ToolbarButton icon={isUpdatingPrices ? <Loader2 size={16} className="animate-spin text-white" /> : <RefreshCw size={16} className="text-portal-accent" />} label={isUpdatingPrices ? `${updateProgress}%` : "PREÇOS"} onClick={handleForceUpdatePrices} disabled={isUpdatingPrices} progress={updateProgress} />
             </div>
 
             {/* Main Content Area */}
             <div className="flex-1 px-4 lg:px-8 pb-8 flex flex-col lg:flex-row gap-8 min-h-0 overflow-y-auto lg:overflow-hidden">
 
               {/* Set List (Sidebar) - Hidden on Mobile */}
-              <div className="hidden lg:flex w-full lg:w-64 h-64 lg:h-full bg-portal-panel border border-portal-border rounded-xl flex-col overflow-hidden shadow-2xl shrink-0 relative">
+              <div className="hidden lg:flex w-full lg:w-64 h-64 lg:h-full glass-panel rounded-2xl flex-col overflow-hidden shadow-2xl shrink-0 relative">
                 {setColumnBg && <div className="absolute inset-0 z-0"><img src={setColumnBg} alt="Set BG" className="w-full h-full object-cover opacity-10 grayscale mix-blend-luminosity" /><div className="absolute inset-0 bg-gradient-to-b from-portal-panel/80 via-portal-panel/50 to-portal-panel"></div></div>}
-                <div className="h-12 bg-black/40 border-b border-gray-800 flex items-center px-4 justify-between shrink-0 relative z-10"><div className="flex items-center gap-2 text-sm font-bold text-gray-200"><Layers size={16} /> Coleções <span className="bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded text-[10px]">{derivedSets.length} sets</span></div><button onClick={() => setSetsSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')} className="text-gray-500 hover:text-white transition-colors">{setsSortOrder === 'desc' ? <ArrowDown size={16} /> : <ArrowUp size={16} />}</button></div>
-                <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent relative z-10">{derivedSets.length === 0 && !isLoading && <div className="text-center p-4 text-xs text-gray-500 italic">Nenhum set encontrado.</div>}{derivedSets.map((set) => (<button key={set.code} onClick={() => toggleSet(set.code)} className={`w-full text-left p-2.5 rounded-lg border transition-all duration-200 flex flex-col gap-1.5 group ${selectedSet === set.code ? 'bg-emerald-900/20 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]' : 'bg-black/40 border-gray-800/50 hover:bg-black/60 hover:border-gray-700'}`}><div className="flex items-center gap-3"><div className={`w-6 h-6 rounded-full flex items-center justify-center border shrink-0 ${selectedSet === set.code ? 'border-emerald-500 bg-emerald-950' : 'border-gray-700 bg-gray-900 group-hover:border-gray-500'}`}><img src={`https://svgs.scryfall.io/sets/${set.code.toLowerCase()}.svg`} alt={set.code} className={`w-3.5 h-3.5 ${selectedSet === set.code ? 'invert-[.5] sepia-[1] saturate-[30] hue-rotate-[100deg] brightness-[1.2]' : 'invert opacity-60 group-hover:opacity-100'}`} onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('fallback-icon'); }} /></div><div className="flex-1 min-w-0"><div className={`text-xs font-bold truncate ${selectedSet === set.code ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>{set.name}</div><div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-600 font-mono">{set.year !== '????' ? set.year : ''}</span><span className="text-[10px] text-gray-500">{set.owned}/{set.total}</span></div></div></div></button>))}</div>
+                <div className="h-12 bg-black/20 flex items-center px-4 justify-between shrink-0 relative z-10"><div className="flex items-center gap-2 text-sm font-bold text-gray-200"><Layers size={16} /> Coleções <span className="bg-portal-accent/10 text-portal-accent px-1.5 py-0.5 rounded text-[10px]">{derivedSets.length} sets</span></div><button onClick={() => setSetsSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')} className="text-gray-500 hover:text-portal-accent transition-colors">{setsSortOrder === 'desc' ? <ArrowDown size={16} /> : <ArrowUp size={16} />}</button></div>
+                <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent relative z-10">{derivedSets.length === 0 && !isLoading && <div className="text-center p-4 text-xs text-gray-500 italic">Nenhum set encontrado.</div>}{derivedSets.map((set) => (<button key={set.code} onClick={() => toggleSet(set.code)} className={`w-full text-left p-2.5 rounded-xl ring-1 transition-all duration-200 flex flex-col gap-1.5 group ${selectedSet === set.code ? 'bg-portal-accent/12 ring-portal-accent/45' : 'bg-black/40 ring-portal-accent/10 hover:bg-black/60 hover:ring-portal-accent/35'}`}><div className="flex items-center gap-3"><div className={`w-6 h-6 rounded-full flex items-center justify-center ring-1 shrink-0 transition-colors ${selectedSet === set.code ? 'ring-portal-accent bg-emerald-950' : 'bg-gray-900 ring-portal-accent/20 group-hover:ring-portal-accent/45'}`}><img src={`https://svgs.scryfall.io/sets/${set.code.toLowerCase()}.svg`} alt={set.code} className={`w-3.5 h-3.5 ${selectedSet === set.code ? 'invert-[.5] sepia-[1] saturate-[30] hue-rotate-[100deg] brightness-[1.2]' : 'invert opacity-60 group-hover:opacity-100'}`} onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('fallback-icon'); }} /></div><div className="flex-1 min-w-0"><div className={`text-xs font-bold truncate ${selectedSet === set.code ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>{set.name}</div><div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-600 font-mono">{set.year !== '????' ? set.year : ''}</span><span className="text-[10px] text-gray-500">{set.owned}/{set.total}</span></div></div></div></button>))}</div>
               </div>
 
               {/* Middle Panel - Checklist/Main List (Visible on Mobile) */}
-              <div className="flex-1 h-full bg-transparent lg:bg-portal-panel lg:border lg:border-portal-border lg:rounded-xl flex flex-col overflow-hidden lg:shadow-2xl shrink-0">
-                <div className="hidden lg:flex h-12 bg-black/40 border-b border-gray-800 items-center px-5 justify-between shrink-0"><div className="flex items-center gap-4 h-full overflow-x-auto scrollbar-hide"><button onClick={() => setActiveLeftTab('missing')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeLeftTab === 'missing' ? 'text-red-500 border-red-500 bg-red-500/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:border-gray-700'}`}><X size={16} /> Checklist / Faltantes <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeLeftTab === 'missing' ? 'bg-red-900/50 text-red-300' : 'bg-gray-800 text-gray-500'}`}>{filteredCollectionCards.length}</span></button><button onClick={() => setActiveLeftTab('buy')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeLeftTab === 'buy' ? 'text-blue-500 border-blue-500 bg-blue-500/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:border-gray-700'}`}><ShoppingCart size={16} /> Listada <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeLeftTab === 'buy' ? 'bg-blue-900/50 text-blue-300' : 'bg-gray-800 text-gray-500'}`}>{buyList.length}</span></button></div><div className="flex gap-2.5">{activeLeftTab === 'missing' && (<button onClick={handleMarkAll} className="text-[10px] bg-emerald-900/30 text-emerald-500 border border-emerald-900 hover:bg-emerald-900/50 px-3 py-1 rounded flex items-center gap-1.5 transition-colors font-bold whitespace-nowrap"><Check size={12} /> MARCAR TODAS</button>)}</div></div>
+              <div className="flex-1 h-full bg-transparent lg:bg-transparent lg:border-0 lg:rounded-2xl glass-panel flex flex-col overflow-hidden lg:shadow-2xl shrink-0">
+                <div className="hidden lg:flex h-12 bg-black/20 border-b /70 items-center px-5 justify-between shrink-0"><div className="flex items-center gap-4 h-full overflow-x-auto scrollbar-hide"><button onClick={() => setActiveLeftTab('missing')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeLeftTab === 'missing' ? 'text-portal-accent border-portal-accent bg-portal-accent/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:'}`}><X size={16} /> Checklist / Faltantes <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeLeftTab === 'missing' ? 'bg-portal-accent/15 text-portal-accent' : 'bg-gray-800 text-gray-500'}`}>{filteredCollectionCards.length}</span></button><button onClick={() => setActiveLeftTab('buy')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeLeftTab === 'buy' ? 'text-portal-accent border-portal-accent bg-portal-accent/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:'}`}><ShoppingCart size={16} /> Listada <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeLeftTab === 'buy' ? 'bg-portal-accent/15 text-portal-accent' : 'bg-gray-800 text-gray-500'}`}>{buyList.length}</span></button></div><div className="flex gap-2.5">{activeLeftTab === 'missing' && (<button onClick={handleMarkAll} className="text-[10px] bg-emerald-900/30 text-portal-accent border border-emerald-900 hover:bg-emerald-900/50 px-3 py-1 rounded flex items-center gap-1.5 transition-colors font-bold whitespace-nowrap"><Check size={12} /> MARCAR TODAS</button>)}</div></div>
 
                 {/* Mobile View Title for this section */}
                 <div className="lg:hidden pb-2 px-1 flex justify-between items-center">
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">
                     {showMobileOwned ? 'Minha Coleção (Possuídas)' : (activeLeftTab === 'missing' ? 'Cartas da Coleção' : 'Lista de Compras')}
                   </div>
-                  <div className="text-xs text-emerald-500 font-mono">
+                  <div className="text-xs text-portal-accent font-mono">
                     {(showMobileOwned ? rightPanelCards : middlePanelCards).length} items
                   </div>
                 </div>
@@ -1684,10 +1689,10 @@ const Dashboard: React.FC<{ user: any, onExit: () => void, sharedId?: string }> 
               </div>
 
               {/* Right Panel (Owned) - Hidden on Mobile unless navigated? Actually, we'll keep it hidden on mobile and rely on bottom stats */}
-              <div className="hidden lg:flex flex-1 h-full bg-portal-panel border border-portal-border rounded-xl flex-col overflow-hidden shadow-2xl shrink-0">
-                <div className="h-12 bg-black/40 border-b border-gray-800 flex items-center px-5 justify-between shrink-0"><div className="flex items-center gap-4 h-full overflow-x-auto scrollbar-hide"><button onClick={() => setActiveRightTab('owned')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeRightTab === 'owned' ? 'text-emerald-500 border-emerald-500 bg-emerald-500/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:border-gray-700'}`}><Check size={16} /> Possuídas <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeRightTab === 'owned' ? 'bg-emerald-900/50 text-emerald-300' : 'bg-gray-800 text-gray-500'}`}>{rightPanelCards.length}</span></button><button onClick={() => setActiveRightTab('print')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeRightTab === 'print' ? 'text-purple-500 border-purple-500 bg-purple-500/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:border-gray-700'}`}><Printer size={16} /> Impressão <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeRightTab === 'print' ? 'bg-purple-900/50 text-purple-300' : 'bg-gray-800 text-gray-500'}`}>{printList.length}</span></button></div><div className="flex gap-2.5">{activeRightTab === 'owned' && (<button onClick={handleUnmarkAll} className="text-[10px] bg-red-900/30 text-red-500 border border-red-900 hover:bg-red-900/50 px-3 py-1 rounded flex items-center gap-1.5 transition-colors font-bold whitespace-nowrap"><X size={12} /> LIMPAR</button>)}</div></div>
-                {activeRightTab === 'owned' && (<div className="bg-black/20 border-b border-gray-800 px-5 py-3 flex flex-wrap items-center justify-between gap-3 relative"><div className="flex items-center gap-2 lg:gap-3 text-xs w-full sm:w-auto overflow-x-auto scrollbar-hide"><span className="text-gray-400 whitespace-nowrap hidden sm:inline">Marcar Edições:</span><select value={rangeStartSet} onChange={(e) => setRangeStartSet(e.target.value)} className="bg-black border border-gray-700 text-gray-300 rounded px-2 py-1 text-xs outline-none focus:border-emerald-500 max-w-[100px] lg:max-w-[120px]"><option value="">Início</option>{derivedSets.map(set => (<option key={set.code} value={set.code}>{set.name} ({set.code})</option>))}</select><span className="text-gray-500">até</span><select value={rangeEndSet} onChange={(e) => setRangeEndSet(e.target.value)} className="bg-black border border-gray-700 text-gray-300 rounded px-2 py-1 text-xs outline-none focus:border-emerald-500 max-w-[100px] lg:max-w-[120px]"><option value="">Fim</option>{derivedSets.map(set => (<option key={set.code} value={set.code}>{set.name} ({set.code})</option>))}</select></div><div className="flex items-center gap-4 ml-auto sm:ml-0"><div className="text-right hidden sm:block"><div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Valor Total</div><div className="text-emerald-400 font-mono font-bold text-sm">R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div></div><div className="flex items-center gap-2">{isRangeFilterActive && (<button onClick={clearRangeFilter} className="text-[10px] bg-gray-800 text-gray-400 border border-gray-700 px-2 py-1 rounded hover:bg-gray-700 hover:text-white transition-colors whitespace-nowrap">Limpar</button>)}<button onClick={handleApplyRangeFilter} className={`text-[10px] px-3 py-1 rounded flex items-center gap-1.5 font-bold transition-colors whitespace-nowrap ${isRangeFilterActive ? 'bg-pink-900/50 text-pink-300 border border-pink-500' : 'bg-pink-900/20 text-pink-400 border-pink-900/50 hover:bg-pink-900/40'}`}><div className="w-2 h-2 rounded-full bg-pink-500"></div> MARCAR</button></div></div></div>)}
-                <div className="flex-1 overflow-y-auto p-4 lg:p-6 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent" onScroll={handleScroll}><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">{rightPanelCards.length === 0 ? (<div className="col-span-full flex flex-col items-center justify-center text-gray-500 h-40 gap-2">{activeRightTab === 'owned' ? <div className="p-3 bg-gray-900 rounded-full"><Check size={24} className="text-gray-700" /></div> : <div className="p-3 bg-gray-900 rounded-full"><Printer size={24} className="text-gray-700" /></div>}<p className="text-sm">{activeRightTab === 'owned' ? "Vazio." : "Lista vazia."}</p></div>) : (rightPanelCards.slice(0, visibleCount).map(card => (<DashboardCard key={card.id} card={card} status={activeCollection?.ownedCardIds?.includes(card.id) ? 'owned' : 'missing'} quantity={(activeCollection?.quantities || {})[card.id] || 1} onUpdateQuantity={handleUpdateQuantity} onClick={handleRemoveCard} onToggleBuyList={toggleBuyList} onTogglePrintList={togglePrintList} onInfoClick={(c) => setSelectedCardDetails(c)} isInBuyList={buyList.some(c => c.id === card.id)} isInPrintList={printList.some(c => c.id === card.id)} onPriceUpdate={handlePriceUpdate} />)))}</div></div>
+              <div className="hidden lg:flex flex-1 h-full glass-panel rounded-2xl flex-col overflow-hidden shadow-2xl shrink-0">
+                <div className="h-12 bg-black/20 border-b /70 flex items-center px-5 justify-between shrink-0"><div className="flex items-center gap-4 h-full overflow-x-auto scrollbar-hide"><button onClick={() => setActiveRightTab('owned')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeRightTab === 'owned' ? 'text-portal-accent border-portal-accent bg-portal-accent/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:'}`}><Check size={16} /> Possuídas <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeRightTab === 'owned' ? 'bg-emerald-900/50 text-emerald-300' : 'bg-gray-800 text-gray-500'}`}>{rightPanelCards.length}</span></button><button onClick={() => setActiveRightTab('print')} className={`h-full flex items-center gap-2.5 text-sm font-bold border-b-2 px-3 transition-colors whitespace-nowrap ${activeRightTab === 'print' ? 'text-portal-accent border-portal-accent bg-portal-accent/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:'}`}><Printer size={16} /> Impressão <span className={`px-2 py-0.5 rounded text-[10px] ml-1 ${activeRightTab === 'print' ? 'bg-portal-accent/15 text-portal-accent' : 'bg-gray-800 text-gray-500'}`}>{printList.length}</span></button></div><div className="flex gap-2.5">{activeRightTab === 'owned' && (<button onClick={handleUnmarkAll} className="text-[10px] bg-red-900/30 text-red-500 border border-red-900 hover:bg-red-900/50 px-3 py-1 rounded flex items-center gap-1.5 transition-colors font-bold whitespace-nowrap"><X size={12} /> LIMPAR</button>)}</div></div>
+                {activeRightTab === 'owned' && (<div className="bg-black/10 border-b /70 px-5 py-3 flex flex-wrap items-center justify-between gap-3 relative"><div className="flex items-center gap-2 lg:gap-3 text-xs w-full sm:w-auto overflow-x-auto scrollbar-hide"><span className="text-gray-400 whitespace-nowrap hidden sm:inline">Marcar Edições:</span><select value={rangeStartSet} onChange={(e) => setRangeStartSet(e.target.value)} className="bg-black text-gray-300 rounded px-2 py-1 text-xs outline-none focus:border-portal-accent max-w-[100px] lg:max-w-[120px]"><option value="">Início</option>{derivedSets.map(set => (<option key={set.code} value={set.code}>{set.name} ({set.code})</option>))}</select><span className="text-gray-500">até</span><select value={rangeEndSet} onChange={(e) => setRangeEndSet(e.target.value)} className="bg-black text-gray-300 rounded px-2 py-1 text-xs outline-none focus:border-portal-accent max-w-[100px] lg:max-w-[120px]"><option value="">Fim</option>{derivedSets.map(set => (<option key={set.code} value={set.code}>{set.name} ({set.code})</option>))}</select></div><div className="flex items-center gap-4 ml-auto sm:ml-0"><div className="text-right hidden sm:block"><div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Valor Total</div><div className="text-emerald-400 font-mono font-bold text-sm">R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div></div><div className="flex items-center gap-2">{isRangeFilterActive && (<button onClick={clearRangeFilter} className="text-[10px] bg-gray-800 text-gray-400 px-2 py-1 rounded hover:bg-white/10 hover:text-white transition-colors whitespace-nowrap">Limpar</button>)}<button onClick={handleApplyRangeFilter} className={`text-[10px] px-3 py-1 rounded flex items-center gap-1.5 font-bold transition-colors whitespace-nowrap ${isRangeFilterActive ? 'bg-pink-900/50 text-pink-300 border border-portal-accent' : 'bg-portal-accent/10 text-portal-accent  hover:bg-pink-900/40'}`}><div className="w-2 h-2 rounded-full bg-portal-accent"></div> MARCAR</button></div></div></div>)}
+                <div className="flex-1 overflow-y-auto p-4 lg:p-6 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent" onScroll={handleScroll}><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">{rightPanelCards.length === 0 ? (<div className="col-span-full flex flex-col items-center justify-center text-gray-500 h-40 gap-2">{activeRightTab === 'owned' ? <div className="p-3 bg-white/5 rounded-full"><Check size={24} className="text-gray-700" /></div> : <div className="p-3 bg-white/5 rounded-full"><Printer size={24} className="text-gray-700" /></div>}<p className="text-sm">{activeRightTab === 'owned' ? "Vazio." : "Lista vazia."}</p></div>) : (rightPanelCards.slice(0, visibleCount).map(card => (<DashboardCard key={card.id} card={card} status={activeCollection?.ownedCardIds?.includes(card.id) ? 'owned' : 'missing'} quantity={(activeCollection?.quantities || {})[card.id] || 1} onUpdateQuantity={handleUpdateQuantity} onClick={handleRemoveCard} onToggleBuyList={toggleBuyList} onTogglePrintList={togglePrintList} onInfoClick={(c) => setSelectedCardDetails(c)} isInBuyList={buyList.some(c => c.id === card.id)} isInPrintList={printList.some(c => c.id === card.id)} onPriceUpdate={handlePriceUpdate} />)))}</div></div>
               </div>
             </div>
           </div>
@@ -1788,4 +1793,9 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+
+
+
+
 

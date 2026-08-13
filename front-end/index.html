@@ -14,29 +14,61 @@
           extend: {
             colors: {
               portal: {
-                bg: '#020604', // Very deep black-green
-                panel: '#0a1410', // Dark green panel
-                surface: '#111c16', // Slightly lighter surface
-                border: '#1f2e25',
-                text: '#c4cec9',
-                muted: '#5e7065',
-                accent: '#10b981', // Emerald green
-                accentHover: '#059669',
+                bg: '#020604',
+                panel: '#07120a',
+                surface: '#0f1d14',
+                border: '#1d3325',
+                text: '#e5eee9',
+                muted: '#8da096',
+                accent: '#10b981',
+                accentHover: '#34d399',
+                gold: '#d6a84f',
                 danger: '#ef4444',
               }
             },
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
+              display: ['Cinzel', 'serif'],
+              mono: ['JetBrains Mono', 'monospace'],
             }
           }
         }
       }
     </script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
       
       body {
         font-family: 'Inter', sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(16, 185, 129, 0.10), transparent 34rem),
+          radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.06), transparent 30rem),
+          #020604;
+      }
+      .glass-panel {
+        background: rgba(7, 18, 10, 0.78);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255,255,255,0.04);
+        backdrop-filter: blur(18px);
+      }
+      .soft-card {
+        background: linear-gradient(180deg, rgba(15, 29, 20, 0.88), rgba(7, 18, 10, 0.94));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.035), 0 18px 48px rgba(0,0,0,0.22);
+      }
+      .portal-chip {
+        background: rgba(255,255,255,0.055);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+      .portal-chip:hover {
+        background: rgba(255,255,255,0.09);
+      }
+      .portal-menu {
+        background: rgba(5, 14, 8, 0.94);
+        box-shadow: 0 28px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+        backdrop-filter: blur(20px);
+      }
+      :focus-visible {
+        outline: 2px solid #34d399;
+        outline-offset: 2px;
       }
       
       /* Custom Scrollbar for dark theme */

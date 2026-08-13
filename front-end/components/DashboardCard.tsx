@@ -118,35 +118,32 @@ const DashboardCardComponent: React.FC<DashboardCardProps> = ({
                 e.preventDefault();
                 if (onInfoClick) onInfoClick(card);
             }}
-            className={`relative group rounded-xl border transition-all duration-200 cursor-pointer 
+            className={`relative group rounded-2xl transition-all duration-200 cursor-pointer soft-card
         flex ${isGridMode ? 'flex-col' : 'flex-row md:flex-col'} items-center ${isGridMode ? 'items-stretch' : 'md:items-stretch'} 
         ${isGridMode ? 'h-auto' : 'h-24 md:h-auto'} overflow-hidden
-        ${isOwned
-                    ? 'border-emerald-900/50 bg-emerald-950/10 hover:border-emerald-500/50'
-                    : 'border-gray-800 bg-gray-900/40 hover:border-gray-600 hover:bg-gray-800/50'
-                }`}
+        ${isOwned ? 'shadow-[0_0_0_1px_rgba(16,185,129,0.22)]' : 'hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]'}`}
         >
             {/* --- DESKTOP ACTIONS (Hidden on Mobile unless grid mode logic required customization, keeping mostly hidden for clean mobile UI) --- */}
-            <div className="hidden md:block absolute top-2 left-2 z-20" onClick={(e) => e.stopPropagation()}>
+            <div className="hidden md:block absolute top-2 left-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={() => onInfoClick && onInfoClick(card)}
-                    className="bg-black/80 rounded p-1 text-gray-400 hover:text-white cursor-pointer border border-gray-700 hover:border-emerald-500 transition-colors block"
+                    className="bg-black/80 rounded-lg p-1.5 text-portal-muted hover:text-portal-text hover:bg-white/10 cursor-pointer transition-colors block backdrop-blur"
                 >
                     <Info size={12} />
                 </button>
             </div>
 
-            <div className="hidden md:flex absolute top-8 left-2 z-20 flex-col gap-1" onClick={(e) => e.stopPropagation()}>
+            <div className="hidden md:flex absolute top-10 left-2 z-20 flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={() => onToggleBuyList && onToggleBuyList(card)}
-                    className={`p-1 rounded border transition-colors ${isInBuyList ? 'bg-blue-600 text-white border-blue-500' : 'bg-black/80 text-gray-500 border-gray-700 hover:text-blue-400 hover:border-blue-500'}`}
+                    className={`p-1.5 rounded-lg transition-colors backdrop-blur ${isInBuyList ? 'bg-portal-accent text-black' : 'bg-black/80 text-portal-muted hover:text-portal-text hover:bg-white/10'}`}
                     title="Adicionar à Lista de Compras"
                 >
                     <ShoppingCart size={12} />
                 </button>
                 <button
                     onClick={() => onTogglePrintList && onTogglePrintList(card)}
-                    className={`p-1 rounded border transition-colors ${isInPrintList ? 'bg-purple-600 text-white border-purple-500' : 'bg-black/80 text-gray-500 border-gray-700 hover:text-purple-400 hover:border-purple-500'}`}
+                    className={`p-1.5 rounded-lg transition-colors backdrop-blur ${isInPrintList ? 'bg-portal-gold text-black' : 'bg-black/80 text-portal-muted hover:text-portal-text hover:bg-white/10'}`}
                     title="Adicionar à Lista de Impressão"
                 >
                     <Printer size={12} />
@@ -155,15 +152,15 @@ const DashboardCardComponent: React.FC<DashboardCardProps> = ({
 
             {/* --- RIGHT CONTROLS (Desktop Only) --- */}
             <div className="hidden md:flex absolute top-2 right-2 z-10 flex-col gap-1 items-end">
-                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${isOwned
-                    ? 'bg-emerald-500 border-emerald-400 scale-100'
-                    : 'bg-black/50 border-gray-500 group-hover:border-gray-300'
+                <div className={`w-5 h-5 rounded flex items-center justify-center transition-all ${isOwned
+                    ? 'bg-portal-accent scale-100'
+                    : 'bg-black/50 group-hover:bg-white/10'
                     }`}>
                     {isOwned && <Check size={14} className="text-black stroke-[3]" />}
                 </div>
                 {isOwned && (
                     <div
-                        className="flex items-center bg-black/80 border border-gray-700 rounded overflow-hidden shadow-lg mt-1"
+                        className="flex items-center bg-black/80 rounded-lg overflow-hidden shadow-lg mt-1 backdrop-blur"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -235,16 +232,29 @@ const DashboardCardComponent: React.FC<DashboardCardProps> = ({
 
                     {/* Mobile Actions Menu Trigger - Only in List Mode */}
                     {!isGridMode && (
-                        <div className="md:hidden">
+                        <div className="md:hidden relative" onClick={(e) => e.stopPropagation()}>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setShowMobileMenu(!showMobileMenu);
                                 }}
-                                className="text-gray-500 p-1"
+                                className="text-portal-muted hover:text-portal-text p-1.5 rounded-full bg-black/30 hover:bg-white/10"
                             >
-                                {/* Placeholder */}
+                                <MoreVertical size={15} />
                             </button>
+                            {showMobileMenu && (
+                                <div className="absolute right-0 top-8 z-40 w-44 glass-panel rounded-xl p-1.5 shadow-2xl">
+                                    <button onClick={() => onInfoClick && onInfoClick(card)} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-portal-text hover:bg-portal-surface rounded-lg">
+                                        <Info size={14} /> Detalhes
+                                    </button>
+                                    <button onClick={() => onToggleBuyList && onToggleBuyList(card)} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-portal-text hover:bg-portal-surface rounded-lg">
+                                        <ShoppingCart size={14} /> {isInBuyList ? 'Remover compra' : 'Comprar'}
+                                    </button>
+                                    <button onClick={() => onTogglePrintList && onTogglePrintList(card)} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-portal-text hover:bg-portal-surface rounded-lg">
+                                        <Printer size={14} /> {isInPrintList ? 'Remover impressão' : 'Imprimir'}
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -261,32 +271,16 @@ const DashboardCardComponent: React.FC<DashboardCardProps> = ({
                     {/* Mobile Quantity Control (List Mode Only) */}
                     {!isGridMode && (
                         <div className="flex flex-col items-end gap-1 md:hidden" onClick={(e) => e.stopPropagation()}>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => onToggleBuyList && onToggleBuyList(card)}
-                                    className={`p-1.5 rounded-full ${isInBuyList ? 'text-blue-400 bg-blue-900/30' : 'text-gray-600 hover:text-gray-400'}`}
-                                >
-                                    <ShoppingCart size={14} />
-                                </button>
-                                <button
-                                    onClick={() => onTogglePrintList && onTogglePrintList(card)}
-                                    className={`p-1.5 rounded-full ${isInPrintList ? 'text-purple-400 bg-purple-900/30' : 'text-gray-600 hover:text-gray-400'}`}
-                                >
-                                    <Printer size={14} />
-                                </button>
-                                <button
-                                    onClick={() => onInfoClick && onInfoClick(card)}
-                                    className="p-1.5 rounded-full text-gray-600 hover:text-gray-400"
-                                >
-                                    <Info size={14} />
-                                </button>
+                            <div className="flex gap-1">
+                                {isInBuyList && <span className="h-2 w-2 rounded-full bg-portal-accent" title="Na lista de compras" />}
+                                {isInPrintList && <span className="h-2 w-2 rounded-full bg-portal-gold" title="Na lista de impressão" />}
                             </div>
 
                             {isOwned && (
-                                <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 h-7">
-                                    <button onClick={(e) => handleQuantityChange(e, -1)} className="px-2 text-gray-400 hover:text-white"><Minus size={12} /></button>
-                                    <span className="text-xs font-bold text-white px-1 min-w-[16px] text-center">{quantity}</span>
-                                    <button onClick={(e) => handleQuantityChange(e, 1)} className="px-2 text-gray-400 hover:text-white"><Plus size={12} /></button>
+                                <div className="flex items-center bg-black/50 rounded-lg h-7 shadow-sm">
+                                    <button onClick={(e) => handleQuantityChange(e, -1)} className="px-2 text-portal-muted hover:text-portal-text"><Minus size={12} /></button>
+                                    <span className="text-xs font-bold text-portal-text px-1 min-w-[16px] text-center">{quantity}</span>
+                                    <button onClick={(e) => handleQuantityChange(e, 1)} className="px-2 text-portal-muted hover:text-portal-text"><Plus size={12} /></button>
                                 </div>
                             )}
                         </div>

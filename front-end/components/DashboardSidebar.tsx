@@ -54,10 +54,6 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 }) => {
   const activeCollection = collections.find(c => c.id === activeCollectionId);
 
-  console.log(activeCollection);
-  console.log(collections);
-  console.log(activeCollectionId);
-
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
 
@@ -100,7 +96,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       )}
 
       <aside className={`
-            w-64 bg-[#020604]/95 lg:bg-black/40 border-r border-portal-border flex flex-col h-screen fixed left-0 top-0 overflow-y-auto z-50 backdrop-blur-md lg:backdrop-blur-sm
+            w-64 glass-panel rounded-none flex flex-col h-screen fixed left-0 top-0 overflow-y-auto z-50 backdrop-blur-xl
             transition-transform duration-300 ease-in-out
             ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
@@ -120,7 +116,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           {activeCollection && (
             <div>
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Coleção Atual</h3>
-              <div className="bg-portal-surface border border-portal-border rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-portal-accent transition-colors group">
+              <div className="bg-portal-surface rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-portal-accent transition-colors group">
                 <Settings className="text-portal-accent group-hover:animate-spin-slow" size={20} />
                 <div className="overflow-hidden">
                   <div className="text-portal-accent font-bold text-sm truncate">{activeCollection.name}</div>
@@ -137,7 +133,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               <li>
                 <button
                   onClick={() => onOpenGlobalList && onOpenGlobalList('buy')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 rounded-md hover:bg-portal-surface hover:text-white transition-colors bg-portal-accent/10 border border-transparent hover:border-portal-border group"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 rounded-md hover:bg-portal-surface hover:text-white transition-colors bg-portal-accent/10 group"
                 >
                   <List size={16} className="text-emerald-400" />
                   <span className="flex-1 text-left">Lista de Compras</span>
@@ -151,12 +147,12 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               <li>
                 <button
                   onClick={() => onOpenGlobalList && onOpenGlobalList('print')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 rounded-md hover:bg-portal-surface hover:text-white transition-colors bg-portal-accent/10 border border-transparent hover:border-portal-border group"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 rounded-md hover:bg-portal-surface hover:text-white transition-colors bg-portal-accent/10 group"
                 >
-                  <Package size={16} className="text-purple-400" />
+                  <Package size={16} className="text-portal-accent" />
                   <span className="flex-1 text-left">Lista de Impressão</span>
                   {printListCount > 0 && (
-                    <span className="bg-purple-900 text-purple-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-purple-800">
+                    <span className="bg-portal-accent/15 text-portal-accent text-[10px] font-bold px-2 py-0.5 rounded-full">
                       {printListCount}
                     </span>
                   )}
@@ -173,13 +169,13 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 if (onSpoilersClick) onSpoilersClick();
                 if (onClose) onClose();
               }}
-              className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors border ${
+               className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${
                 activeView === 'spoilers'
-                  ? 'bg-pink-900/30 text-pink-300 border-pink-500/40'
-                  : 'text-gray-300 bg-portal-accent/10 border-transparent hover:bg-portal-surface hover:text-white hover:border-portal-border'
+                  ? 'bg-portal-accent/15 text-portal-accent '
+                   : 'text-gray-300 bg-portal-accent/10 hover:bg-portal-surface hover:text-white'
               }`}
             >
-              <Calendar size={16} className={activeView === 'spoilers' ? 'text-pink-400' : 'text-pink-500'} />
+              <Calendar size={16} className={activeView === 'spoilers' ? 'text-portal-accent' : 'text-portal-accent'} />
               <span className="flex-1 text-left">Spoilers</span>
             </button>
           </div>
@@ -201,10 +197,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                     }}
                     className={`flex-1 flex items-center gap-2 p-2 border rounded text-sm transition-colors text-left min-w-0 cursor-pointer ${activeCollectionId === col.id
                       ? 'bg-portal-surface/80 border-portal-accent/50 text-white'
-                      : 'bg-portal-surface/20 border-portal-border/50 text-gray-400 hover:text-white hover:border-gray-500'
+                      : 'bg-portal-surface/20  text-gray-400 hover:text-white hover:border-gray-500'
                       }`}
                   >
-                    <Layers size={14} className={activeCollectionId === col.id ? "text-emerald-500" : ""} />
+                    <Layers size={14} className={activeCollectionId === col.id ? "text-portal-accent" : ""} />
                     <div className="flex-1 min-w-0">
                       {editingId === col.id ? (
                         <div className="flex items-center gap-1">
@@ -213,10 +209,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-gray-800 border border-emerald-500/50 rounded px-1 py-0.5 text-white text-xs w-full focus:outline-none"
+                            className="bg-gray-800 rounded px-1 py-0.5 text-white text-xs w-full focus:outline-none"
                             autoFocus
                           />
-                          <button onClick={(e) => handleSaveRename(e, col.id)} className="text-emerald-500 hover:text-emerald-400">
+                          <button onClick={(e) => handleSaveRename(e, col.id)} className="text-portal-accent hover:text-emerald-400">
                             <Check size={12} />
                           </button>
                           <button onClick={handleCancelEdit} className="text-red-500 hover:text-red-400">
@@ -284,7 +280,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                       }}
                       className="flex-1 flex items-center gap-2 p-2 rounded bg-gray-900/50 hover:bg-gray-800 border border-transparent hover:border-gray-700 transition-colors text-left min-w-0 cursor-pointer"
                     >
-                      <Search size={12} className="text-emerald-500 shrink-0" />
+                      <Search size={12} className="text-portal-accent shrink-0" />
                       <span className="text-xs text-gray-300 truncate">{search.name}</span>
                     </div>
                     <button
@@ -313,7 +309,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         </nav>
 
         {/* User Profile Footer */}
-        <div className="p-4 border-t border-portal-border bg-black/20 mt-auto">
+        <div className="p-4 border-t  bg-black/20 mt-auto">
           <button
             onClick={onProfileClick}
             className="w-full flex items-center gap-3 p-2 rounded hover:bg-gray-800/50 transition-colors group text-left"
@@ -344,3 +340,5 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     </>
   );
 };
+
+

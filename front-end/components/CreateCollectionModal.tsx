@@ -395,11 +395,11 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                     </div>
                 </div>
 
-                <div className="bg-portal-panel/80 backdrop-blur-xl border border-portal-border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                <div className="bg-portal-panel/80 backdrop-blur-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden">
                     <div className="p-8 overflow-y-auto custom-scrollbar">
                         <div className="text-center mb-8">
                             <h2 className="text-3xl font-black text-white mb-1 tracking-tighter">
-                                Portal de Coleções <span className="text-emerald-500">Magic</span>
+                                Portal de Coleções <span className="text-portal-accent">Magic</span>
                             </h2>
                             <p className="text-gray-500 text-sm">O que você deseja colecionar hoje?</p>
                         </div>
@@ -407,7 +407,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                         <div className="flex p-1 bg-black/40 rounded-xl mb-8 border border-white/5">
                             <button
                                 onClick={() => setActiveTab('create')}
-                                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTab === 'create' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'text-gray-500 hover:text-gray-300'}`}
+                                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTab === 'create' ? 'bg-portal-accent text-black shadow-lg shadow-emerald-500/20' : 'text-gray-500 hover:text-gray-300'}`}
                             >
                                 <Rocket size={16} /> Nova Coleção
                             </button>
@@ -427,7 +427,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Ex: Coleção de Elfos"
-                                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-emerald-500 transition-all shadow-inner"
+                                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-portal-accent transition-all shadow-inner"
                                 />
                             </div>
 
@@ -438,14 +438,14 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                             <button
                                                 key={fmt}
                                                 onClick={() => setImportFormat(fmt)}
-                                                className={`py-3 rounded-xl text-xs font-bold border transition-all ${importFormat === fmt ? 'bg-emerald-500 text-black border-emerald-500' : 'bg-black/40 text-gray-500 border-white/10'}`}
+                                                className={`py-3 rounded-xl text-xs font-bold border transition-all ${importFormat === fmt ? 'bg-portal-accent text-black border-portal-accent' : 'bg-black/40 text-gray-500 border-white/10'}`}
                                             >
                                                 {fmt === 'json' ? 'JSON SCHEMA' : fmt.toUpperCase()}
                                             </button>
                                         ))}
                                     </div>
 
-                                    <div className="border-2 border-dashed border-white/10 rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all relative">
+                                    <div className="border-2 border-dashed border-white/10 rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:border-portal-accent/50 hover:bg-portal-accent/5 transition-all relative">
                                         <input
                                             type="file"
                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -454,7 +454,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                         />
                                         {importedFile ? (
                                             <div className="space-y-2">
-                                                <FileText size={40} className="text-emerald-500 mx-auto" />
+                                                <FileText size={40} className="text-portal-accent mx-auto" />
                                                 <div className="text-white font-bold text-sm">{importedFile.name}</div>
                                                 <div className="text-xs text-gray-500">~{importStats?.count} cartas detectadas</div>
                                             </div>
@@ -488,7 +488,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                         <select
                                             value={filterType}
                                             onChange={(e) => setFilterType(e.target.value as CollectionFilterType)}
-                                            className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white appearance-none focus:outline-none focus:border-emerald-500 cursor-pointer"
+                                            className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white appearance-none focus:outline-none focus:border-portal-accent cursor-pointer"
                                         >
                                             <option value="tribal">Tipo de Criatura (Tribal)</option>
                                             <option value="set">Edição Completa (Set)</option>
@@ -511,7 +511,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                             value={filterValue}
                                             onChange={(e) => setFilterValue(e.target.value)}
                                             placeholder="Ex: c:g t:creature r:m"
-                                            className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-emerald-500"
+                                            className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-portal-accent"
                                         />
                                     ) : (
                                         <div className="relative" ref={dropdownRef}>
@@ -524,11 +524,11 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                                         if (!isDropdownOpen) setIsDropdownOpen(true);
                                                     }}
                                                     placeholder={isLoadingOptions ? "Carregando..." : "Buscar..."}
-                                                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 pr-12 text-white focus:outline-none focus:border-emerald-500"
+                                                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 pr-12 text-white focus:outline-none focus:border-portal-accent"
                                                     autoComplete="off"
                                                 />
                                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                                    {isLoadingOptions && <Loader2 size={16} className="animate-spin text-emerald-500" />}
+                                                    {isLoadingOptions && <Loader2 size={16} className="animate-spin text-portal-accent" />}
                                                     <Search size={18} className="text-gray-500" />
                                                 </div>
                                             </div>
@@ -546,7 +546,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                                                 <button
                                                                     key={idx}
                                                                     onClick={() => handleOptionSelect(val as string, label as string)}
-                                                                    className="w-full text-left px-5 py-4 text-sm text-gray-400 hover:bg-emerald-500 hover:text-black transition-all border-b border-white/5 last:border-0"
+                                                                    className="w-full text-left px-5 py-4 text-sm text-gray-400 hover:bg-portal-accent hover:text-black transition-all border-b border-white/5 last:border-0"
                                                                 >
                                                                     {label as string}
                                                                     {isSet && <span className="ml-2 text-[10px] font-mono text-gray-600">{(opt as any).code}</span>}
@@ -561,7 +561,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                 </div>
 
                                 <div className="bg-black/40 border border-white/5 p-4 rounded-xl">
-                                    <div className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Query Scryfall Final</div>
+                                    <div className="text-[9px] font-bold text-portal-accent uppercase tracking-widest mb-1">Query Scryfall Final</div>
                                     <div className="text-xs font-mono text-gray-400 break-all">{previewQuery}</div>
                                 </div>
 
@@ -573,7 +573,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                             onChange={(e) => setForceDownload(e.target.checked)}
                                             className="peer h-5 w-5 opacity-0 absolute cursor-pointer"
                                         />
-                                        <div className="h-5 w-5 border border-white/20 bg-black/40 rounded flex items-center justify-center peer-checked:bg-emerald-500 peer-checked:border-emerald-500 transition-all">
+                                        <div className="h-5 w-5 border border-white/20 bg-black/40 rounded flex items-center justify-center peer-checked:bg-portal-accent peer-checked:border-portal-accent transition-all">
                                             <Check size={14} className="text-black stroke-[3]" />
                                         </div>
                                     </div>
@@ -585,7 +585,7 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                                 <button
                                     onClick={handleCreate}
                                     disabled={!name || !filterValue || (activeTab === 'import' && !importedFile) || isResolving}
-                                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-black py-4 rounded-xl shadow-xl transition-all disabled:opacity-20 flex items-center justify-center gap-2"
+                                    className="w-full bg-portal-accent hover:bg-portal-accentHover text-black font-black py-4 rounded-xl shadow-xl transition-all disabled:opacity-20 flex items-center justify-center gap-2"
                                 >
                                     {isResolving ? (
                                         <>
@@ -614,3 +614,4 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
         </div>
     );
 };
+
