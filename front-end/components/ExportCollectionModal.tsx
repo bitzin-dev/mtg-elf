@@ -289,7 +289,7 @@ export const ExportCollectionModal: React.FC<ExportCollectionModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[220] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
 
       <div className="relative bg-[#020604] rounded-2xl w-full max-w-lg shadow-2xl border border-gray-800 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">

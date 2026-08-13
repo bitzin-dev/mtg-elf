@@ -391,7 +391,7 @@ export const GlobalListModal: React.FC<GlobalListModalProps> = ({
         {/* Floating Image Preview (Desktop Only) */}
         {previewImg && (
             <div 
-                className="fixed z-[100] pointer-events-none animate-in fade-in duration-150 hidden md:block"
+                className="fixed z-[230] pointer-events-none animate-in fade-in duration-150 hidden md:block"
                 style={{ 
                     top: Math.min(cursorPos.y - 100, window.innerHeight - 350), 
                     left: cursorPos.x + 20 
@@ -405,7 +405,7 @@ export const GlobalListModal: React.FC<GlobalListModalProps> = ({
             </div>
         )}
 
-        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[220] flex items-center justify-center p-4">
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
 
         <div className="relative bg-[#020604] rounded-2xl w-full max-w-6xl h-[90vh] md:h-[85vh] flex flex-col shadow-2xl border border-gray-800 animate-in fade-in zoom-in-95 duration-200">
